@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="MARA Lab" />
+  <meta name="apple-mobile-web-app-title" content="Lab" />
   <meta name="theme-color" content="#ffffff" />
-  <title>MARA Lab</title>
+  <title>Lab</title>
   <link rel="manifest" href="manifest.json" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -478,7 +478,7 @@
 <div id="app">
   <header>
     <div class="header-inner">
-      <div><span class="logo">MARA</span><span class="logo-sub">Lab</span></div>
+      <div><span class="logo">Lab</span></div>
       <div id="header-action"></div>
     </div>
   </header>
@@ -521,6 +521,7 @@ let state = {
   families: [],
   page: 'molecules',
   filter: 'all',
+  pyramidFilter: 'all',
   search: '',
 };
 
@@ -568,7 +569,7 @@ function toast(msg) {
 
 // ── NAV ──
 function showPage(p) {
-  state.page = p; state.filter = 'all'; state.search = '';
+  state.page = p; state.filter = 'all'; state.pyramidFilter = 'all'; state.search = '';
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('nav-' + p).classList.add('active');
   render();
@@ -598,13 +599,14 @@ function renderMolecules() {
 
   const filtered = state.molecules.filter(m => {
     const okF = state.filter === 'all' || m.family === state.filter;
+    const okP = state.pyramidFilter === 'all' || m.pyramid === state.pyramidFilter;
     const q = state.search.toLowerCase();
     const okS = !q || m.name.toLowerCase().includes(q) || (m.cas||'').includes(q);
-    return okF && okS;
-  }).sort((a, b) => a.name.localeCompare(b.name)); // sort molecules alphabetically
+    return okF && okP && okS;
+  }).sort((a, b) => a.name.localeCompare(b.name));
 
   // Group by family
-  const familyOrder = allFamilies().map(f => f.key); // already alphabetical
+  const familyOrder = allFamilies().map(f => f.key);
   const groups = {};
   filtered.forEach(m => {
     const key = m.family || '—';
@@ -612,7 +614,6 @@ function renderMolecules() {
     groups[key].push(m);
   });
 
-  // Sort group keys alphabetically (family order already alpha, ungrouped '—' goes last)
   const sortedKeys = Object.keys(groups).sort((a, b) => {
     if (a === '—') return 1;
     if (b === '—') return -1;
@@ -620,6 +621,8 @@ function renderMolecules() {
   });
 
   const usedFamilies = [...new Set(state.molecules.map(m => m.family).filter(Boolean))].sort((a, b) => a.localeCompare(b));
+
+  const PYR_COLORS = { Top: '#c4a84a', Heart: '#d4a5b5', Base: '#7a7a9e' };
 
   document.getElementById('main-content').innerHTML = `
     <div class="section-head">
@@ -643,6 +646,16 @@ function renderMolecules() {
         return `<button class="chip${active?' active':''}"
           style="${active?`background:${col};border-color:${col};`:`color:${col};border-color:${col}55;`}"
           onclick="state.filter='${esc(f)}';renderMolecules()">${esc(f)}</button>`;
+      }).join('')}
+    </div>
+
+    <div class="chips">
+      ${['all','Top','Heart','Base'].map(p => {
+        const active = state.pyramidFilter === p;
+        const label = p === 'all' ? 'All notes' : p;
+        return `<button class="chip${active?' active':''}"
+          style="${active?'background:#111110;border-color:#111110;':''}"
+          onclick="state.pyramidFilter='${p}';renderMolecules()">${label}</button>`;
       }).join('')}
     </div>
 
@@ -1074,6 +1087,8 @@ function formulaCard(f) {
   const v = f.versions[f.activeVersion || 0];
   const total = v.ingredients.reduce((s, i) => s + ingEffectivePct(i), 0);
   const hasWarn = v.ingredients.some(i => ifraStatus(i, total) !== 'ok');
+  const ethanolMl = +v.ethanolMl || 0;
+  const finalMl = (+v.totalMl || 0) + ethanolMl;
   return `
     <div class="formula-card" onclick="openFormulaDetail('${f.id}')">
       <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
@@ -1085,7 +1100,7 @@ function formulaCard(f) {
         <span>·</span>
         <span>${f.versions.length} version${f.versions.length>1?'s':''}</span>
         <span>·</span>
-        <span style="color:${Math.abs(total-100)<0.05?'#2d7a4a':'var(--text3)'}">${total.toFixed(2)}%</span>
+        <span>${ethanolMl > 0 ? `${finalMl.toFixed(1)} ml total` : `${v.totalMl} ml conc.`}</span>
       </div>
       ${f.notes ? `<div style="font-size:12px;color:var(--text3);margin-top:4px;line-height:1.4">${esc(f.notes)}</div>` : ''}
     </div>
@@ -1153,9 +1168,11 @@ function openFormulaBuilder(fid) {
     BS = JSON.parse(JSON.stringify(state.formulas.find(x => x.id === fid)));
   } else {
     BS = { id: null, name: '', notes: '',
-           versions: [{ name: 'v1', ingredients: [], totalMl: 10 }],
+           versions: [{ name: 'v1', ingredients: [], totalMl: 2, ethanolMl: '' }],
            activeVersion: 0 };
   }
+  // migrate old versions without ethanolMl
+  BS.versions.forEach(v => { if (v.ethanolMl === undefined) v.ethanolMl = ''; });
   inputMode = 'pct';
   renderBuilder();
 }
@@ -1166,6 +1183,11 @@ function renderBuilder() {
   const ok   = Math.abs(total - 100) < 0.05;
   const over = total > 100.05;
 
+  const ethanolMl = +v.ethanolMl || 0;
+  const concMl = v.totalMl || 0;
+  const finalMl = concMl + ethanolMl;
+  const concPct = finalMl > 0 ? ((concMl / finalMl) * 100).toFixed(1) : '—';
+
   showSheet('builder', BS.id ? 'Edit formula' : 'New formula', `
     <div class="version-tabs">
       ${BS.versions.map((ver, idx) =>
@@ -1175,17 +1197,32 @@ function renderBuilder() {
     </div>
 
     <div class="form-body" style="padding-bottom:8px">
-      <div class="field-row-2">
-        <div class="field">
-          <label>Formula name</label>
-          <input id="b-name" placeholder="e.g. NOCTURNE" value="${esc(BS.name)}" oninput="BS.name=this.value" />
+      <div class="field">
+        <label>Formula name</label>
+        <input id="b-name" placeholder="e.g. NOCTURNE" value="${esc(BS.name)}" oninput="BS.name=this.value" />
+      </div>
+
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-sm);padding:12px;display:flex;flex-direction:column;gap:10px">
+        <div class="field-row-2">
+          <div class="field">
+            <label>Concentrate (ml)</label>
+            <input id="b-ml" type="number" step="0.1" min="0.1" value="${concMl}"
+              oninput="BS.versions[BS.activeVersion].totalMl=+this.value;refreshTotals();refreshEthanolInfo()" />
+          </div>
+          <div class="field">
+            <label>Ethanol (ml) <span style="font-weight:400;text-transform:none;color:var(--text3)">optional</span></label>
+            <input id="b-ethanol" type="number" step="0.1" min="0" placeholder="—"
+              value="${v.ethanolMl || ''}"
+              oninput="BS.versions[BS.activeVersion].ethanolMl=this.value;refreshEthanolInfo()" />
+          </div>
         </div>
-        <div class="field">
-          <label>Total volume (ml)</label>
-          <input id="b-ml" type="number" step="1" min="0.1" value="${v.totalMl}"
-            oninput="BS.versions[BS.activeVersion].totalMl=+this.value;refreshTotals()" />
+        <div id="b-ethanol-info" style="font-size:12px;color:var(--text2);line-height:1.5">
+          ${ethanolMl > 0
+            ? `Final volume: <strong>${finalMl.toFixed(2)} ml</strong> · Concentrate: <strong>${concPct}%</strong>`
+            : `Pure concentrate · ${concMl} ml`}
         </div>
       </div>
+
       <div style="display:flex;align-items:center;gap:8px">
         <span style="font-size:11px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--text2)">Input mode</span>
         <div style="display:flex;gap:4px">
@@ -1196,7 +1233,7 @@ function renderBuilder() {
     </div>
 
     <div class="total-bar">
-      <span class="total-label">Total</span>
+      <span class="total-label">Concentrate total</span>
       <span id="b-total" class="total-val ${ok?'total-ok':over?'total-over':''}">${total.toFixed(4)}%</span>
     </div>
 
@@ -1221,6 +1258,18 @@ function renderBuilder() {
       <button class="btn btn-primary" onclick="saveFormula()">Save formula</button>
     </div>
   `);
+}
+
+function refreshEthanolInfo() {
+  const v = BS.versions[BS.activeVersion];
+  const concMl = +v.totalMl || 0;
+  const ethanolMl = +v.ethanolMl || 0;
+  const finalMl = concMl + ethanolMl;
+  const el = document.getElementById('b-ethanol-info');
+  if (!el) return;
+  el.innerHTML = ethanolMl > 0
+    ? `Final volume: <strong>${finalMl.toFixed(2)} ml</strong> · Concentrate: <strong>${((concMl/finalMl)*100).toFixed(1)}%</strong>`
+    : `Pure concentrate · ${concMl} ml`;
 }
 
 function setInputMode(m) {
@@ -1456,7 +1505,7 @@ function openFormulaDetail(id) {
     </div>
 
     <div class="detail-block" style="padding-bottom:8px">
-      <div class="detail-label">Ingredients — ${total.toFixed(4)}% · ${v.totalMl} ml</div>
+      <div class="detail-label">Ingredients — ${total.toFixed(4)}% · ${v.totalMl} ml concentrate${+v.ethanolMl > 0 ? ` + ${v.ethanolMl} ml ethanol = ${(+v.totalMl + +v.ethanolMl).toFixed(2)} ml total` : ''}</div>
     </div>
 
     ${v.ingredients.map(ing => {
