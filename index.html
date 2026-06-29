@@ -601,10 +601,10 @@ function renderMolecules() {
     const q = state.search.toLowerCase();
     const okS = !q || m.name.toLowerCase().includes(q) || (m.cas||'').includes(q);
     return okF && okS;
-  });
+  }).sort((a, b) => a.name.localeCompare(b.name)); // sort molecules alphabetically
 
-  // Group by family (preserve family order), then ungrouped
-  const familyOrder = allFamilies().map(f => f.key);
+  // Group by family
+  const familyOrder = allFamilies().map(f => f.key); // already alphabetical
   const groups = {};
   filtered.forEach(m => {
     const key = m.family || '—';
@@ -612,17 +612,14 @@ function renderMolecules() {
     groups[key].push(m);
   });
 
-  // Sort group keys by family order
+  // Sort group keys alphabetically (family order already alpha, ungrouped '—' goes last)
   const sortedKeys = Object.keys(groups).sort((a, b) => {
-    const ai = familyOrder.indexOf(a);
-    const bi = familyOrder.indexOf(b);
-    if (ai === -1 && bi === -1) return a.localeCompare(b);
-    if (ai === -1) return 1;
-    if (bi === -1) return -1;
-    return ai - bi;
+    if (a === '—') return 1;
+    if (b === '—') return -1;
+    return a.localeCompare(b);
   });
 
-  const usedFamilies = [...new Set(state.molecules.map(m => m.family).filter(Boolean))];
+  const usedFamilies = [...new Set(state.molecules.map(m => m.family).filter(Boolean))].sort((a, b) => a.localeCompare(b));
 
   document.getElementById('main-content').innerHTML = `
     <div class="section-head">
