@@ -1,0 +1,1917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="MARA Lab" />
+  <meta name="theme-color" content="#ffffff" />
+  <title>MARA Lab</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:        #ffffff;
+      --bg2:       #f7f7f6;
+      --bg3:       #f0f0ee;
+      --surface:   #ffffff;
+      --border:    #e8e8e6;
+      --border2:   #d0d0cc;
+      --text:      #111110;
+      --text2:     #6b6b68;
+      --text3:     #9b9b97;
+      --r:         10px;
+      --r-sm:      7px;
+      --warn-bg:   #fff8f0;
+      --warn-border:#f5c97a;
+      --warn-text: #a06010;
+      --err-bg:    #fff0f0;
+      --err-border:#f5a0a0;
+      --err-text:  #c02020;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { background: #ffffff; }
+    html, body { background: #ffffff; }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: #ffffff; color: var(--text);
+      min-height: 100dvh;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden; font-size: 15px; line-height: 1.5;
+    }
+
+    /* ── LAYOUT ── */
+    #app { display: flex; flex-direction: column; min-height: 100dvh; background: #ffffff; }
+
+    header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      padding-top: env(safe-area-inset-top, 0);
+    }
+    .header-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 52px; padding: 0 16px;
+    }
+    .logo { font-size: 15px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; }
+    .logo-sub { font-size: 11px; font-weight: 400; color: var(--text3); letter-spacing: 0.06em; margin-left: 6px; }
+
+    nav {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+      background: #ffffff;
+      border-top: 1px solid var(--border);
+      padding-bottom: env(safe-area-inset-bottom, 0);
+      display: flex;
+    }
+    /* white fill behind nav for home indicator area */
+    nav::after {
+      content: ''; position: absolute; bottom: -40px; left: 0; right: 0;
+      height: 40px; background: #ffffff;
+    }
+    .nav-btn {
+      flex: 1; background: none; border: none;
+      display: flex; flex-direction: column; align-items: center; gap: 3px;
+      padding: 10px 0 8px; font-size: 10px; letter-spacing: 0.07em;
+      text-transform: uppercase; font-family: 'Inter', sans-serif;
+      color: var(--text3); cursor: pointer; transition: color 0.15s; font-weight: 500;
+    }
+    .nav-btn.active { color: var(--text); }
+    .nav-btn svg { width: 20px; height: 20px; stroke-width: 1.6; }
+
+    main {
+      flex: 1; padding: 20px 16px;
+      padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 76px);
+      max-width: 560px; margin: 0 auto; width: 100%;
+    }
+
+    /* ── SECTION HEAD ── */
+    .section-head {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .section-title { font-size: 22px; font-weight: 600; letter-spacing: -0.02em; }
+    .count-badge { font-size: 12px; color: var(--text3); }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 8px 14px; border-radius: var(--r-sm); border: none;
+      font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
+      cursor: pointer; transition: all 0.15s;
+    }
+    .btn-primary { background: var(--text); color: #fff; }
+    .btn-primary:active { opacity: 0.75; }
+    .btn-ghost { background: var(--bg2); color: var(--text2); border: 1px solid var(--border); }
+    .btn-ghost:active { background: var(--bg3); }
+    .btn-danger { background: transparent; color: #c0392b; border: 1px solid #f0c0bc; width: 100%; justify-content: center; padding: 10px; }
+    .btn-danger:active { background: #fdf0ef; }
+    .btn-sm { padding: 5px 10px; font-size: 12px; }
+
+    /* ── SEARCH ── */
+    .search-wrap { position: relative; margin-bottom: 12px; }
+    .search-wrap svg { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); width: 15px; height: 15px; color: var(--text3); pointer-events: none; }
+    .search-input {
+      width: 100%; background: var(--bg2); border: 1px solid var(--border);
+      border-radius: var(--r-sm); color: var(--text);
+      font-family: 'Inter', sans-serif; font-size: 14px;
+      padding: 9px 12px 9px 34px; outline: none; transition: border-color 0.15s;
+    }
+    .search-input:focus { border-color: var(--border2); background: #fff; }
+    .search-input::placeholder { color: var(--text3); }
+
+    /* ── CHIPS ── */
+    .chips { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 14px; scrollbar-width: none; }
+    .chips::-webkit-scrollbar { display: none; }
+    .chip {
+      flex-shrink: 0; padding: 4px 11px; border-radius: 20px;
+      font-size: 12px; font-weight: 500; cursor: pointer;
+      border: 1.5px solid var(--border); background: transparent;
+      color: var(--text2); font-family: 'Inter', sans-serif; transition: all 0.15s;
+    }
+    .chip.active { color: #fff; }
+
+    /* ── MOLECULE LIST ── */
+    .family-group { margin-bottom: 24px; }
+    .family-group-header {
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 2px; padding-bottom: 8px;
+      border-bottom: 1.5px solid var(--border);
+    }
+    .family-group-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+    .family-group-name { font-size: 12px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text2); }
+    .family-group-count { font-size: 11px; color: var(--text3); margin-left: auto; }
+
+    .mol-card {
+      background: var(--bg); padding: 12px 2px;
+      cursor: pointer; transition: background 0.1s;
+      display: flex; align-items: flex-start; gap: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .mol-card:last-child { border-bottom: none; }
+    .mol-card:active { background: var(--bg2); }
+
+    .family-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+    .mol-card-body { flex: 1; min-width: 0; }
+    .mol-name { font-size: 15px; font-weight: 500; line-height: 1.3; }
+    .mol-sub { font-size: 12px; color: var(--text3); margin-top: 2px; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+    .mol-sep { color: var(--border2); }
+    .mol-card-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0; max-width: 100px; }
+    .family-tag { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 500; white-space: nowrap; }
+
+    /* ── EMPTY ── */
+    .empty { text-align: center; padding: 56px 20px; color: var(--text3); }
+    .empty-icon { font-size: 28px; margin-bottom: 10px; opacity: 0.4; }
+    .empty h3 { font-size: 16px; font-weight: 500; margin-bottom: 4px; color: var(--text2); }
+    .empty p { font-size: 13px; line-height: 1.5; }
+
+    /* ── SHEET ── */
+    .overlay {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(0,0,0,0.22);
+      display: flex; align-items: flex-end;
+      opacity: 0; pointer-events: none; transition: opacity 0.22s;
+    }
+    .overlay.open { opacity: 1; pointer-events: all; }
+
+    .sheet {
+      width: 100%; background: var(--surface);
+      border-radius: 16px 16px 0 0;
+      border-top: 1px solid var(--border);
+      padding-bottom: max(env(safe-area-inset-bottom, 0px), 20px);
+      transform: translateY(24px);
+      transition: transform 0.26s cubic-bezier(0.4,0,0.2,1);
+      max-height: 92dvh; overflow-y: auto; overflow-x: hidden;
+    }
+    .overlay.open .sheet { transform: translateY(0); }
+
+    .sheet-handle { width: 32px; height: 3px; background: var(--border2); border-radius: 2px; margin: 10px auto 0; }
+
+    .sheet-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 16px 12px; border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; background: var(--surface); z-index: 2;
+    }
+    .sheet-title { font-size: 16px; font-weight: 600; }
+    .close-btn {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 50%; width: 28px; height: 28px; min-width: 28px;
+      color: var(--text2); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; line-height: 1;
+    }
+
+    /* ── FORM ── */
+    .form-body { padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+    .field { display: flex; flex-direction: column; gap: 5px; }
+    .field label { font-size: 11px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text2); }
+    .field-hint { font-size: 11px; color: var(--text3); margin-top: 2px; line-height: 1.4; }
+    .field input, .field select, .field textarea {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: var(--r-sm); color: var(--text);
+      font-family: 'Inter', sans-serif; font-size: 14px;
+      padding: 10px 12px; outline: none; transition: border-color 0.15s; width: 100%;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--border2); background: #fff; }
+    .field input::placeholder, .field textarea::placeholder { color: var(--text3); }
+    .field select {
+      appearance: none; cursor: pointer; padding-right: 32px;
+      background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%236b6b68' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 12px center;
+    }
+    .field textarea { resize: vertical; min-height: 72px; line-height: 1.5; }
+
+    .field-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .field-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+
+    .section-div {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--text3);
+      padding-top: 6px; padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .form-actions {
+      display: flex; gap: 8px; padding: 12px 16px 4px;
+      border-top: 1px solid var(--border);
+    }
+    .form-actions .btn { flex: 1; justify-content: center; }
+
+    /* ── PYRAMID ── */
+    .pyramid-btns { display: flex; gap: 6px; }
+    .pyr-btn {
+      flex: 1; padding: 9px 4px; border-radius: var(--r-sm);
+      border: 1.5px solid var(--border); background: transparent;
+      color: var(--text2); font-family: 'Inter', sans-serif;
+      font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.15s; text-align: center;
+    }
+    .pyr-btn.active { border-color: var(--text); background: var(--text); color: #fff; }
+
+    /* ── DILUTIONS ── */
+    .dilution-list { display: flex; flex-direction: column; gap: 8px; }
+    .dilution-row { display: flex; gap: 8px; align-items: center; }
+    .dilution-row .dil-label { font-size: 12px; color: var(--text2); white-space: nowrap; flex-shrink: 0; min-width: 38px; }
+    .dilution-row input { flex: 1; }
+    .dilution-row .dil-pct-wrap { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+    .dilution-row .dil-pct-wrap input { width: 68px; }
+    .dilution-row .dil-pct-sym { font-size: 12px; color: var(--text3); }
+    .dil-del { background: none; border: none; color: var(--text3); font-size: 18px; cursor: pointer; padding: 0 4px; line-height: 1; flex-shrink: 0; }
+    .dil-del:active { color: #c0392b; }
+    .add-dil-btn {
+      background: none; border: 1.5px dashed var(--border2); border-radius: var(--r-sm);
+      color: var(--text2); font-size: 12px; font-weight: 500;
+      padding: 8px 12px; cursor: pointer; font-family: 'Inter', sans-serif;
+      transition: all 0.15s; text-align: center; width: 100%;
+    }
+    .add-dil-btn:active { background: var(--bg2); }
+
+    /* ── DETAIL ── */
+    .detail-block { padding: 12px 16px; border-bottom: 1px solid var(--border); }
+    .detail-label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); margin-bottom: 5px; }
+    .detail-val { font-size: 15px; color: var(--text); line-height: 1.5; }
+
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; }
+    .detail-cell { padding: 12px 16px; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); }
+    .detail-cell:nth-child(even) { border-right: none; }
+    .detail-cell .detail-label { margin-bottom: 3px; }
+
+    .pyramid-badge { display: inline-block; padding: 3px 10px; border-radius: 4px; font-size: 12px; font-weight: 500; }
+    .pyr-top    { background: #fff5e0; color: #a06000; }
+    .pyr-heart  { background: #fce8f0; color: #a03050; }
+    .pyr-base   { background: #eee8f8; color: #4030a0; }
+
+    .dil-chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 20px; font-size: 12px; background: var(--bg2); border: 1px solid var(--border); margin: 3px 4px 3px 0; }
+
+    /* ── FORMULA CARDS ── */
+    .formula-card {
+      background: var(--bg); padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer; transition: background 0.1s;
+    }
+    .formula-card:first-child { border-top: 1px solid var(--border); }
+    .formula-card:active { background: var(--bg2); }
+    .formula-name { font-size: 15px; font-weight: 500; }
+    .formula-meta { font-size: 12px; color: var(--text3); margin-top: 3px; display: flex; gap: 8px; flex-wrap: wrap; }
+
+    /* ── BUILDER ── */
+    .version-tabs { display: flex; gap: 5px; overflow-x: auto; padding: 10px 16px 0; scrollbar-width: none; }
+    .version-tabs::-webkit-scrollbar { display: none; }
+    .vtab { flex-shrink: 0; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; cursor: pointer; border: 1.5px solid var(--border); background: none; color: var(--text2); font-family: 'Inter', sans-serif; transition: all 0.15s; }
+    .vtab.active { background: var(--text); color: #fff; border-color: var(--text); }
+    .vtab-add { flex-shrink: 0; padding: 4px 10px; border-radius: 20px; border: 1.5px dashed var(--border2); background: none; color: var(--text3); font-size: 14px; cursor: pointer; line-height: 1.3; }
+
+    .total-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 16px; background: var(--bg2);
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    }
+    .total-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text2); }
+    .total-val { font-size: 15px; font-weight: 500; font-variant-numeric: tabular-nums; }
+    .total-ok   { color: #2d7a4a; }
+    .total-over { color: #c0392b; }
+
+    /* ── INGREDIENT ROW ── */
+    .ingredient-row {
+      padding: 10px 16px; border-bottom: 1px solid var(--border);
+    }
+    .ing-top { display: flex; align-items: center; gap: 8px; }
+    .ing-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .ing-info { flex: 1; min-width: 0; }
+    .ing-name-text { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ing-family-text { font-size: 11px; color: var(--text3); }
+    .ing-del { background: none; border: none; color: var(--text3); font-size: 16px; cursor: pointer; padding: 2px 4px; flex-shrink: 0; }
+    .ing-del:active { color: #c0392b; }
+
+    /* inputs row */
+    .ing-inputs { display: flex; gap: 6px; align-items: center; margin-top: 8px; padding-left: 15px; }
+    .ing-input-wrap { display: flex; align-items: center; gap: 3px; flex: 1; }
+    .ing-input-wrap label { font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text3); white-space: nowrap; }
+    .ing-num {
+      flex: 1; background: var(--bg2); border: 1px solid var(--border);
+      border-radius: var(--r-sm); color: var(--text); font-size: 13px;
+      padding: 5px 7px; font-variant-numeric: tabular-nums;
+      font-family: 'Inter', sans-serif; outline: none; min-width: 0;
+    }
+    .ing-num:focus { border-color: var(--border2); background: #fff; }
+    .ing-unit { font-size: 11px; color: var(--text3); white-space: nowrap; }
+
+    /* dilution selector inside ingredient row */
+    .ing-dil-select {
+      margin-top: 6px; padding-left: 15px;
+    }
+    .ing-dil-select select {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: var(--r-sm); color: var(--text2);
+      font-family: 'Inter', sans-serif; font-size: 11px;
+      padding: 4px 24px 4px 8px; outline: none; cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg width='8' height='5' viewBox='0 0 8 5' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L4 4L7 1' stroke='%236b6b68' stroke-width='1.2' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 8px center;
+      max-width: 100%;
+    }
+
+    /* ── IFRA WARNING ── */
+    .ifra-warn {
+      display: flex; align-items: flex-start; gap: 8px;
+      padding: 9px 12px; border-radius: var(--r-sm);
+      margin-top: 6px; margin-left: 15px;
+      font-size: 12px; line-height: 1.4;
+    }
+    .ifra-warn.warn { background: var(--warn-bg); border: 1px solid var(--warn-border); color: var(--warn-text); }
+    .ifra-warn.err  { background: var(--err-bg);  border: 1px solid var(--err-border);  color: var(--err-text); }
+    .ifra-warn svg  { width: 14px; height: 14px; flex-shrink: 0; margin-top: 1px; }
+
+    .add-ing-btn {
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      padding: 12px 16px; background: none; border: none;
+      color: var(--text2); font-size: 13px; font-weight: 500;
+      cursor: pointer; font-family: 'Inter', sans-serif; width: 100%;
+    }
+    .add-ing-btn:active { background: var(--bg2); }
+
+    /* ── ING PICK ── */
+    .ing-pick-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 11px 16px; border-bottom: 1px solid var(--border);
+      cursor: pointer; transition: background 0.1s;
+    }
+    .ing-pick-item:active { background: var(--bg2); }
+
+    /* ── FORMULA DETAIL ── */
+    .fi-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 16px; border-bottom: 1px solid var(--border);
+    }
+    .fi-left { display: flex; align-items: center; gap: 10px; }
+    .fi-right { text-align: right; flex-shrink: 0; }
+    .fi-pct { font-size: 13px; font-weight: 500; font-variant-numeric: tabular-nums; }
+    .fi-ml { font-size: 11px; color: var(--text3); font-variant-numeric: tabular-nums; }
+
+    .fi-warn { font-size: 11px; margin-top: 2px; }
+    .fi-warn.w { color: var(--warn-text); }
+    .fi-warn.e { color: var(--err-text); }
+
+    /* ── CUSTOM FAMILY MODAL ── */
+    .color-swatch-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 8px; margin-top: 8px; }
+    .color-swatch {
+      width: 100%; aspect-ratio: 1; border-radius: 50%; cursor: pointer;
+      border: 2px solid transparent; transition: transform 0.15s;
+    }
+    .color-swatch.selected { border-color: var(--text); transform: scale(1.15); }
+    .color-swatch:active { transform: scale(0.9); }
+
+    /* ── ANALYTICS PANEL ── */
+    .analytics-panel {
+      border-top: 1px solid var(--border);
+      background: var(--bg2);
+    }
+    .analytics-toggle {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 16px; cursor: pointer; user-select: none;
+      background: none; border: none; width: 100%; font-family: 'Inter', sans-serif;
+    }
+    .analytics-toggle-label {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--text2);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .analytics-toggle-label svg { width: 13px; height: 13px; }
+    .analytics-chevron { font-size: 12px; color: var(--text3); transition: transform 0.2s; }
+    .analytics-chevron.open { transform: rotate(180deg); }
+    .analytics-body { padding: 0 16px 14px; display: none; }
+    .analytics-body.open { display: block; }
+
+    .an-section { margin-bottom: 16px; }
+    .an-label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); margin-bottom: 8px; }
+
+    /* stacked bar */
+    .stacked-bar { height: 8px; border-radius: 4px; overflow: hidden; display: flex; margin-bottom: 6px; gap: 1px; }
+    .stacked-seg { height: 100%; transition: width 0.3s; }
+    .stacked-legend { display: flex; flex-wrap: wrap; gap: 8px 14px; }
+    .stacked-legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text2); }
+    .stacked-legend-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+    /* longevity */
+    .longevity-row { display: flex; align-items: center; gap: 10px; }
+    .longevity-bar-wrap { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+    .longevity-bar-fill { height: 100%; border-radius: 3px; background: linear-gradient(to right, #6b9e9e, #4a7a9e); transition: width 0.4s; }
+    .longevity-label { font-size: 12px; font-weight: 500; color: var(--text2); white-space: nowrap; min-width: 64px; text-align: right; }
+
+    /* aromatic profile */
+    .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+    .profile-item { background: var(--bg); border: 1px solid var(--border); border-radius: var(--r-sm); padding: 8px 10px; }
+    .profile-item-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .profile-item-bar { height: 3px; border-radius: 2px; background: var(--border); overflow: hidden; margin-bottom: 3px; }
+    .profile-item-fill { height: 100%; border-radius: 2px; background: var(--border2); }
+    .profile-item-val { font-size: 12px; font-weight: 500; color: var(--text2); }
+
+    /* IFRA summary */
+    .ifra-summary-row { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--border); }
+    .ifra-summary-row:last-child { border-bottom: none; }
+    .ifra-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .ifra-dot.ok   { background: #2d7a4a; }
+    .ifra-dot.warn { background: #c09020; }
+    .ifra-dot.over { background: #c02020; }
+    .ifra-summary-name { flex: 1; font-size: 12px; }
+    .ifra-summary-val { font-size: 11px; color: var(--text3); }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed; bottom: 84px; left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      background: var(--text); color: #fff;
+      padding: 9px 18px; border-radius: 20px;
+      font-size: 13px; opacity: 0; transition: all 0.2s;
+      pointer-events: none; z-index: 400; white-space: nowrap;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } }
+  </style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <div class="header-inner">
+      <div><span class="logo">MARA</span><span class="logo-sub">Lab</span></div>
+      <div id="header-action"></div>
+    </div>
+  </header>
+  <main id="main-content"></main>
+  <nav>
+    <button class="nav-btn active" id="nav-molecules" onclick="showPage('molecules')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><circle cx="3" cy="6" r="2"/><circle cx="21" cy="6" r="2"/><circle cx="3" cy="18" r="2"/><circle cx="21" cy="18" r="2"/><line x1="5" y1="6.8" x2="9.5" y2="10.2"/><line x1="19" y1="6.8" x2="14.5" y2="10.2"/><line x1="5" y1="17.2" x2="9.5" y2="13.8"/><line x1="19" y1="17.2" x2="14.5" y2="13.8"/></svg>
+      Molecules
+    </button>
+    <button class="nav-btn" id="nav-formulas" onclick="showPage('formulas')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="9" x2="9" y2="21"/></svg>
+      Formulas
+    </button>
+  </nav>
+</div>
+<div id="toast" class="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════════════════
+
+const DEFAULT_FAMILIES = [
+  { key: 'Floral',    color: '#d4a5b5' },
+  { key: 'Woody',     color: '#b5895a' },
+  { key: 'Citrus',    color: '#c4a84a' },
+  { key: 'Oriental',  color: '#8c6b9e' },
+  { key: 'Gourmand',  color: '#c47a5a' },
+  { key: 'Green',     color: '#6b9e6b' },
+  { key: 'Aquatic',   color: '#5a8fa0' },
+  { key: 'Fougère',   color: '#7a8c6b' },
+  { key: 'Chypre',    color: '#a0846b' },
+  { key: 'Resinous',  color: '#8c6b50' },
+  { key: 'Aldehyde',  color: '#7a7a9e' },
+  { key: 'Musk',      color: '#a09585' },
+];
+
+const PALETTE = [
+  '#d4a5b5','#e8a0a0','#e8b4a0','#e8c890','#e8d870',
+  '#c4a84a','#a8c870','#7ab870','#6b9e6b','#7a9e80',
+  '#7a8c6b','#a0b46b','#5a9e8a','#5a8fa0','#5a7ab5',
+  '#7a7a9e','#8c6b9e','#b070b0','#c070a0','#d4708a',
+  '#b5895a','#c4956b','#a09585','#8c7a70','#a0846b',
+  '#8c6b50','#7a5a40','#9e7060','#c47a5a','#7a9ea0',
+  '#506070','#708090','#607860','#806050','#905060',
+];
+
+const PYRAMID_LEVELS = ['Top', 'Heart', 'Base'];
+
+let state = {
+  molecules: [],
+  formulas: [],
+  families: [],
+  page: 'molecules',
+  filter: 'all',
+  search: '',
+};
+
+// Merge default families with any saved custom ones
+function allFamilies() {
+  const customs = state.families || [];
+  const deletedKeys = new Set(customs.filter(f => f.deleted).map(f => f.key));
+  const customMap = {};
+  customs.filter(f => !f.deleted).forEach(f => customMap[f.key] = { ...f, isDefault: false });
+
+  const result = [];
+  DEFAULT_FAMILIES.forEach(f => {
+    if (!deletedKeys.has(f.key)) {
+      result.push(customMap[f.key] || { ...f, isDefault: true });
+      delete customMap[f.key];
+    }
+  });
+  Object.values(customMap).forEach(f => result.push(f));
+  return result;
+}
+
+function familyColor(name) {
+  const all = allFamilies();
+  const f = all.find(f => f.key === name);
+  return f ? f.color : '#bbb';
+}
+
+function load() {
+  try {
+    const m   = localStorage.getItem('mara_mols_v3');
+    const f   = localStorage.getItem('mara_forms_v3');
+    const fam = localStorage.getItem('mara_families_v3');
+    if (m)   state.molecules = JSON.parse(m);
+    if (f)   state.formulas  = JSON.parse(f);
+    if (fam) state.families  = JSON.parse(fam);
+  } catch(e) {}
+}
+
+function save() {
+  localStorage.setItem('mara_mols_v3',     JSON.stringify(state.molecules));
+  localStorage.setItem('mara_forms_v3',    JSON.stringify(state.formulas));
+  localStorage.setItem('mara_families_v3', JSON.stringify(state.families));
+}
+
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ── TOAST ──
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('show'), 2200);
+}
+
+// ── NAV ──
+function showPage(p) {
+  state.page = p; state.filter = 'all'; state.search = '';
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('nav-' + p).classList.add('active');
+  render();
+}
+function render() {
+  if (state.page === 'molecules') renderMolecules();
+  else renderFormulas();
+}
+
+// ══════════════════════════════════════════════════════
+// MOLECULES — LIST (grouped by family)
+// ══════════════════════════════════════════════════════
+function renderMolecules() {
+  document.getElementById('header-action').innerHTML = `
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost btn-sm" onclick="openBackupSheet()" title="Backup & Restore">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      </button>
+      <button class="btn btn-ghost btn-sm" onclick="openFamilyManager()" title="Manage families">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+      </button>
+      <button class="btn btn-primary btn-sm" onclick="openMoleculeForm()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add
+      </button>
+    </div>`;
+
+  const filtered = state.molecules.filter(m => {
+    const okF = state.filter === 'all' || m.family === state.filter;
+    const q = state.search.toLowerCase();
+    const okS = !q || m.name.toLowerCase().includes(q) || (m.cas||'').includes(q);
+    return okF && okS;
+  });
+
+  // Group by family (preserve family order), then ungrouped
+  const familyOrder = allFamilies().map(f => f.key);
+  const groups = {};
+  filtered.forEach(m => {
+    const key = m.family || '—';
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(m);
+  });
+
+  // Sort group keys by family order
+  const sortedKeys = Object.keys(groups).sort((a, b) => {
+    const ai = familyOrder.indexOf(a);
+    const bi = familyOrder.indexOf(b);
+    if (ai === -1 && bi === -1) return a.localeCompare(b);
+    if (ai === -1) return 1;
+    if (bi === -1) return -1;
+    return ai - bi;
+  });
+
+  const usedFamilies = [...new Set(state.molecules.map(m => m.family).filter(Boolean))];
+
+  document.getElementById('main-content').innerHTML = `
+    <div class="section-head">
+      <h1 class="section-title">Molecules</h1>
+      <span class="count-badge">${state.molecules.length}</span>
+    </div>
+
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="search-input" placeholder="Search by name or CAS…" value="${esc(state.search)}"
+        oninput="state.search=this.value;renderMolecules()" />
+    </div>
+
+    <div class="chips">
+      <button class="chip${state.filter==='all'?' active':''}"
+        style="${state.filter==='all'?'background:#111110;border-color:#111110;':''}"
+        onclick="state.filter='all';renderMolecules()">All</button>
+      ${usedFamilies.map(f => {
+        const col = familyColor(f);
+        const active = state.filter === f;
+        return `<button class="chip${active?' active':''}"
+          style="${active?`background:${col};border-color:${col};`:`color:${col};border-color:${col}55;`}"
+          onclick="state.filter='${esc(f)}';renderMolecules()">${esc(f)}</button>`;
+      }).join('')}
+    </div>
+
+    ${filtered.length === 0 ? `
+      <div class="empty">
+        <div class="empty-icon">◎</div>
+        <h3>${state.molecules.length === 0 ? 'Start your collection' : 'Nothing found'}</h3>
+        <p>${state.molecules.length === 0 ? 'Add your first molecule' : 'Try a different search'}</p>
+      </div>
+    ` : sortedKeys.map(key => {
+      const mols = groups[key];
+      const col = key === '—' ? '#bbb' : familyColor(key);
+      return `
+        <div class="family-group">
+          <div class="family-group-header">
+            <div class="family-group-dot" style="background:${col}"></div>
+            <span class="family-group-name">${esc(key)}</span>
+            <span class="family-group-count">${mols.length}</span>
+          </div>
+          ${mols.map(m => molCard(m)).join('')}
+        </div>
+      `;
+    }).join('')}
+  `;
+}
+
+function molCard(m) {
+  const col = m.family ? familyColor(m.family) : '#bbb';
+  const subs = [];
+  if (m.cas) subs.push(m.cas);
+  if (m.pyramid) subs.push(m.pyramid);
+  if (m.stock) subs.push(`${m.stock} g`);
+
+  return `
+    <div class="mol-card" onclick="openMoleculeDetail('${m.id}')">
+      <div class="family-dot" style="background:${col}"></div>
+      <div class="mol-card-body">
+        <div class="mol-name">${esc(m.name)}</div>
+        ${subs.length ? `<div class="mol-sub">${subs.map((s,i)=>i?`<span class="mol-sep">·</span><span>${esc(s)}</span>`:`<span>${esc(s)}</span>`).join('')}</div>` : ''}
+      </div>
+      <div class="mol-card-right">
+        ${m.family ? `<span class="family-tag" style="background:${col}22;color:${col}">${esc(m.family)}</span>` : ''}
+        ${m.ifra ? `<span style="font-size:11px;color:var(--text3)">IFRA ${m.ifra}%</span>` : ''}
+      </div>
+    </div>
+  `;
+}
+
+// ══════════════════════════════════════════════════════
+// MOLECULE FORM
+// ══════════════════════════════════════════════════════
+let editMolId = null;
+let formDilutions = []; // [{label, pct}]
+let formPyramid = '';
+
+function openMoleculeForm(id) {
+  editMolId = id || null;
+  const m = id ? state.molecules.find(x => x.id === id) : null;
+  const v = m || {};
+  // dilutions: migrate old string format or use new object format
+  if (v.dilutions && v.dilutions.length) {
+    formDilutions = v.dilutions.map(d => typeof d === 'string'
+      ? { label: d, pct: 100 }
+      : { label: d.label || '', pct: d.pct != null ? d.pct : 100 });
+  } else {
+    formDilutions = [];
+  }
+  formPyramid = v.pyramid || '';
+
+  const famOptions = allFamilies().map(f =>
+    `<option value="${esc(f.key)}"${v.family===f.key?' selected':''}>${esc(f.key)}</option>`
+  ).join('');
+
+  showSheet('molForm', id ? 'Edit molecule' : 'New molecule', `
+    <div class="form-body">
+      <div class="field">
+        <label>Name *</label>
+        <input id="f-name" placeholder="e.g. Ambroxan" value="${esc(v.name||'')}" />
+      </div>
+
+      <div class="field-row-2">
+        <div class="field">
+          <label>CAS number</label>
+          <input id="f-cas" placeholder="6790-58-5" value="${esc(v.cas||'')}" />
+        </div>
+        <div class="field">
+          <label>Cost (₴ / g)</label>
+          <input id="f-cost" type="number" step="0.01" placeholder="0.00" value="${esc(v.cost||'')}" />
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Family</label>
+        <select id="f-family">
+          <option value="">— select —</option>
+          ${famOptions}
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Fragrance Pyramid</label>
+        <div class="pyramid-btns">
+          ${PYRAMID_LEVELS.map(lvl => `
+            <button class="pyr-btn${formPyramid===lvl?' active':''}" id="pyr-${lvl}"
+              onclick="setPyramid('${lvl}')">${lvl}</button>
+          `).join('')}
+        </div>
+      </div>
+
+      <div class="field">
+        <label>IFRA limit <span style="text-transform:none;font-weight:400;color:var(--text3)">% in finished product</span></label>
+        <input id="f-ifra" type="number" step="0.01" placeholder="e.g. 3.50" value="${esc(v.ifra||'')}" />
+        <div class="field-hint">Maximum safe concentration for skin application</div>
+      </div>
+
+      <div class="field">
+        <label>Stock (g)</label>
+        <input id="f-stock" type="number" step="0.01" placeholder="e.g. 10.00" value="${esc(v.stock||'')}" />
+      </div>
+
+      <div class="field">
+        <label>Dilutions</label>
+        <div class="dilution-list" id="dilution-list">${renderDilutionRows()}</div>
+        <button class="add-dil-btn" onclick="addDilutionRow()">+ Add dilution</button>
+        <div class="field-hint">List every concentration you have (default 100% = pure). E.g. "10% in DPG"</div>
+      </div>
+
+      <div class="field">
+        <label>Notes</label>
+        <textarea id="f-notes" placeholder="Impressions, blending tips…">${esc(v.notes||'')}</textarea>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-ghost" onclick="closeSheet()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveMolecule()">Save</button>
+    </div>
+  `);
+}
+
+function renderDilutionRows() {
+  if (!formDilutions.length) return '';
+  return formDilutions.map((d, i) => `
+    <div class="dilution-row">
+      <input class="dil-label-inp" placeholder='e.g. "10% in DPG"'
+        value="${esc(d.label)}" oninput="formDilutions[${i}].label=this.value" style="flex:1" />
+      <div class="dil-pct-wrap">
+        <input type="number" step="0.1" min="0.1" max="100"
+          value="${d.pct}" oninput="formDilutions[${i}].pct=+this.value" style="width:64px" />
+        <span class="dil-pct-sym">%</span>
+      </div>
+      <button class="dil-del" onclick="removeDilution(${i})">×</button>
+    </div>
+  `).join('');
+}
+
+function addDilutionRow() {
+  formDilutions.push({ label: '', pct: 100 });
+  document.getElementById('dilution-list').innerHTML = renderDilutionRows();
+}
+
+function removeDilution(i) {
+  // sync current values first
+  syncDilutionInputs();
+  formDilutions.splice(i, 1);
+  document.getElementById('dilution-list').innerHTML = renderDilutionRows();
+}
+
+function syncDilutionInputs() {
+  document.querySelectorAll('.dilution-row').forEach((row, i) => {
+    const labelInp = row.querySelector('.dil-label-inp');
+    const pctInp = row.querySelector('input[type="number"]');
+    if (labelInp) formDilutions[i].label = labelInp.value;
+    if (pctInp) formDilutions[i].pct = +pctInp.value;
+  });
+}
+
+function setPyramid(lvl) {
+  formPyramid = formPyramid === lvl ? '' : lvl;
+  document.querySelectorAll('.pyr-btn').forEach(b => b.classList.remove('active'));
+  if (formPyramid) document.getElementById('pyr-' + formPyramid)?.classList.add('active');
+}
+
+function saveMolecule() {
+  const name = document.getElementById('f-name').value.trim();
+  if (!name) { toast('Enter a molecule name'); return; }
+  syncDilutionInputs();
+
+  const mol = {
+    id: editMolId || uid(),
+    name,
+    cas:      document.getElementById('f-cas').value.trim(),
+    cost:     document.getElementById('f-cost').value,
+    family:   document.getElementById('f-family').value,
+    pyramid:  formPyramid,
+    ifra:     document.getElementById('f-ifra').value,
+    stock:    document.getElementById('f-stock').value,
+    dilutions: formDilutions.filter(d => d.label.trim() || d.pct !== 100),
+    notes:    document.getElementById('f-notes').value.trim(),
+  };
+
+  if (editMolId) {
+    state.molecules = state.molecules.map(m => m.id === editMolId ? mol : m);
+    toast('Molecule updated');
+  } else {
+    state.molecules.push(mol);
+    toast('Molecule added');
+  }
+  save(); closeSheet(); renderMolecules();
+}
+
+// ── MOLECULE DETAIL ──
+function openMoleculeDetail(id) {
+  const m = state.molecules.find(x => x.id === id);
+  if (!m) return;
+  const col = familyColor(m.family);
+  const pyrClass = { Top: 'pyr-top', Heart: 'pyr-heart', Base: 'pyr-base' };
+
+  const cells = [
+    m.cas   ? ['CAS', m.cas] : null,
+    m.ifra  ? ['IFRA limit', m.ifra + '%'] : null,
+    m.stock ? ['Stock', m.stock + ' g'] : null,
+    m.cost  ? ['Cost', '₴' + parseFloat(m.cost).toFixed(2) + '/g'] : null,
+  ].filter(Boolean);
+
+  showSheet('molDetail', esc(m.name), `
+    ${(m.family || m.pyramid) ? `
+      <div class="detail-block" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding-bottom:12px">
+        ${m.family ? `<span class="family-tag" style="background:${col}22;color:${col}">${esc(m.family)}</span>` : ''}
+        ${m.pyramid ? `<span class="pyramid-badge ${pyrClass[m.pyramid]||''}">${m.pyramid} note</span>` : ''}
+      </div>
+    ` : ''}
+
+    ${cells.length ? `
+      <div class="detail-grid">
+        ${cells.map(([l, v]) => `
+          <div class="detail-cell">
+            <div class="detail-label">${l}</div>
+            <div class="detail-val">${esc(v)}</div>
+          </div>
+        `).join('')}
+      </div>
+    ` : ''}
+
+    ${m.dilutions && m.dilutions.length ? `
+      <div class="detail-block">
+        <div class="detail-label">Dilutions</div>
+        <div style="margin-top:6px">
+          ${m.dilutions.map(d => {
+            const label = typeof d === 'string' ? d : (d.label || 'Pure');
+            const pct = typeof d === 'string' ? 100 : (d.pct || 100);
+            return `<span class="dil-chip">${esc(label)} · ${pct}%</span>`;
+          }).join('')}
+        </div>
+      </div>
+    ` : ''}
+
+    ${m.notes ? `
+      <div class="detail-block">
+        <div class="detail-label">Notes</div>
+        <div class="detail-val" style="color:var(--text2);line-height:1.6;margin-top:4px">${esc(m.notes)}</div>
+      </div>
+    ` : ''}
+
+    <div class="form-actions" style="margin-top:6px">
+      <button class="btn btn-ghost" onclick="closeSheet();openMoleculeForm('${m.id}')">Edit</button>
+      <button class="btn btn-danger" onclick="deleteMolecule('${m.id}')">Delete</button>
+    </div>
+  `);
+}
+
+function deleteMolecule(id) {
+  const m = state.molecules.find(x => x.id === id);
+  if (!m) return;
+  // Replace sheet content with inline confirmation (Safari blocks confirm() in sheets)
+  const sheet = document.querySelector('#sheet-molDetail .sheet');
+  if (!sheet) return;
+  const conf = document.createElement('div');
+  conf.style.cssText = 'padding:20px 16px;display:flex;flex-direction:column;gap:12px';
+  conf.innerHTML = `
+    <div style="font-size:14px;color:var(--text2);line-height:1.5">Delete <strong>${esc(m.name)}</strong>? This cannot be undone.</div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="this.closest('.overlay').remove();sheetStack.pop()">Cancel</button>
+      <button class="btn btn-danger" style="flex:1" onclick="confirmDeleteMolecule('${id}')">Delete</button>
+    </div>`;
+  sheet.appendChild(conf);
+  sheet.scrollTop = sheet.scrollHeight;
+}
+
+function confirmDeleteMolecule(id) {
+  state.molecules = state.molecules.filter(m => m.id !== id);
+  save(); closeSheet(); toast('Deleted'); renderMolecules();
+}
+
+// ══════════════════════════════════════════════════════
+// CUSTOM FAMILY MANAGER
+// ══════════════════════════════════════════════════════
+let cfPickedColor = PALETTE[0];
+let cfEditKey = null; // null = new
+
+function openFamilyManager() {
+  cfEditKey = null; cfPickedColor = PALETTE[0];
+  showSheet('famMgr', 'Families', familyManagerContent());
+}
+
+function familyManagerContent() {
+  return `
+    <div style="padding:12px 16px 0">
+      <p style="font-size:12px;color:var(--text3);margin-bottom:12px">
+        Tap delete to remove any family. Molecules keep their name but lose the colour.
+      </p>
+      ${allFamilies().map(f => `
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)">
+          <div style="width:10px;height:10px;border-radius:50%;background:${f.color};flex-shrink:0"></div>
+          <span style="flex:1;font-size:14px;font-weight:500">${esc(f.key)}</span>
+          <button class="btn btn-ghost btn-sm" onclick="deleteFamilyKey('${esc(f.key)}')">Delete</button>
+        </div>
+      `).join('')}
+    </div>
+    <div style="padding:16px;border-top:1px solid var(--border);margin-top:8px">
+      <div class="section-div" style="margin-bottom:12px">Add custom family</div>
+      <div class="field" style="margin-bottom:10px">
+        <label>Name</label>
+        <input id="cf-name" placeholder="e.g. Aromatic" />
+      </div>
+      <div class="field">
+        <label>Color</label>
+        <div class="color-swatch-grid" id="cf-swatches">
+          ${PALETTE.map(c => `
+            <div class="color-swatch${c===cfPickedColor?' selected':''}"
+              style="background:${c}" onclick="cfPickColor('${c}')"></div>
+          `).join('')}
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
+          <span style="font-size:11px;color:var(--text3)">Custom hex:</span>
+          <input id="cf-hex" value="${cfPickedColor}" placeholder="#rrggbb"
+            style="font-size:12px;padding:5px 8px;width:100px"
+            oninput="cfHexChange(this.value)" />
+          <div id="cf-preview" style="width:24px;height:24px;border-radius:50%;background:${cfPickedColor};border:1px solid var(--border);flex-shrink:0"></div>
+        </div>
+      </div>
+      <div style="margin-top:14px">
+        <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="addCustomFamily()">Add Family</button>
+      </div>
+    </div>
+  `;
+}
+
+function cfPickColor(c) {
+  cfPickedColor = c;
+  document.querySelectorAll('.color-swatch').forEach(el => {
+    el.classList.toggle('selected', el.style.background === c || el.style.backgroundColor === c);
+  });
+  document.getElementById('cf-hex').value = c;
+  document.getElementById('cf-preview').style.background = c;
+}
+
+function cfHexChange(val) {
+  if (/^#[0-9a-fA-F]{6}$/.test(val)) {
+    cfPickedColor = val;
+    document.getElementById('cf-preview').style.background = val;
+    document.querySelectorAll('.color-swatch').forEach(el => el.classList.remove('selected'));
+  }
+}
+
+function addCustomFamily() {
+  const name = document.getElementById('cf-name').value.trim();
+  if (!name) { toast('Enter a family name'); return; }
+  const hex = document.getElementById('cf-hex').value.trim();
+  const color = /^#[0-9a-fA-F]{6}$/.test(hex) ? hex : cfPickedColor;
+  if (!state.families) state.families = [];
+  if (state.families.find(f => f.key === name) || DEFAULT_FAMILIES.find(f => f.key === name)) {
+    toast('Family already exists'); return;
+  }
+  state.families.push({ key: name, color });
+  save(); toast('Family added'); closeSheet();
+}
+
+function deleteFamilyKey(key) {
+  // Inline confirmation — Safari blocks confirm() inside sheets
+  const list = document.querySelector('#sheet-famMgr .sheet > div');
+  if (!list) return;
+  const existing = document.getElementById('fam-del-confirm');
+  if (existing) existing.remove();
+  const conf = document.createElement('div');
+  conf.id = 'fam-del-confirm';
+  conf.style.cssText = 'margin:12px 16px;padding:14px;background:var(--err-bg);border:1px solid var(--err-border);border-radius:var(--r-sm);display:flex;flex-direction:column;gap:10px';
+  conf.innerHTML = `
+    <div style="font-size:13px;color:var(--err-text);line-height:1.4">Delete "<strong>${esc(key)}</strong>"? Molecules keep the name but lose the colour.</div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost btn-sm" style="flex:1;justify-content:center" onclick="document.getElementById('fam-del-confirm').remove()">Cancel</button>
+      <button class="btn btn-sm" style="flex:1;justify-content:center;background:#c02020;color:#fff;border:none" onclick="confirmDeleteFamily('${esc(key)}')">Delete</button>
+    </div>`;
+  list.prepend(conf);
+}
+
+function confirmDeleteFamily(key) {
+  const isDefault = DEFAULT_FAMILIES.some(f => f.key === key);
+  if (!state.families) state.families = [];
+  if (isDefault) {
+    state.families = state.families.filter(f => f.key !== key);
+    state.families.push({ key, color: '#bbb', deleted: true });
+  } else {
+    state.families = state.families.filter(f => f.key !== key);
+  }
+  save(); closeSheet(); toast(`"${key}" deleted`);
+}
+
+// ══════════════════════════════════════════════════════
+// FORMULAS — LIST
+// ══════════════════════════════════════════════════════
+function renderFormulas() {
+  document.getElementById('header-action').innerHTML = `
+    <button class="btn btn-primary btn-sm" onclick="openFormulaBuilder()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      New
+    </button>`;
+
+  document.getElementById('main-content').innerHTML = `
+    <div class="section-head">
+      <h1 class="section-title">Formulas</h1>
+      <span class="count-badge">${state.formulas.length}</span>
+    </div>
+    <div>
+      ${state.formulas.length === 0 ? `
+        <div class="empty">
+          <div class="empty-icon">⌗</div>
+          <h3>No formulas yet</h3>
+          <p>Combine molecules and save your first recipe</p>
+        </div>
+      ` : state.formulas.map(f => formulaCard(f)).join('')}
+    </div>
+  `;
+}
+
+function formulaCard(f) {
+  const v = f.versions[f.activeVersion || 0];
+  const total = v.ingredients.reduce((s, i) => s + ingEffectivePct(i), 0);
+  const hasWarn = v.ingredients.some(i => ifraStatus(i, total) !== 'ok');
+  return `
+    <div class="formula-card" onclick="openFormulaDetail('${f.id}')">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
+        <div class="formula-name">${esc(f.name)}</div>
+        ${hasWarn ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#a06010" stroke-width="2" style="flex-shrink:0;margin-top:2px"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>` : ''}
+      </div>
+      <div class="formula-meta">
+        <span>${v.ingredients.length} ingredients</span>
+        <span>·</span>
+        <span>${f.versions.length} version${f.versions.length>1?'s':''}</span>
+        <span>·</span>
+        <span style="color:${Math.abs(total-100)<0.05?'#2d7a4a':'var(--text3)'}">${total.toFixed(2)}%</span>
+      </div>
+      ${f.notes ? `<div style="font-size:12px;color:var(--text3);margin-top:4px;line-height:1.4">${esc(f.notes)}</div>` : ''}
+    </div>
+  `;
+}
+
+// ══════════════════════════════════════════════════════
+// IFRA LOGIC
+// ══════════════════════════════════════════════════════
+
+// Returns the effective % of pure molecule contributed to the formula
+// ing.pct = percentage of this ingredient in formula (as diluted material)
+// ing.dilPct = concentration of molecule in that material (100 if pure)
+function ingEffectivePct(ing) {
+  const rawPct = +ing.pct || 0;
+  const conc = +ing.dilPct || 100;
+  return rawPct; // pct in formula is always the % of the diluted material in final product
+}
+
+// Returns effective PURE molecule % in finished product
+function ingPurePct(ing) {
+  const rawPct = +ing.pct || 0;
+  const conc = +ing.dilPct || 100; // concentration of molecule in the used dilution
+  return (rawPct * conc) / 100;
+}
+
+// Returns 'ok' | 'warn' (approaching) | 'over'
+function ifraStatus(ing, totalPct) {
+  const mol = state.molecules.find(m => m.id === ing.molId);
+  if (!mol || !mol.ifra) return 'ok';
+  const ifraLimit = +mol.ifra; // already expressed as % in finished product
+
+  // % of finished product = ing.pct (this ingredient) as fraction of 100% total
+  // But total might not be 100 yet — IFRA is about the finished product
+  // So pure molecule % in final product = purePct (already accounts for dilution)
+  const purePct = ingPurePct(ing);
+
+  if (purePct > ifraLimit) return 'over';
+  if (purePct > ifraLimit * 0.85) return 'warn';
+  return 'ok';
+}
+
+function ifraWarningHTML(ing) {
+  const mol = state.molecules.find(m => m.id === ing.molId);
+  if (!mol || !mol.ifra) return '';
+  const status = ifraStatus(ing, 100);
+  if (status === 'ok') return '';
+  const purePct = ingPurePct(ing).toFixed(3);
+  const limit = mol.ifra;
+  const warnIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`;
+  if (status === 'over') {
+    return `<div class="ifra-warn err">${warnIcon}<span>IFRA exceeded: ${purePct}% pure in product (limit ${limit}%)</span></div>`;
+  }
+  return `<div class="ifra-warn warn">${warnIcon}<span>Approaching IFRA limit: ${purePct}% of ${limit}% max</span></div>`;
+}
+
+// ══════════════════════════════════════════════════════
+// FORMULA BUILDER
+// ══════════════════════════════════════════════════════
+let BS = null;
+let inputMode = 'pct'; // 'pct' | 'ml'
+
+function openFormulaBuilder(fid) {
+  if (fid) {
+    BS = JSON.parse(JSON.stringify(state.formulas.find(x => x.id === fid)));
+  } else {
+    BS = { id: null, name: '', notes: '',
+           versions: [{ name: 'v1', ingredients: [], totalMl: 10 }],
+           activeVersion: 0 };
+  }
+  inputMode = 'pct';
+  renderBuilder();
+}
+
+function renderBuilder() {
+  const v = BS.versions[BS.activeVersion];
+  const total = v.ingredients.reduce((s, i) => s + (+i.pct || 0), 0);
+  const ok   = Math.abs(total - 100) < 0.05;
+  const over = total > 100.05;
+
+  showSheet('builder', BS.id ? 'Edit formula' : 'New formula', `
+    <div class="version-tabs">
+      ${BS.versions.map((ver, idx) =>
+        `<button class="vtab${BS.activeVersion===idx?' active':''}" onclick="bSetVersion(${idx})">${esc(ver.name)}</button>`
+      ).join('')}
+      <button class="vtab-add" onclick="bAddVersion()">+</button>
+    </div>
+
+    <div class="form-body" style="padding-bottom:8px">
+      <div class="field-row-2">
+        <div class="field">
+          <label>Formula name</label>
+          <input id="b-name" placeholder="e.g. NOCTURNE" value="${esc(BS.name)}" oninput="BS.name=this.value" />
+        </div>
+        <div class="field">
+          <label>Total volume (ml)</label>
+          <input id="b-ml" type="number" step="1" min="0.1" value="${v.totalMl}"
+            oninput="BS.versions[BS.activeVersion].totalMl=+this.value;refreshTotals()" />
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:11px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--text2)">Input mode</span>
+        <div style="display:flex;gap:4px">
+          <button class="btn btn-sm${inputMode==='pct'?' btn-primary':' btn-ghost'}" onclick="setInputMode('pct')">%</button>
+          <button class="btn btn-sm${inputMode==='ml'?' btn-primary':' btn-ghost'}" onclick="setInputMode('ml')">ml</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="total-bar">
+      <span class="total-label">Total</span>
+      <span id="b-total" class="total-val ${ok?'total-ok':over?'total-over':''}">${total.toFixed(4)}%</span>
+    </div>
+
+    <div id="b-ings">${builderIngsList(v)}</div>
+
+    <button class="add-ing-btn" onclick="openAddIngredient()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Add ingredient
+    </button>
+
+    ${analyticsHTML(v)}
+
+    <div class="form-body" style="padding-top:8px">
+      <div class="field">
+        <label>Notes</label>
+        <textarea id="b-notes" placeholder="Observations, iterations, ideas…" oninput="BS.notes=this.value">${esc(BS.notes)}</textarea>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn btn-ghost" onclick="closeSheet()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveFormula()">Save formula</button>
+    </div>
+  `);
+}
+
+function setInputMode(m) {
+  inputMode = m;
+  const v = BS.versions[BS.activeVersion];
+  document.getElementById('b-ings').innerHTML = builderIngsList(v);
+  // update mode buttons without full re-render
+  document.querySelectorAll('.btn-sm').forEach(b => {
+    if (b.textContent === '%') { b.className = `btn btn-sm${m==='pct'?' btn-primary':' btn-ghost'}`; }
+    if (b.textContent === 'ml') { b.className = `btn btn-sm${m==='ml'?' btn-primary':' btn-ghost'}`; }
+  });
+}
+
+function builderIngsList(v) {
+  if (!v.ingredients.length) return `<div style="padding:14px 16px;font-size:13px;color:var(--text3)">No ingredients — add from your collection</div>`;
+
+  return v.ingredients.map((ing, idx) => {
+    const col = familyColor(ing.family);
+    const pctVal = (+ing.pct || 0);
+    const mlVal  = v.totalMl ? (pctVal / 100 * v.totalMl) : 0;
+    const mol = state.molecules.find(m => m.id === ing.molId);
+    const hasDilutions = mol && mol.dilutions && mol.dilutions.length > 0;
+    const warnHTML = ifraWarningHTML(ing);
+
+    // dilution selector options
+    let dilOptions = `<option value="100"${(+ing.dilPct||100)===100?' selected':''}>Pure (100%)</option>`;
+    if (hasDilutions) {
+      mol.dilutions.forEach(d => {
+        const label = typeof d === 'string' ? d : (d.label || 'Dilution');
+        const pct   = typeof d === 'string' ? 100 : (d.pct || 100);
+        dilOptions += `<option value="${pct}"${(+ing.dilPct)===pct?' selected':''}>${esc(label)} · ${pct}%</option>`;
+      });
+    }
+
+    return `
+      <div class="ingredient-row">
+        <div class="ing-top">
+          <div class="ing-dot" style="background:${col}"></div>
+          <div class="ing-info">
+            <div class="ing-name-text">${esc(ing.name)}</div>
+            ${ing.family ? `<div class="ing-family-text">${esc(ing.family)}</div>` : ''}
+          </div>
+          <button class="ing-del" onclick="bRemoveIng(${idx})">×</button>
+        </div>
+
+        <div class="ing-inputs">
+          ${inputMode === 'pct' ? `
+            <div class="ing-input-wrap">
+              <input class="ing-num" type="number" step="0.0001" min="0" max="100"
+                value="${pctVal.toFixed(4)}" oninput="bUpdatePct(${idx},+this.value)" />
+              <span class="ing-unit">%</span>
+            </div>
+            <span style="font-size:11px;color:var(--text3);margin-left:4px">${v.totalMl?(pctVal/100*v.totalMl).toFixed(4)+' ml':'—'}</span>
+          ` : `
+            <div class="ing-input-wrap">
+              <input class="ing-num" type="number" step="0.0001" min="0"
+                value="${mlVal.toFixed(4)}" oninput="bUpdateMl(${idx},+this.value)" />
+              <span class="ing-unit">ml</span>
+            </div>
+            <span style="font-size:11px;color:var(--text3);margin-left:4px">${pctVal.toFixed(4)}%</span>
+          `}
+        </div>
+
+        ${hasDilutions ? `
+          <div class="ing-dil-select">
+            <select onchange="bSetDilution(${idx},+this.value)">${dilOptions}</select>
+          </div>
+        ` : ''}
+
+        ${warnHTML}
+      </div>
+    `;
+  }).join('');
+}
+
+function bUpdatePct(idx, val) {
+  BS.versions[BS.activeVersion].ingredients[idx].pct = val;
+  refreshTotals();
+  // update ml display inline
+  const v = BS.versions[BS.activeVersion];
+  const ing = v.ingredients[idx];
+  const mlSpan = document.querySelector(`#b-ings .ingredient-row:nth-child(${idx+1}) .ing-inputs span`);
+  if (mlSpan && v.totalMl) mlSpan.textContent = (val/100*v.totalMl).toFixed(4) + ' ml';
+  // refresh IFRA warning
+  refreshIngWarning(idx);
+}
+
+function bUpdateMl(idx, mlVal) {
+  const v = BS.versions[BS.activeVersion];
+  const pct = v.totalMl ? (mlVal / v.totalMl * 100) : 0;
+  v.ingredients[idx].pct = pct;
+  // update % display
+  const pctSpan = document.querySelector(`#b-ings .ingredient-row:nth-child(${idx+1}) .ing-inputs span`);
+  if (pctSpan) pctSpan.textContent = pct.toFixed(4) + '%';
+  refreshTotals();
+  refreshIngWarning(idx);
+}
+
+function bSetDilution(idx, pct) {
+  BS.versions[BS.activeVersion].ingredients[idx].dilPct = pct;
+  refreshIngWarning(idx);
+}
+
+function refreshIngWarning(idx) {
+  const v = BS.versions[BS.activeVersion];
+  const ing = v.ingredients[idx];
+  const row = document.querySelector(`#b-ings .ingredient-row:nth-child(${idx+1})`);
+  if (!row) return;
+  let warnEl = row.querySelector('.ifra-warn');
+  const newWarn = ifraWarningHTML(ing);
+  if (newWarn) {
+    if (!warnEl) {
+      const div = document.createElement('div');
+      div.innerHTML = newWarn;
+      row.appendChild(div.firstElementChild);
+    } else {
+      warnEl.outerHTML = newWarn;
+    }
+  } else {
+    if (warnEl) warnEl.remove();
+  }
+}
+
+function refreshTotals() {
+  const v = BS.versions[BS.activeVersion];
+  const total = v.ingredients.reduce((s, i) => s + (+i.pct || 0), 0);
+  const ok = Math.abs(total - 100) < 0.05;
+  const over = total > 100.05;
+  const tv = document.getElementById('b-total');
+  if (tv) {
+    tv.textContent = total.toFixed(4) + '%';
+    tv.className = 'total-val ' + (ok ? 'total-ok' : over ? 'total-over' : '');
+  }
+}
+
+function bSetVersion(idx) { BS.activeVersion = idx; renderBuilder(); }
+
+function bAddVersion() {
+  const n = BS.versions.length + 1;
+  const last = BS.versions[BS.versions.length - 1];
+  BS.versions.push({ name: 'v' + n, ingredients: JSON.parse(JSON.stringify(last.ingredients)), totalMl: last.totalMl });
+  BS.activeVersion = BS.versions.length - 1;
+  renderBuilder();
+}
+
+function bRemoveIng(idx) {
+  BS.versions[BS.activeVersion].ingredients.splice(idx, 1);
+  renderBuilder();
+}
+
+// ── ADD INGREDIENT ──
+function openAddIngredient() {
+  if (!state.molecules.length) { toast('Add molecules first'); return; }
+  showSheet('ingPick', 'Add ingredient', `
+    <div style="padding:12px 16px 0">
+      <div class="search-wrap" style="margin-bottom:0">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input class="search-input" placeholder="Search…" oninput="filterIngPick(this.value)" />
+      </div>
+    </div>
+    <div id="ing-pick-list" style="margin-top:8px">${ingPickList(state.molecules)}</div>
+  `);
+}
+
+function ingPickList(mols) {
+  const inIds = new Set(BS.versions[BS.activeVersion].ingredients.map(i => i.molId));
+  return mols.map(m => {
+    const col = familyColor(m.family);
+    const already = inIds.has(m.id);
+    return `
+      <div class="ing-pick-item" onclick="${already?`toast('Already in formula')`:`bAddIng('${m.id}')`}">
+        <div class="family-dot" style="background:${col}"></div>
+        <div style="flex:1">
+          <div style="font-size:14px;font-weight:500;color:${already?'var(--text3)':'var(--text)'}">${esc(m.name)}</div>
+          <div style="font-size:11px;color:var(--text3)">${[m.family,m.pyramid].filter(Boolean).join(' · ')}</div>
+        </div>
+        ${already ? `<span style="font-size:11px;color:var(--text3)">added</span>` : ''}
+        ${m.ifra ? `<span style="font-size:11px;color:var(--text3)">IFRA ${m.ifra}%</span>` : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+function filterIngPick(q) {
+  const mols = state.molecules.filter(m => m.name.toLowerCase().includes(q.toLowerCase()));
+  document.getElementById('ing-pick-list').innerHTML = ingPickList(mols);
+}
+
+function bAddIng(molId) {
+  const mol = state.molecules.find(m => m.id === molId);
+  const v = BS.versions[BS.activeVersion];
+  v.ingredients.push({
+    molId, name: mol.name, family: mol.family,
+    pct: 1,
+    dilPct: 100, // default: pure
+  });
+  closeSheet();
+  renderBuilder();
+}
+
+function saveFormula() {
+  if (!BS.name.trim()) { toast('Enter a formula name'); return; }
+  const f = {
+    id: BS.id || uid(),
+    name: BS.name.trim(),
+    notes: BS.notes,
+    versions: BS.versions,
+    activeVersion: BS.activeVersion,
+    updatedAt: Date.now(),
+  };
+  if (BS.id) {
+    state.formulas = state.formulas.map(x => x.id === BS.id ? f : x);
+    toast('Formula updated');
+  } else {
+    state.formulas.push(f);
+    toast('Formula saved');
+  }
+  save(); closeSheet(); renderFormulas();
+}
+
+// ── FORMULA DETAIL ──
+function openFormulaDetail(id) {
+  const f = state.formulas.find(x => x.id === id);
+  if (!f) return;
+  const v = f.versions[f.activeVersion || 0];
+  const total = v.ingredients.reduce((s, i) => s + (+i.pct || 0), 0);
+
+  showSheet('fDetail', esc(f.name), `
+    <div style="padding:10px 16px;border-bottom:1px solid var(--border);display:flex;gap:6px;flex-wrap:wrap">
+      ${f.versions.map((ver, idx) =>
+        `<span style="font-size:12px;padding:3px 10px;border-radius:20px;border:1px solid ${idx===f.activeVersion?'var(--border2)':'var(--border)'};color:${idx===f.activeVersion?'var(--text)':'var(--text3)'};font-weight:${idx===f.activeVersion?'500':'400'}">${esc(ver.name)}</span>`
+      ).join('')}
+    </div>
+
+    <div class="detail-block" style="padding-bottom:8px">
+      <div class="detail-label">Ingredients — ${total.toFixed(4)}% · ${v.totalMl} ml</div>
+    </div>
+
+    ${v.ingredients.map(ing => {
+      const col = familyColor(ing.family);
+      const pct = +ing.pct || 0;
+      const ml  = (pct / 100 * v.totalMl).toFixed(4);
+      const purePct = ingPurePct(ing);
+      const mol = state.molecules.find(m => m.id === ing.molId);
+      const status = ifraStatus(ing, total);
+      const dilLabel = (+ing.dilPct||100) < 100 ? ` · ${ing.dilPct}% dil.` : '';
+
+      return `
+        <div class="fi-row">
+          <div class="fi-left">
+            <div class="ing-dot" style="background:${col}"></div>
+            <div>
+              <div style="font-size:14px;font-weight:500">${esc(ing.name)}</div>
+              <div style="font-size:11px;color:var(--text3)">${[ing.family||'', dilLabel].filter(s=>s.trim()).join('')}</div>
+              ${status === 'over' ? `<div class="fi-warn e">⚠ IFRA exceeded (${purePct.toFixed(4)}% / ${mol?.ifra}% max)</div>` : ''}
+              ${status === 'warn' ? `<div class="fi-warn w">⚠ Near IFRA limit (${purePct.toFixed(4)}%)</div>` : ''}
+            </div>
+          </div>
+          <div class="fi-right">
+            <div class="fi-pct">${pct.toFixed(4)}%</div>
+            <div class="fi-ml">${ml} ml</div>
+          </div>
+        </div>
+      `;
+    }).join('')}
+
+    ${analyticsHTML(v)}
+
+    ${f.notes ? `
+      <div class="detail-block">
+        <div class="detail-label">Notes</div>
+        <div class="detail-val" style="color:var(--text2);line-height:1.6;margin-top:4px">${esc(f.notes)}</div>
+      </div>
+    ` : ''}
+
+    <div class="form-actions" style="margin-top:6px">
+      <button class="btn btn-ghost" onclick="closeSheet();openFormulaBuilder('${id}')">Edit</button>
+      <button class="btn btn-danger" onclick="deleteFormula('${id}')">Delete</button>
+    </div>
+  `);
+}
+
+function deleteFormula(id) {
+  const f = state.formulas.find(x => x.id === id);
+  if (!f) return;
+  const sheet = document.querySelector('#sheet-fDetail .sheet');
+  if (!sheet) return;
+  const conf = document.createElement('div');
+  conf.style.cssText = 'padding:20px 16px;display:flex;flex-direction:column;gap:12px';
+  conf.innerHTML = `
+    <div style="font-size:14px;color:var(--text2);line-height:1.5">Delete <strong>${esc(f.name)}</strong>? This cannot be undone.</div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="this.closest('.overlay').remove();sheetStack.pop()">Cancel</button>
+      <button class="btn btn-danger" style="flex:1" onclick="confirmDeleteFormula('${id}')">Delete</button>
+    </div>`;
+  sheet.appendChild(conf);
+  sheet.scrollTop = sheet.scrollHeight;
+}
+
+function confirmDeleteFormula(id) {
+  state.formulas = state.formulas.filter(f => f.id !== id);
+  save(); closeSheet(); toast('Deleted'); renderFormulas();
+}
+
+// ══════════════════════════════════════════════════════
+// SHEET SYSTEM
+// ══════════════════════════════════════════════════════
+let sheetStack = [];
+
+function showSheet(id, title, content) {
+  let old = document.getElementById('sheet-' + id);
+  if (old) old.remove();
+
+  const overlay = document.createElement('div');
+  overlay.className = 'overlay';
+  overlay.id = 'sheet-' + id;
+  overlay.innerHTML = `
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <span class="sheet-title">${title}</span>
+        <button class="close-btn" onclick="closeSheet()">×</button>
+      </div>
+      ${content}
+    </div>
+  `;
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeSheet(); });
+  document.body.appendChild(overlay);
+  sheetStack.push(id);
+  requestAnimationFrame(() => overlay.classList.add('open'));
+}
+
+function closeSheet() {
+  const id = sheetStack.pop();
+  if (!id) return;
+  const el = document.getElementById('sheet-' + id);
+  if (!el) return;
+  el.classList.remove('open');
+  setTimeout(() => el.remove(), 260);
+}
+
+// ══════════════════════════════════════════════════════
+// ANALYTICS ENGINE
+// ══════════════════════════════════════════════════════
+
+function computeAnalytics(v) {
+  const ings = v.ingredients;
+  const total = ings.reduce((s, i) => s + (+i.pct || 0), 0);
+  if (!ings.length || total === 0) return null;
+
+  // ── Pyramid breakdown ──
+  const pyramid = { Top: 0, Heart: 0, Base: 0, Unknown: 0 };
+  ings.forEach(ing => {
+    const mol = state.molecules.find(m => m.id === ing.molId);
+    const lvl = mol?.pyramid || 'Unknown';
+    pyramid[lvl] = (pyramid[lvl] || 0) + (+ing.pct || 0);
+  });
+  const pyrPct = {};
+  Object.keys(pyramid).forEach(k => pyrPct[k] = total > 0 ? (pyramid[k] / total * 100) : 0);
+
+  // ── Family breakdown ──
+  const famMap = {};
+  ings.forEach(ing => {
+    const key = ing.family || 'Other';
+    famMap[key] = (famMap[key] || 0) + (+ing.pct || 0);
+  });
+  const famSorted = Object.entries(famMap).sort((a,b) => b[1] - a[1]);
+
+  // ── Longevity score ──
+  // Base notes = longest, Top = shortest. Score 0–100
+  const baseWeight = pyrPct['Base'] || 0;
+  const heartWeight = pyrPct['Heart'] || 0;
+  const topWeight = pyrPct['Top'] || 0;
+  const longevityScore = Math.min(100, Math.round(
+    baseWeight * 0.7 + heartWeight * 0.25 + topWeight * 0.05
+  ));
+  let longevityLabel = 'Poor';
+  if (longevityScore >= 70) longevityLabel = 'Excellent';
+  else if (longevityScore >= 45) longevityLabel = 'Good';
+  else if (longevityScore >= 25) longevityLabel = 'Moderate';
+
+  // ── Aromatic profile ──
+  // Each family maps to profile axes: Freshness, Warmth, Sweetness, Earthiness
+  const PROFILE_MAP = {
+    Citrus:    { Freshness: 90, Warmth: 10, Sweetness: 20, Earthiness: 5  },
+    Aquatic:   { Freshness: 85, Warmth: 5,  Sweetness: 5,  Earthiness: 10 },
+    Green:     { Freshness: 70, Warmth: 15, Sweetness: 10, Earthiness: 40 },
+    Floral:    { Freshness: 40, Warmth: 30, Sweetness: 60, Earthiness: 10 },
+    Fougère:   { Freshness: 50, Warmth: 40, Sweetness: 20, Earthiness: 35 },
+    Chypre:    { Freshness: 30, Warmth: 50, Sweetness: 15, Earthiness: 55 },
+    Gourmand:  { Freshness: 5,  Warmth: 60, Sweetness: 90, Earthiness: 15 },
+    Oriental:  { Freshness: 5,  Warmth: 80, Sweetness: 65, Earthiness: 40 },
+    Musk:      { Freshness: 20, Warmth: 55, Sweetness: 35, Earthiness: 30 },
+    Woody:     { Freshness: 15, Warmth: 65, Sweetness: 20, Earthiness: 70 },
+    Resinous:  { Freshness: 5,  Warmth: 75, Sweetness: 30, Earthiness: 65 },
+    Aldehyde:  { Freshness: 55, Warmth: 35, Sweetness: 40, Earthiness: 10 },
+  };
+  const profile = { Freshness: 0, Warmth: 0, Sweetness: 0, Earthiness: 0 };
+  ings.forEach(ing => {
+    const fam = ing.family;
+    const map = PROFILE_MAP[fam];
+    if (!map) return;
+    const weight = (+ing.pct || 0) / total;
+    Object.keys(profile).forEach(axis => {
+      profile[axis] += (map[axis] || 0) * weight;
+    });
+  });
+
+  // ── IFRA risks ──
+  const ifraRisks = ings.map(ing => {
+    const mol = state.molecules.find(m => m.id === ing.molId);
+    if (!mol?.ifra) return null;
+    const purePct = ingPurePct(ing);
+    const limit = +mol.ifra;
+    const status = purePct > limit ? 'over' : purePct > limit * 0.85 ? 'warn' : 'ok';
+    return { name: ing.name, purePct, limit, status };
+  }).filter(Boolean);
+
+  return { pyrPct, famSorted, total, longevityScore, longevityLabel, profile, ifraRisks };
+}
+
+function analyticsHTML(v) {
+  const an = computeAnalytics(v);
+  if (!an) return '';
+
+  const PYR_COLORS = { Top: '#c4a84a', Heart: '#d4a5b5', Base: '#7a7a9e', Unknown: '#d0d0cc' };
+
+  // Pyramid bar
+  const pyrSegments = ['Top','Heart','Base','Unknown']
+    .filter(k => an.pyrPct[k] > 0)
+    .map(k => `<div class="stacked-seg" style="width:${an.pyrPct[k].toFixed(1)}%;background:${PYR_COLORS[k]}"></div>`)
+    .join('');
+
+  const pyrLegend = ['Top','Heart','Base','Unknown']
+    .filter(k => an.pyrPct[k] > 0.5)
+    .map(k => `<span class="stacked-legend-item"><span class="stacked-legend-dot" style="background:${PYR_COLORS[k]}"></span>${k} ${an.pyrPct[k].toFixed(0)}%</span>`)
+    .join('');
+
+  // Family bar
+  const famSegments = an.famSorted.map(([fam, pct]) => {
+    const col = familyColor(fam);
+    const w = (pct / an.total * 100).toFixed(1);
+    return `<div class="stacked-seg" style="width:${w}%;background:${col}"></div>`;
+  }).join('');
+
+  const famLegend = an.famSorted.slice(0, 6).map(([fam, pct]) => {
+    const col = familyColor(fam);
+    const w = (pct / an.total * 100).toFixed(0);
+    return `<span class="stacked-legend-item"><span class="stacked-legend-dot" style="background:${col}"></span>${esc(fam)} ${w}%</span>`;
+  }).join('');
+
+  // Profile grid
+  const profileHTML = Object.entries(an.profile).map(([axis, val]) => {
+    const rounded = Math.round(val);
+    return `
+      <div class="profile-item">
+        <div class="profile-item-label">${axis}</div>
+        <div class="profile-item-bar"><div class="profile-item-fill" style="width:${rounded}%;background:${val>60?'#6b9e6b':val>30?'#b5895a':'#a09585'}"></div></div>
+        <div class="profile-item-val">${rounded}/100</div>
+      </div>`;
+  }).join('');
+
+  // IFRA summary
+  const ifraHTML = an.ifraRisks.length ? an.ifraRisks.map(r => `
+    <div class="ifra-summary-row">
+      <div class="ifra-dot ${r.status}"></div>
+      <div class="ifra-summary-name">${esc(r.name)}</div>
+      <div class="ifra-summary-val">${r.purePct.toFixed(4)}% / ${r.limit}% max</div>
+    </div>
+  `).join('') : `<div style="font-size:12px;color:var(--text3)">No IFRA-limited molecules</div>`;
+
+  return `
+    <div class="analytics-panel">
+      <button class="analytics-toggle" onclick="toggleAnalytics(this)">
+        <span class="analytics-toggle-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Formula Analytics
+        </span>
+        <span class="analytics-chevron">▼</span>
+      </button>
+      <div class="analytics-body">
+
+        <div class="an-section">
+          <div class="an-label">Pyramid Distribution</div>
+          <div class="stacked-bar">${pyrSegments}</div>
+          <div class="stacked-legend">${pyrLegend}</div>
+        </div>
+
+        <div class="an-section">
+          <div class="an-label">Family Breakdown</div>
+          <div class="stacked-bar">${famSegments}</div>
+          <div class="stacked-legend">${famLegend}</div>
+        </div>
+
+        <div class="an-section">
+          <div class="an-label">Longevity Forecast</div>
+          <div class="longevity-row">
+            <div class="longevity-bar-wrap">
+              <div class="longevity-bar-fill" style="width:${an.longevityScore}%"></div>
+            </div>
+            <div class="longevity-label">${an.longevityLabel}</div>
+          </div>
+        </div>
+
+        <div class="an-section">
+          <div class="an-label">Aromatic Profile</div>
+          <div class="profile-grid">${profileHTML}</div>
+        </div>
+
+        <div class="an-section" style="margin-bottom:0">
+          <div class="an-label">IFRA Risks</div>
+          ${ifraHTML}
+        </div>
+
+      </div>
+    </div>
+  `;
+}
+
+function toggleAnalytics(btn) {
+  const body = btn.nextElementSibling;
+  const chevron = btn.querySelector('.analytics-chevron');
+  const isOpen = body.classList.toggle('open');
+  chevron.classList.toggle('open', isOpen);
+}
+
+// ══════════════════════════════════════════════════════
+// EXPORT / IMPORT BACKUP
+// ══════════════════════════════════════════════════════
+
+function exportBackup() {
+  const data = {
+    version: 3,
+    exportedAt: new Date().toISOString(),
+    molecules: state.molecules,
+    formulas:  state.formulas,
+    families:  state.families || [],
+  };
+  const json = JSON.stringify(data, null, 2);
+  const date = new Date().toISOString().slice(0,10);
+
+  // Safari-compatible: open as data URI in new tab — user saves with long-press → "Download"
+  const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(json);
+  const a = document.createElement('a');
+  a.href = dataUri;
+  a.download = `mara-lab-backup-${date}.json`;
+  a.style.display = 'none';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+
+  // Fallback: show the JSON in a sheet so user can copy it
+  setTimeout(() => {
+    // if download didn't trigger (Safari PWA), show copy sheet
+    showSheet('exportFallback', 'Export Backup', `
+      <div class="form-body">
+        <p style="font-size:13px;color:var(--text2);line-height:1.5">
+          If the file didn't download automatically, copy the text below and save it as a <code>.json</code> file on your computer or in Notes.
+        </p>
+        <div class="field">
+          <label>Backup data</label>
+          <textarea style="min-height:160px;font-size:11px;font-family:monospace" readonly onclick="this.select()">${esc(json)}</textarea>
+        </div>
+        <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="navigator.clipboard&&navigator.clipboard.writeText(${JSON.stringify(json)}).then(()=>toast('Copied!'))">Copy to clipboard</button>
+      </div>
+    `);
+  }, 800);
+
+  toast('Preparing backup…');
+}
+
+function importBackup() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json,application/json';
+  input.onchange = async e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    try {
+      const text = await file.text();
+      const data = JSON.parse(text);
+      if (!data.molecules || !data.formulas) throw new Error('Invalid file');
+      const molCount  = data.molecules.length;
+      const formCount = data.formulas.length;
+      const ok = confirm(`Import backup?\n\n• ${molCount} molecules\n• ${formCount} formulas\n\nThis will REPLACE all current data.`);
+      if (!ok) return;
+      state.molecules = data.molecules;
+      state.formulas  = data.formulas;
+      state.families  = data.families || [];
+      save();
+      render();
+      toast(`Imported: ${molCount} molecules, ${formCount} formulas`);
+    } catch(err) {
+      toast('Error: invalid backup file');
+    }
+  };
+  document.body.appendChild(input);
+  input.click();
+  document.body.removeChild(input);
+}
+
+function openBackupSheet() {
+  const molCount  = state.molecules.length;
+  const formCount = state.formulas.length;
+  const lastSaved = (() => {
+    try {
+      const raw = localStorage.getItem('mara_mols_v3');
+      return raw ? 'In browser storage' : 'Nothing saved';
+    } catch { return 'Unknown'; }
+  })();
+
+  showSheet('backup', 'Backup & Restore', `
+    <div class="form-body">
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-sm);padding:14px 16px">
+        <div class="detail-label" style="margin-bottom:8px">Current Data</div>
+        <div style="display:flex;gap:20px">
+          <div>
+            <div style="font-size:22px;font-weight:600">${molCount}</div>
+            <div style="font-size:11px;color:var(--text3)">molecules</div>
+          </div>
+          <div>
+            <div style="font-size:22px;font-weight:600">${formCount}</div>
+            <div style="font-size:11px;color:var(--text3)">formulas</div>
+          </div>
+        </div>
+        <div style="margin-top:8px;font-size:11px;color:var(--text3)">${lastSaved}</div>
+      </div>
+
+      <div>
+        <button class="btn btn-primary" style="width:100%;justify-content:center;padding:12px" onclick="exportBackup()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Export Backup (.json)
+        </button>
+        <div style="font-size:11px;color:var(--text3);margin-top:6px;text-align:center">Downloads a .json file you can keep as backup</div>
+      </div>
+
+      <div>
+        <button class="btn btn-ghost" style="width:100%;justify-content:center;padding:12px" onclick="importBackup()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Import Backup
+        </button>
+        <div style="font-size:11px;color:var(--text3);margin-top:6px;text-align:center">⚠ Replaces all current data</div>
+      </div>
+
+      <div style="background:var(--warn-bg);border:1px solid var(--warn-border);border-radius:var(--r-sm);padding:12px;font-size:12px;color:var(--warn-text);line-height:1.5">
+        💡 Export a backup regularly — browser storage can be cleared by iOS or if you clear Safari data. Keep the .json file in Files or iCloud.
+      </div>
+    </div>
+  `);
+}
+
+// ── INIT ──
+load();
+render();
+</script>
+</body>
+</html>
