@@ -521,6 +521,7 @@ let state = {
   families: [],
   page: 'molecules',
   filter: 'all',
+  filterMode: 'families',
   pyramidFilter: 'all',
   search: '',
 };
@@ -569,7 +570,8 @@ function toast(msg) {
 
 // ── NAV ──
 function showPage(p) {
-  state.page = p; state.filter = 'all'; state.pyramidFilter = 'all'; state.search = '';
+  state.page = p; state.filter = 'all'; state.pyramidFilter = 'all';
+  state.filterMode = 'families'; state.search = '';
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('nav-' + p).classList.add('active');
   render();
@@ -636,28 +638,39 @@ function renderMolecules() {
         oninput="state.search=this.value;renderMolecules()" />
     </div>
 
-    <div class="chips">
-      <button class="chip${state.filter==='all'?' active':''}"
-        style="${state.filter==='all'?'background:#111110;border-color:#111110;':''}"
-        onclick="state.filter='all';renderMolecules()">All</button>
-      ${usedFamilies.map(f => {
-        const col = familyColor(f);
-        const active = state.filter === f;
-        return `<button class="chip${active?' active':''}"
-          style="${active?`background:${col};border-color:${col};`:`color:${col};border-color:${col}55;`}"
-          onclick="state.filter='${esc(f)}';renderMolecules()">${esc(f)}</button>`;
-      }).join('')}
+    <div style="display:flex;background:var(--bg2);border-radius:8px;padding:3px;margin-bottom:14px;gap:2px">
+      <button id="ft-families"
+        style="flex:1;padding:6px;border:none;border-radius:6px;font-family:Inter,sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all 0.15s;background:${state.filterMode!=='notes'?'#fff':'transparent'};color:${state.filterMode!=='notes'?'var(--text)':'var(--text3)'};box-shadow:${state.filterMode!=='notes'?'0 1px 3px rgba(0,0,0,0.08)':'none'}"
+        onclick="state.filterMode='families';renderMolecules()">Families</button>
+      <button id="ft-notes"
+        style="flex:1;padding:6px;border:none;border-radius:6px;font-family:Inter,sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all 0.15s;background:${state.filterMode==='notes'?'#fff':'transparent'};color:${state.filterMode==='notes'?'var(--text)':'var(--text3)'};box-shadow:${state.filterMode==='notes'?'0 1px 3px rgba(0,0,0,0.08)':'none'}"
+        onclick="state.filterMode='notes';renderMolecules()">Notes</button>
     </div>
 
-    <div class="chips">
-      ${['all','Top','Heart','Base'].map(p => {
-        const active = state.pyramidFilter === p;
-        const label = p === 'all' ? 'All notes' : p;
-        return `<button class="chip${active?' active':''}"
-          style="${active?'background:#111110;border-color:#111110;':''}"
-          onclick="state.pyramidFilter='${p}';renderMolecules()">${label}</button>`;
-      }).join('')}
-    </div>
+    ${state.filterMode === 'notes' ? `
+      <div class="chips">
+        ${['all','Top','Heart','Base'].map(p => {
+          const active = state.pyramidFilter === p;
+          const label = p === 'all' ? 'All' : p;
+          return `<button class="chip${active?' active':''}"
+            style="${active?'background:#111110;border-color:#111110;':''}"
+            onclick="state.pyramidFilter='${p}';renderMolecules()">${label}</button>`;
+        }).join('')}
+      </div>
+    ` : `
+      <div class="chips">
+        <button class="chip${state.filter==='all'?' active':''}"
+          style="${state.filter==='all'?'background:#111110;border-color:#111110;':''}"
+          onclick="state.filter='all';renderMolecules()">All</button>
+        ${usedFamilies.map(f => {
+          const col = familyColor(f);
+          const active = state.filter === f;
+          return `<button class="chip${active?' active':''}"
+            style="${active?`background:${col};border-color:${col};`:`color:${col};border-color:${col}55;`}"
+            onclick="state.filter='${esc(f)}';renderMolecules()">${esc(f)}</button>`;
+        }).join('')}
+      </div>
+    `}
 
     ${filtered.length === 0 ? `
       <div class="empty">
