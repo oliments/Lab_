@@ -501,20 +501,7 @@
 // DATA
 // ══════════════════════════════════════════════════════
 
-const DEFAULT_FAMILIES = [
-  { key: 'Floral',    color: '#d4a5b5' },
-  { key: 'Woody',     color: '#b5895a' },
-  { key: 'Citrus',    color: '#c4a84a' },
-  { key: 'Oriental',  color: '#8c6b9e' },
-  { key: 'Gourmand',  color: '#c47a5a' },
-  { key: 'Green',     color: '#6b9e6b' },
-  { key: 'Aquatic',   color: '#5a8fa0' },
-  { key: 'Fougère',   color: '#7a8c6b' },
-  { key: 'Chypre',    color: '#a0846b' },
-  { key: 'Resinous',  color: '#8c6b50' },
-  { key: 'Aldehyde',  color: '#7a7a9e' },
-  { key: 'Musk',      color: '#a09585' },
-];
+const DEFAULT_FAMILIES = [];
 
 const PALETTE = [
   '#d4a5b5','#e8a0a0','#e8b4a0','#e8c890','#e8d870',
@@ -537,22 +524,8 @@ let state = {
   search: '',
 };
 
-// Merge default families with any saved custom ones
 function allFamilies() {
-  const customs = state.families || [];
-  const deletedKeys = new Set(customs.filter(f => f.deleted).map(f => f.key));
-  const customMap = {};
-  customs.filter(f => !f.deleted).forEach(f => customMap[f.key] = { ...f, isDefault: false });
-
-  const result = [];
-  DEFAULT_FAMILIES.forEach(f => {
-    if (!deletedKeys.has(f.key)) {
-      result.push(customMap[f.key] || { ...f, isDefault: true });
-      delete customMap[f.key];
-    }
-  });
-  Object.values(customMap).forEach(f => result.push(f));
-  return result;
+  return (state.families || []).filter(f => !f.deleted);
 }
 
 function familyColor(name) {
@@ -978,12 +951,11 @@ function openFamilyManager() {
 }
 
 function familyManagerContent() {
+  const families = state.families ? state.families.filter(f => !f.deleted) : [];
   return `
     <div style="padding:12px 16px 0">
-      <p style="font-size:12px;color:var(--text3);margin-bottom:12px">
-        Tap delete to remove any family. Molecules keep their name but lose the colour.
-      </p>
-      ${allFamilies().map(f => `
+      ${families.length === 0 ? `<p style="font-size:13px;color:var(--text3);padding:8px 0 16px">No families yet — add your first one below.</p>` : ''}
+      ${families.map(f => `
         <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)">
           <div style="width:10px;height:10px;border-radius:50%;background:${f.color};flex-shrink:0"></div>
           <span style="flex:1;font-size:14px;font-weight:500">${esc(f.key)}</span>
@@ -992,10 +964,10 @@ function familyManagerContent() {
       `).join('')}
     </div>
     <div style="padding:16px;border-top:1px solid var(--border);margin-top:8px">
-      <div class="section-div" style="margin-bottom:12px">Add custom family</div>
+      <div class="section-div" style="margin-bottom:12px">Add family</div>
       <div class="field" style="margin-bottom:10px">
         <label>Name</label>
-        <input id="cf-name" placeholder="e.g. Aromatic" />
+        <input id="cf-name" placeholder="e.g. Balsamic" />
       </div>
       <div class="field">
         <label>Color</label>
@@ -1043,17 +1015,17 @@ function addCustomFamily() {
   const hex = document.getElementById('cf-hex').value.trim();
   const color = /^#[0-9a-fA-F]{6}$/.test(hex) ? hex : cfPickedColor;
   if (!state.families) state.families = [];
-  if (state.families.find(f => f.key === name) || DEFAULT_FAMILIES.find(f => f.key === name)) {
+  // Remove from deleted list if previously deleted
+  state.families = state.families.filter(f => !(f.key === name && f.deleted));
+  // Check duplicate
+  if (state.families.find(f => f.key === name && !f.deleted)) {
     toast('Family already exists'); return;
   }
   state.families.push({ key: name, color });
-  save(); toast('Family added'); closeSheet();
+  save(); toast(`"${name}" added`); closeSheet();
 }
 
 function deleteFamilyKey(key) {
-  // Inline confirmation — Safari blocks confirm() inside sheets
-  const list = document.querySelector('#sheet-famMgr .sheet > div');
-  if (!list) return;
   const existing = document.getElementById('fam-del-confirm');
   if (existing) existing.remove();
   const conf = document.createElement('div');
@@ -1065,18 +1037,12 @@ function deleteFamilyKey(key) {
       <button class="btn btn-ghost btn-sm" style="flex:1;justify-content:center" onclick="document.getElementById('fam-del-confirm').remove()">Cancel</button>
       <button class="btn btn-sm" style="flex:1;justify-content:center;background:#c02020;color:#fff;border:none" onclick="confirmDeleteFamily('${esc(key)}')">Delete</button>
     </div>`;
-  list.prepend(conf);
+  const list = document.querySelector('#sheet-famMgr .sheet > div');
+  if (list) list.prepend(conf);
 }
 
 function confirmDeleteFamily(key) {
-  const isDefault = DEFAULT_FAMILIES.some(f => f.key === key);
-  if (!state.families) state.families = [];
-  if (isDefault) {
-    state.families = state.families.filter(f => f.key !== key);
-    state.families.push({ key, color: '#bbb', deleted: true });
-  } else {
-    state.families = state.families.filter(f => f.key !== key);
-  }
+  state.families = (state.families || []).filter(f => f.key !== key);
   save(); closeSheet(); toast(`"${key}" deleted`);
 }
 
