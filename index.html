@@ -525,7 +525,7 @@ let state = {
 };
 
 function allFamilies() {
-  return (state.families || []).filter(f => !f.deleted);
+  return (state.families || []).filter(f => !f.deleted).sort((a, b) => a.key.localeCompare(b.key));
 }
 
 function familyColor(name) {
