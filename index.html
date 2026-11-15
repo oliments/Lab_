@@ -2214,8 +2214,8 @@ function toggleAnalytics(btn) {
 // EXPORT / IMPORT BACKUP
 // ══════════════════════════════════════════════════════
 
-function exportBackup() {
-  const data = {
+function backupJSON() {
+  return JSON.stringify({
     version: 3,
     exportedAt: new Date().toISOString(),
     molecules: state.molecules,
@@ -2223,70 +2223,85 @@ function exportBackup() {
     accords:   state.accords || [],
     visions:   state.visions || [],
     families:  state.families || [],
-  };
-  const json = JSON.stringify(data, null, 2);
-  const date = new Date().toISOString().slice(0,10);
+  }, null, 2);
+}
+function backupName() { return `lab-backup-${new Date().toISOString().slice(0,10)}.json`; }
+function backupSay(t) { const el = document.getElementById('backup-msg'); if (el) el.innerHTML = t; }
 
-  // Safari-compatible: open as data URI in new tab — user saves with long-press → "Download"
-  const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(json);
-  const a = document.createElement('a');
-  a.href = dataUri;
-  a.download = `lab-backup-${date}.json`;
-  a.style.display = 'none';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-
-  // Fallback: show the JSON in a sheet so user can copy it
-  setTimeout(() => {
-    // if download didn't trigger (Safari PWA), show copy sheet
-    showSheet('exportFallback', 'Export Backup', `
-      <div class="form-body">
-        <p style="font-size:13px;color:var(--text2);line-height:1.5">
-          If the file didn't download automatically, copy the text below and save it as a <code>.json</code> file on your computer or in Notes.
-        </p>
-        <div class="field">
-          <label>Backup data</label>
-          <textarea style="min-height:160px;font-size:11px;font-family:monospace" readonly onclick="this.select()">${esc(json)}</textarea>
-        </div>
-        <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="navigator.clipboard&&navigator.clipboard.writeText(${JSON.stringify(json)}).then(()=>toast('Copied!'))">Copy to clipboard</button>
-      </div>
-    `);
-  }, 800);
-
-  toast('Preparing backup…');
+// Save the backup. Inside Claude it goes through Claude's own save prompt;
+// on iPhone (Safari / home-screen app) it opens the share sheet → "Save to Files";
+// elsewhere it downloads the file.
+function exportBackup() {
+  const json = backupJSON(), name = backupName();
+  if (window.claude && typeof window.claude.use === 'function') {
+    backupSay('Opening save…');
+    window.claude.use('downloads').then(dl => {
+      if (!dl) throw { code: 'unavailable' };
+      return dl.save({ filename: name, data: json });
+    }).then(() => backupSay('Saved ✓'))
+      .catch(e => backupSay(e && e.code === 'declined' ? 'Not saved' : 'Saving isn’t available here — use “Copy backup text” below'));
+    return;
+  }
+  let file = null;
+  try { file = new File([json], name, { type: 'application/json' }); } catch (e) {}
+  if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+    navigator.share({ files: [file], title: name })
+      .then(() => backupSay('Saved ✓ — check the place you picked (e.g. Files)'))
+      .catch(e => { if (!e || e.name !== 'AbortError') backupSay('Couldn’t open the share sheet — use “Copy backup text” below'); });
+    return;
+  }
+  try {
+    const url = URL.createObjectURL(new Blob([json], { type: 'application/json' }));
+    const a = document.createElement('a');
+    a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
+    backupSay('Downloaded ✓ — look in your Downloads folder');
+  } catch (e) {
+    backupSay('Download isn’t available here — use “Copy backup text” below');
+  }
 }
 
-function importBackup() {
-  const input = document.createElement('input');
-  input.type = 'file';
-  input.accept = '.json,application/json';
-  input.onchange = async e => {
-    const file = e.target.files[0];
-    if (!file) return;
-    try {
-      const text = await file.text();
-      const data = JSON.parse(text);
-      if (!data.molecules || !data.formulas) throw new Error('Invalid file');
-      const molCount  = data.molecules.length;
-      const formCount = data.formulas.length;
-      const ok = confirm(`Import backup?\n\n• ${molCount} molecules\n• ${formCount} formulas\n\nThis will REPLACE all current data.`);
-      if (!ok) return;
-      state.molecules = data.molecules;
-      state.formulas  = data.formulas;
-      state.families  = data.families || [];
-      if (data.accords) state.accords = data.accords;
-      if (data.visions) state.visions = data.visions;
-      save();
-      render();
-      toast(`Imported: ${molCount} molecules, ${formCount} formulas`);
-    } catch(err) {
-      toast('Error: invalid backup file');
-    }
-  };
-  document.body.appendChild(input);
-  input.click();
-  document.body.removeChild(input);
+function copyBackup() {
+  const json = backupJSON();
+  const done = () => backupSay('Copied ✓ — paste it into Notes or a .json file');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(json).then(done).catch(() => showBackupText(json));
+  } else showBackupText(json);
+}
+function showBackupText(json) {
+  backupSay(`Select all and copy:<textarea readonly style="width:100%;min-height:140px;margin-top:6px;font:11px monospace;border:1px solid var(--border);border-radius:8px;padding:8px" onfocus="this.select()">${esc(json)}</textarea>`);
+}
+
+let pendingImport = null;
+function importBackup() { const i = document.getElementById('backup-file'); if (i) { i.value = ''; i.click(); } }
+function importPicked(input) {
+  const file = input.files && input.files[0];
+  if (!file) return;
+  file.text().then(text => {
+    const data = JSON.parse(text);
+    if (!Array.isArray(data.molecules) || !Array.isArray(data.formulas)) throw new Error('bad');
+    pendingImport = data;
+    backupSay(`
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-sm);padding:12px;color:var(--text2);line-height:1.5">
+        Replace current data with this backup?<br>
+        <b>${data.molecules.length}</b> molecules · <b>${data.formulas.length}</b> formulas${data.accords ? ` · <b>${data.accords.length}</b> accords` : ''}${data.visions ? ` · <b>${data.visions.length}</b> visions` : ''}
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="pendingImport=null;backupSay('')">Cancel</button>
+          <button class="btn btn-danger" style="flex:1" onclick="confirmImport()">Replace</button>
+        </div>
+      </div>`);
+  }).catch(() => backupSay('This file isn’t a Lab backup (.json)'));
+}
+function confirmImport() {
+  const data = pendingImport; if (!data) return;
+  state.molecules = data.molecules;
+  state.formulas  = data.formulas;
+  state.families  = data.families || [];
+  if (data.accords) state.accords = data.accords;
+  if (data.visions) state.visions = data.visions;
+  pendingImport = null;
+  save(); closeSheet(); render();
+  toast(`Imported: ${data.molecules.length} molecules, ${data.formulas.length} formulas`);
 }
 
 function openBackupSheet() {
@@ -2312,6 +2327,14 @@ function openBackupSheet() {
             <div style="font-size:22px;font-weight:600">${formCount}</div>
             <div style="font-size:11px;color:var(--text3)">formulas</div>
           </div>
+          <div>
+            <div style="font-size:22px;font-weight:600">${(state.accords||[]).length}</div>
+            <div style="font-size:11px;color:var(--text3)">accords</div>
+          </div>
+          <div>
+            <div style="font-size:22px;font-weight:600">${(state.visions||[]).length}</div>
+            <div style="font-size:11px;color:var(--text3)">visions</div>
+          </div>
         </div>
         <div style="margin-top:8px;font-size:11px;color:var(--text3)">${lastSaved}</div>
       </div>
@@ -2319,9 +2342,10 @@ function openBackupSheet() {
       <div>
         <button class="btn btn-primary" style="width:100%;justify-content:center;padding:12px" onclick="exportBackup()">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Export Backup (.json)
+          Save backup (.json)
         </button>
-        <div style="font-size:11px;color:var(--text3);margin-top:6px;text-align:center">Downloads a .json file you can keep as backup</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:6px;text-align:center">On iPhone choose “Save to Files” in the menu that opens</div>
+        <button class="btn btn-ghost btn-sm" style="width:100%;justify-content:center;margin-top:8px" onclick="copyBackup()">Copy backup text</button>
       </div>
 
       <div>
@@ -2329,8 +2353,11 @@ function openBackupSheet() {
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
           Import Backup
         </button>
+        <input type="file" id="backup-file" accept=".json,application/json,text/plain" style="display:none" onchange="importPicked(this)" />
         <div style="font-size:11px;color:var(--text3);margin-top:6px;text-align:center">⚠ Replaces all current data</div>
       </div>
+
+      <div id="backup-msg" style="font-size:13px;color:var(--text2);text-align:center"></div>
 
       <div style="background:var(--warn-bg);border:1px solid var(--warn-border);border-radius:var(--r-sm);padding:12px;font-size:12px;color:var(--warn-text);line-height:1.5">
         💡 Export a backup regularly — browser storage can be cleared by iOS or if you clear Safari data. Keep the .json file in Files or iCloud.
