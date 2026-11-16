@@ -2819,7 +2819,7 @@ function importPicked(input) {
     backupSay(`
       <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-sm);padding:12px;color:var(--text2);line-height:1.5">
         Replace current data with this backup?<br>
-        <b>${data.molecules.length}</b> molecules · <b>${data.formulas.length}</b> formulas${data.accords ? ` · <b>${data.accords.length}</b> accords` : ''}${data.visions ? ` · <b>${data.visions.length}</b> visions` : ''}
+        <b>${data.molecules.length}</b> molecules · <b>${data.formulas.length}</b> formulas${data.accords ? ` · <b>${data.accords.length}</b> accords` : ''}${data.visions ? ` · <b>${data.visions.length}</b> visions` : ''}${data.wishlist ? ` · <b>${data.wishlist.length}</b> in wishlist` : ''}
         <div style="display:flex;gap:8px;margin-top:10px">
           <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="pendingImport=null;backupSay('')">Cancel</button>
           <button class="btn btn-danger" style="flex:1" onclick="confirmImport()">Replace</button>
@@ -2870,6 +2870,10 @@ function openBackupSheet() {
           <div>
             <div style="font-size:22px;font-weight:600">${(state.visions||[]).length}</div>
             <div style="font-size:11px;color:var(--text3)">visions</div>
+          </div>
+          <div>
+            <div style="font-size:22px;font-weight:600">${(state.wishlist||[]).length}</div>
+            <div style="font-size:11px;color:var(--text3)">wishlist</div>
           </div>
         </div>
         <div style="margin-top:8px;font-size:11px;color:var(--text3)">${lastBackupText()}</div>
