@@ -645,6 +645,54 @@
     .backup-banner span { flex: 1; }
     .backup-banner-x { border: none; background: none; font-size: 20px; color: var(--text3); padding: 0 4px; cursor: pointer; }
     .form-actions { flex-wrap: wrap; }
+    .an-badge { display: inline-block; min-width: 18px; padding: 0 5px; border-radius: 9px; background: #e0a030; color: #fff; font-size: 10px; line-height: 18px; text-align: center; margin-left: 4px; }
+    .hint-row { font-size: 12px; line-height: 1.45; padding: 6px 9px; border-radius: 8px; margin-bottom: 5px; }
+    .hint-row.warn { background: #fdf3e2; color: #8a5a10; }
+    .hint-row.err { background: #fbe9e7; color: #a03020; }
+    .hint-row.info { background: var(--bg2); color: var(--text2); }
+    .an-note { font-size: 11px; color: var(--text3); line-height: 1.45; margin-top: 6px; }
+    .ev-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+    .ev-time { width: 44px; font-size: 11px; color: var(--text2); flex-shrink: 0; }
+    .ev-names { font-size: 10px; color: var(--text3); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ev-left { width: 38px; text-align: right; font-size: 11px; color: var(--text2); font-variant-numeric: tabular-nums; flex-shrink: 0; }
+    .ac-head, .ac-row { display: grid; grid-template-columns: 1fr 74px 96px; gap: 6px; font-size: 12px; padding: 4px 0; }
+    .ac-head { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: .05em; }
+    .ac-head span:nth-child(n+2), .ac-row span:nth-child(n+2) { text-align: right; font-variant-numeric: tabular-nums; }
+    .ac-row { border-bottom: 1px solid var(--border); }
+    .ac-row span:first-child { display: flex; align-items: center; gap: 6px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .ac-row small { color: var(--text3); }
+    .ac-row .ifra-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+    .cmp-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px 8px; font-size: 12px; background: var(--bg2); border-radius: 10px; padding: 10px 12px; }
+    .cmp-grid span:first-child, .cmp-grid > span:nth-child(3n+1) { color: var(--text3); }
+    .cmp-list { border-top: 1px solid var(--border); }
+    .cmp-row { display: grid; grid-template-columns: 1fr 62px 62px 62px; gap: 6px; padding: 9px 16px; border-bottom: 1px solid var(--border); font-size: 13px; align-items: center; }
+    .cmp-row span:nth-child(n+2) { text-align: right; font-variant-numeric: tabular-nums; }
+    .cmp-head { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: .05em; padding-top: 8px; padding-bottom: 6px; }
+    .cmp-row small { font-size: 10px; color: var(--text3); }
+    .cmp-row.added { background: #eef7ee; } .cmp-row.removed { background: #fbefed; color: var(--text3); }
+    .cmp-row .up { color: #2f7d3a; } .cmp-row .down { color: #b03a2a; }
+    .ing-side { font-size: 11px; color: var(--text3); margin-left: 4px; font-variant-numeric: tabular-nums; }
+    .total-g { font-size: 15px; font-weight: 600; color: var(--text); margin-right: 8px; font-variant-numeric: tabular-nums; }
+    .sheet.full { height: 92dvh; }
+    .vis-sticky { position: sticky; top: 0; z-index: 3; background: var(--surface); padding: 12px 16px 0; border-bottom: 1px solid var(--border); }
+    .trial-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); cursor: pointer; }
+    .trial-title { font-size: 13px; font-weight: 500; }
+    .trial-sub { font-size: 12px; color: var(--text3); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .trial-age { font-size: 11px; color: var(--text3); flex-shrink: 0; }
+    .trial-due { font-size: 11px; font-weight: 600; color: #8a5a10; background: #fdf3e2; padding: 2px 8px; border-radius: 10px; flex-shrink: 0; }
+    .trial-recipe summary { font-size: 12px; color: var(--text2); cursor: pointer; padding: 4px 0; }
+    .trial-note { padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .trial-note-head { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text3); }
+    .trial-note-head b { color: var(--text); font-size: 13px; }
+    .trial-st { color: #c8901a; letter-spacing: 1px; }
+    .trial-note-x { margin-left: auto; border: none; background: none; color: var(--text3); font-size: 16px; cursor: pointer; }
+    .trial-note-text { font-size: 14px; line-height: 1.5; margin-top: 4px; white-space: pre-line; }
+    .trial-add { background: var(--bg2); border-radius: 12px; padding: 12px; }
+    .trial-stars { display: flex; align-items: center; gap: 2px; margin-top: 8px; }
+    .trial-stars button { border: none; background: none; font-size: 26px; color: #c8c4bc; cursor: pointer; padding: 0 2px; line-height: 1; }
+    .trial-stars button.on { color: #c8901a; }
+    .trial-stars span { font-size: 11px; color: var(--text3); margin-left: 6px; }
+    .share-pre { white-space: pre-wrap; font-family: ui-monospace, Menlo, monospace; font-size: 12px; line-height: 1.5; background: var(--bg2); border-radius: 10px; padding: 12px; margin: 0; max-height: 46dvh; overflow: auto; }
     .note-grid-empty { grid-column: 1 / -1; text-align: center; font-size: 12px; color: var(--text3); padding: 14px 0; }
     .note-have-dot {
       position: absolute; top: 2px; right: 2px;
@@ -1013,6 +1061,12 @@ function openMoleculeForm(id) {
       </div>
 
       <div class="field">
+        <label>Odor life <span style="text-transform:none;font-weight:400;color:var(--text3)">hours on blotter</span></label>
+        <input id="f-life" type="number" inputmode="decimal" step="1" min="0" placeholder="${(() => { const t = molLife({ cas: v.cas, pyramid: v.pyramid }); return t.src === 'typical' ? 'typical ≈ ' + t.h + ' h' : 'e.g. 48'; })()}" value="${esc(v.life||'')}" />
+        <div class="field-hint">How long it stays noticeable on a blotter — used for the “how it evolves” analytics</div>
+      </div>
+
+      <div class="field">
         <label>Stock (g)</label>
         <input id="f-stock" type="number" step="0.01" placeholder="e.g. 10.00" value="${esc(v.stock||'')}" />
       </div>
@@ -1101,6 +1155,7 @@ function saveMolecule() {
     dilutions: formDilutions.filter(d => d.label.trim() || d.pct !== 100),
     notes:    document.getElementById('f-notes').value.trim(),
     tips:     document.getElementById('f-tips').value.trim(),
+    life:     document.getElementById('f-life').value,
   };
 
   if (editMolId) {
@@ -1124,6 +1179,7 @@ function openMoleculeDetail(id) {
     m.cas   ? ['CAS', m.cas] : null,
     m.ifra  ? ['IFRA limit', m.ifra + '%'] : null,
     m.stock ? ['Stock', m.stock + ' g'] : null,
+    (() => { const L = molLife(m); return L.src === 'yours' ? ['Odor life', L.h + ' h'] : L.src === 'typical' ? ['Odor life', '≈ ' + L.h + ' h (typical)'] : null; })(),
     m.cost  ? ['Cost', '₴' + parseFloat(m.cost).toFixed(2) + '/g'] : null,
   ].filter(Boolean);
 
@@ -1351,6 +1407,7 @@ function renderFormulas(kind) {
 function formulaCard(f, kind) {
   kind = kind || 'formulas';
   const v = f.versions[f.activeVersion || 0];
+  useStrength(v);
   const total = v.ingredients.reduce((s, i) => s + ingEffectivePct(i), 0);
   const hasWarn = v.ingredients.some(i => ifraStatus(i, total) !== 'ok');
   const ethanolMl = +v.ethanolMl || 0;
@@ -1366,8 +1423,9 @@ function formulaCard(f, kind) {
         <span>·</span>
         <span>${f.versions.length} version${f.versions.length>1?'s':''}</span>
         <span>·</span>
-        <span>${ethanolMl > 0 ? `${finalMl.toFixed(1)} ml total` : `${v.totalMl} ml conc.`}</span>
+        <span>${ethanolMl > 0 ? `${finalMl.toFixed(2)} g total` : `${(+v.totalMl || 0).toFixed(2)} g conc.`}</span>
       </div>
+      ${(() => { const ds = (f.trials || []).map(trialDue).filter(Boolean); return ds.length ? `<div style="margin-top:6px"><span class="trial-due">smell · day ${Math.max(...ds)}</span></div>` : ''; })()}
       ${(f.noteLinks || []).length ? `<div class="acc-links-row">${f.noteLinks.map(n => accNoteChip(n)).join('')}</div>` : ''}
       ${f.notes ? `<div style="font-size:12px;color:var(--text3);margin-top:4px;line-height:1.4">${esc(f.notes)}</div>` : ''}
     </div>
@@ -1408,6 +1466,28 @@ function ingPurePct(ing) {
 // ── Accords inside formulas ──
 // An ingredient row is either a molecule {molId, pct, dilPct} or an accord {accId, pct}.
 // expandIngs turns accord rows into the molecules they are made of, scaled to the row's %.
+// percentages: one decimal (12.5), but tiny amounts keep two significant digits (0.024) so traces don't show as 0.0
+// notes matching a search, best first: starts with it → a word starts with it → anywhere
+function searchNotes(q) {
+  q = String(q || '').toLowerCase().trim().replace(/['`ʼ]/g, '’');
+  if (!q) return [];
+  const sc = n => {
+    const a = n.toLowerCase(), b = (NOTE_ALIAS[n] || '').toLowerCase();
+    if (a === q || b === q) return 4;
+    if (a.startsWith(q) || b.startsWith(q)) return 3;
+    if (a.split(/[\s\-(,]+/).some(w => w.startsWith(q)) || b.split(/[\s\-(,]+/).some(w => w.startsWith(q))) return 2;
+    if (a.includes(q) || b.includes(q)) return 1;
+    return 0;
+  };
+  return shownNotes(ALL_NOTES_FLAT).map(n => [n, sc(n)]).filter(x => x[1]).sort((x, y) => y[1] - x[1] || x[0].localeCompare(y[0], 'uk')).map(x => x[0]);
+}
+function fmtPct(x) {
+  x = +x || 0;
+  const a = Math.abs(x);
+  if (a === 0) return '0';
+  if (a >= 0.1) return x.toFixed(1);
+  return x.toFixed(Math.min(6, 1 - Math.floor(Math.log10(a))));
+}
 function accById(id) { return (state.accords || []).find(a => a.id === id); }
 function accVersion(acc) { return acc ? acc.versions[acc.activeVersion || 0] : null; }
 function expandIngs(ings) {
@@ -1442,54 +1522,62 @@ function ingDisplayName(ing) {
 function accordSubText(ing) {
   const subs = expandIngs([ing]);
   if (!subs.length) return '<span style="color:var(--danger,#b03030)">Accord not found</span>';
-  return subs.map(x => `${esc(x.name)} ${x.pct.toFixed(3)}%`).join(' · ');
+  return subs.map(x => `${esc(x.name)} ${fmtPct(x.pct)}%`).join(' · ');
 }
 
+// ── IFRA is about the finished product: pure % in concentrate × how strong the perfume is ──
+let IFRA_S = 20;                       // strength (%) used by the IFRA checks being rendered
+const STRENGTHS = [['Pure oil', 100], ['Extrait', 30], ['EDP', 20], ['EDT', 12], ['EDC', 5]];
+function finalStrength(v) {
+  if (v && +v.strength > 0) return +v.strength;
+  const eth = +(v && v.ethanolMl) || 0, conc = +(v && v.totalMl) || 0;
+  if (eth > 0 && conc > 0) return conc / (conc + eth) * 100;
+  return 20;
+}
+function strengthLabel(S) {
+  const hit = STRENGTHS.find(x => Math.abs(x[1] - S) < 0.01);
+  return hit ? `${hit[0]} ${hit[1]}%` : `${(+S).toFixed(1).replace(/\.0$/, '')}%`;
+}
+function useStrength(v) { IFRA_S = finalStrength(v); return IFRA_S; }
+function ingFinalPct(ing, S) { return ingPurePct(ing) * (S == null ? IFRA_S : S) / 100; }
+const WARN_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`;
+
 // Returns 'ok' | 'warn' (approaching) | 'over'
-function ifraStatus(ing, totalPct) {
+function ifraStatus(ing, totalPct, S) {
   if (ing.accId) {
-    const st = expandIngs([ing]).map(x => ifraStatus(x, totalPct));
+    const st = expandIngs([ing]).map(x => ifraStatus(x, totalPct, S));
     return st.includes('over') ? 'over' : st.includes('warn') ? 'warn' : 'ok';
   }
   const mol = state.molecules.find(m => m.id === ing.molId);
-  if (!mol || !mol.ifra) return 'ok';
-  const ifraLimit = +mol.ifra; // already expressed as % in finished product
-
-  // % of finished product = ing.pct (this ingredient) as fraction of 100% total
-  // But total might not be 100 yet — IFRA is about the finished product
-  // So pure molecule % in final product = purePct (already accounts for dilution)
-  const purePct = ingPurePct(ing);
-
-  if (purePct > ifraLimit) return 'over';
-  if (purePct > ifraLimit * 0.85) return 'warn';
+  if (!mol || !(+mol.ifra > 0)) return 'ok';
+  const lim = +mol.ifra, fin = ingFinalPct(ing, S);
+  if (fin > lim) return 'over';
+  if (fin > lim * 0.85) return 'warn';
   return 'ok';
 }
 
 function ifraWarningHTML(ing) {
+  const at = ` at ${strengthLabel(IFRA_S)}`;
   if (ing.accId) {
     const bad = expandIngs([ing]).filter(x => ifraStatus(x, 100) !== 'ok');
     if (!bad.length) return '';
     const over = bad.some(x => ifraStatus(x, 100) === 'over');
-    return `<div class="ifra-warn ${over ? 'err' : 'warn'}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span>${over ? 'IFRA exceeded' : 'Near IFRA limit'} inside accord: ${bad.map(x => `${esc(x.name)} ${ingPurePct(x).toFixed(4)}% / ${state.molecules.find(m => m.id === x.molId)?.ifra}%`).join(', ')}</span></div>`;
+    return `<div class="ifra-warn ${over ? 'err' : 'warn'}">${WARN_ICON}<span>${over ? 'IFRA exceeded' : 'Near IFRA limit'} inside accord${at}: ${bad.map(x => `${esc(x.name)} ${fmtPct(ingFinalPct(x))}% / ${state.molecules.find(m => m.id === x.molId)?.ifra}%`).join(', ')}</span></div>`;
   }
   const mol = state.molecules.find(m => m.id === ing.molId);
-  if (!mol || !mol.ifra) return '';
+  if (!mol || !(+mol.ifra > 0)) return '';
   const status = ifraStatus(ing, 100);
   if (status === 'ok') return '';
-  const purePct = ingPurePct(ing).toFixed(3);
-  const limit = mol.ifra;
-  const warnIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`;
-  if (status === 'over') {
-    return `<div class="ifra-warn err">${warnIcon}<span>IFRA exceeded: ${purePct}% pure in product (limit ${limit}%)</span></div>`;
-  }
-  return `<div class="ifra-warn warn">${warnIcon}<span>Approaching IFRA limit: ${purePct}% of ${limit}% max</span></div>`;
+  const fin = fmtPct(ingFinalPct(ing));
+  if (status === 'over') return `<div class="ifra-warn err">${WARN_ICON}<span>IFRA exceeded${at}: ${fin}% in the perfume (limit ${mol.ifra}%)</span></div>`;
+  return `<div class="ifra-warn warn">${WARN_ICON}<span>Near IFRA limit${at}: ${fin}% of ${mol.ifra}% max</span></div>`;
 }
 
 // ══════════════════════════════════════════════════════
 // FORMULA BUILDER
 // ══════════════════════════════════════════════════════
 let BS = null;
-let inputMode = 'pct'; // 'pct' | 'ml'
+let inputMode = 'g'; // 'g' (grams, total adds up by itself) | 'pct'
 
 function openFormulaBuilder(fid, kind, presetNote) {
   BK = kind || (state.page === 'accords' ? 'accords' : 'formulas');
@@ -1503,12 +1591,13 @@ function openFormulaBuilder(fid, kind, presetNote) {
   // migrate old versions without ethanolMl
   BS.versions.forEach(v => { if (v.ethanolMl === undefined) v.ethanolMl = ''; });
   if (!BS.noteLinks) BS.noteLinks = [];
-  inputMode = 'pct';
+  inputMode = 'g';
   renderBuilder();
 }
 
 function renderBuilder() {
   const v = BS.versions[BS.activeVersion];
+  useStrength(v);
   const total = v.ingredients.reduce((s, i) => s + (+i.pct || 0), 0);
   const ok   = Math.abs(total - 100) < 0.05;
   const over = total > 100.05;
@@ -1541,36 +1630,41 @@ function renderBuilder() {
       <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-sm);padding:12px;display:flex;flex-direction:column;gap:10px">
         <div class="field-row-2">
           <div class="field">
-            <label>Concentrate (ml)</label>
-            <input id="b-ml" type="number" step="0.1" min="0.1" value="${concMl}"
-              oninput="BS.versions[BS.activeVersion].totalMl=+this.value;refreshTotals();refreshEthanolInfo()" />
+            <label>Concentrate (g)</label>
+            <input id="b-ml" type="number" inputmode="decimal" step="0.1" min="0.001" value="${(+concMl || 0).toFixed(3).replace(/\.?0+$/, '')}"
+              oninput="BS.versions[BS.activeVersion].totalMl=+this.value;refreshAmounts();refreshTotals();refreshEthanolInfo()" />
           </div>
           <div class="field">
-            <label>Ethanol (ml) <span style="font-weight:400;text-transform:none;color:var(--text3)">optional</span></label>
+            <label>Ethanol (g) <span style="font-weight:400;text-transform:none;color:var(--text3)">optional</span></label>
             <input id="b-ethanol" type="number" step="0.1" min="0" placeholder="—"
               value="${v.ethanolMl || ''}"
               oninput="BS.versions[BS.activeVersion].ethanolMl=this.value;refreshEthanolInfo()" />
           </div>
         </div>
+        <div>
+          <div style="font-size:11px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--text2);margin-bottom:6px">IFRA checked at</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap" id="b-strength">${strengthChipsHTML(v)}</div>
+        </div>
         <div id="b-ethanol-info" style="font-size:12px;color:var(--text2);line-height:1.5">
           ${ethanolMl > 0
-            ? `Final volume: <strong>${finalMl.toFixed(2)} ml</strong> · Concentrate: <strong>${concPct}%</strong>`
-            : `Pure concentrate · ${concMl} ml`}
+            ? `Total: <strong>${finalMl.toFixed(2)} g</strong> · Concentrate: <strong>${concPct}%</strong>`
+            : `Pure concentrate · ${(+concMl || 0).toFixed(3).replace(/\.?0+$/, '')} g${inputMode === 'g' ? ' — adds up from the materials below; change it to scale the whole recipe' : ''}`}
         </div>
       </div>
 
       <div style="display:flex;align-items:center;gap:8px">
         <span style="font-size:11px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--text2)">Input mode</span>
         <div style="display:flex;gap:4px">
+          <button class="btn btn-sm${inputMode==='g'?' btn-primary':' btn-ghost'}" onclick="setInputMode('g')">g</button>
           <button class="btn btn-sm${inputMode==='pct'?' btn-primary':' btn-ghost'}" onclick="setInputMode('pct')">%</button>
-          <button class="btn btn-sm${inputMode==='ml'?' btn-primary':' btn-ghost'}" onclick="setInputMode('ml')">ml</button>
         </div>
       </div>
     </div>
 
     <div class="total-bar">
-      <span class="total-label">Concentrate total</span>
-      <span id="b-total" class="total-val ${ok?'total-ok':over?'total-over':''}">${total.toFixed(4)}%</span>
+      <span class="total-label">Total</span>
+      <span><span id="b-total-g" class="total-g">${(+v.totalMl * total / 100 || 0).toFixed(3)} g</span>
+      <span id="b-total" class="total-val ${ok?'total-ok':over?'total-over':''}">${fmtPct(total)}%</span></span>
     </div>
 
     <div id="b-ings">${builderIngsList(v)}</div>
@@ -1580,7 +1674,7 @@ function renderBuilder() {
       Add ingredient
     </button>
 
-    ${analyticsHTML(v)}
+    <div id="b-analytics">${analyticsHTML(v)}</div>
 
     <div class="form-body" style="padding-top:8px">
       <div class="field">
@@ -1596,6 +1690,19 @@ function renderBuilder() {
   `);
 }
 
+function strengthChipsHTML(v) {
+  const eth = +v.ethanolMl || 0, conc = +v.totalMl || 0;
+  const auto = !(+v.strength > 0);
+  const fromEth = eth > 0 && conc > 0 ? conc / (conc + eth) * 100 : null;
+  return (fromEth != null ? `<button class="mk-chip${auto ? ' on' : ''}" onclick="bSetStrength(0)">From ethanol ${fromEth.toFixed(1).replace(/\.0$/, '')}%</button>` : '')
+    + STRENGTHS.map(([l, p]) => `<button class="mk-chip${(!auto && +v.strength === p) || (auto && fromEth == null && p === 20) ? ' on' : ''}" onclick="bSetStrength(${p})">${l} ${p}%</button>`).join('');
+}
+function bSetStrength(p) {
+  const v = BS.versions[BS.activeVersion];
+  if (p > 0) v.strength = p; else delete v.strength;
+  renderBuilder();
+}
+
 function refreshEthanolInfo() {
   const v = BS.versions[BS.activeVersion];
   const concMl = +v.totalMl || 0;
@@ -1604,19 +1711,15 @@ function refreshEthanolInfo() {
   const el = document.getElementById('b-ethanol-info');
   if (!el) return;
   el.innerHTML = ethanolMl > 0
-    ? `Final volume: <strong>${finalMl.toFixed(2)} ml</strong> · Concentrate: <strong>${((concMl/finalMl)*100).toFixed(1)}%</strong>`
-    : `Pure concentrate · ${concMl} ml`;
+    ? `Total: <strong>${finalMl.toFixed(2)} g</strong> · Concentrate: <strong>${((concMl/finalMl)*100).toFixed(1)}%</strong>`
+    : `Pure concentrate · ${(+concMl || 0).toFixed(3).replace(/\.?0+$/, '')} g${inputMode === 'g' ? ' — adds up from the materials below; change it to scale the whole recipe' : ''}`;
+  const sc = document.getElementById('b-strength'); if (sc) sc.innerHTML = strengthChipsHTML(v);
+  refreshBuilderAnalytics();
 }
 
 function setInputMode(m) {
   inputMode = m;
-  const v = BS.versions[BS.activeVersion];
-  document.getElementById('b-ings').innerHTML = builderIngsList(v);
-  // update mode buttons without full re-render
-  document.querySelectorAll('.btn-sm').forEach(b => {
-    if (b.textContent === '%') { b.className = `btn btn-sm${m==='pct'?' btn-primary':' btn-ghost'}`; }
-    if (b.textContent === 'ml') { b.className = `btn btn-sm${m==='ml'?' btn-primary':' btn-ghost'}`; }
-  });
+  renderBuilder();
 }
 
 function builderIngsList(v) {
@@ -1625,7 +1728,7 @@ function builderIngsList(v) {
   return v.ingredients.map((ing, idx) => {
     const col = ing.accId ? '#9a9a96' : familyColor(ing.family);
     const pctVal = (+ing.pct || 0);
-    const mlVal  = v.totalMl ? (pctVal / 100 * v.totalMl) : 0;
+    const gVal   = v.totalMl ? (pctVal / 100 * v.totalMl) : 0;
     const mol = state.molecules.find(m => m.id === ing.molId);
     const hasDilutions = mol && mol.dilutions && mol.dilutions.length > 0;
     const warnHTML = ifraWarningHTML(ing);
@@ -1654,18 +1757,18 @@ function builderIngsList(v) {
         <div class="ing-inputs">
           ${inputMode === 'pct' ? `
             <div class="ing-input-wrap">
-              <input class="ing-num" type="number" step="0.0001" min="0" max="100"
-                value="${pctVal.toFixed(4)}" oninput="bUpdatePct(${idx},+this.value)" />
+              <input class="ing-num" type="number" inputmode="decimal" step="0.0001" min="0" max="100"
+                value="${+pctVal.toFixed(4)}" oninput="bUpdatePct(${idx},+this.value)" />
               <span class="ing-unit">%</span>
             </div>
-            <span style="font-size:11px;color:var(--text3);margin-left:4px">${v.totalMl?(pctVal/100*v.totalMl).toFixed(4)+' ml':'—'}</span>
+            <span class="ing-side">${v.totalMl?(pctVal/100*v.totalMl).toFixed(4)+' g':'—'}</span>
           ` : `
             <div class="ing-input-wrap">
-              <input class="ing-num" type="number" step="0.0001" min="0"
-                value="${mlVal.toFixed(4)}" oninput="bUpdateMl(${idx},+this.value)" />
-              <span class="ing-unit">ml</span>
+              <input class="ing-num" type="number" inputmode="decimal" step="0.001" min="0"
+                value="${+gVal.toFixed(4)}" oninput="bUpdateG(${idx},this.value)" />
+              <span class="ing-unit">g</span>
             </div>
-            <span style="font-size:11px;color:var(--text3);margin-left:4px">${pctVal.toFixed(4)}%</span>
+            <span class="ing-side">${fmtPct(pctVal)}%</span>
           `}
         </div>
 
@@ -1687,21 +1790,48 @@ function bUpdatePct(idx, val) {
   // update ml display inline
   const v = BS.versions[BS.activeVersion];
   const ing = v.ingredients[idx];
-  const mlSpan = document.querySelector(`#b-ings .ingredient-row:nth-child(${idx+1}) .ing-inputs span`);
-  if (mlSpan && v.totalMl) mlSpan.textContent = (val/100*v.totalMl).toFixed(4) + ' ml';
+  const side = document.querySelector(`#b-ings .ingredient-row:nth-child(${idx+1}) .ing-side`);
+  if (side && v.totalMl) side.textContent = (val/100*v.totalMl).toFixed(4) + ' g';
   // refresh IFRA warning
   refreshIngWarning(idx);
 }
 
-function bUpdateMl(idx, mlVal) {
+// grams mode: every material keeps its grams, the total is their sum, % follow from it
+function currentGrams(v) {
+  const T = +v.totalMl || 0;
+  return v.ingredients.map(i => (+i.pct || 0) / 100 * T);
+}
+function applyGrams(v, gs) {
+  const T = gs.reduce((s, g) => s + (g > 0 ? g : 0), 0);
+  if (T > 0) { v.totalMl = +T.toFixed(6); v.ingredients.forEach((i, k) => i.pct = (gs[k] > 0 ? gs[k] : 0) / T * 100); }
+  else v.ingredients.forEach(i => i.pct = 0);
+}
+function bUpdateG(idx, raw) {
   const v = BS.versions[BS.activeVersion];
-  const pct = v.totalMl ? (mlVal / v.totalMl * 100) : 0;
-  v.ingredients[idx].pct = pct;
-  // update % display
-  const pctSpan = document.querySelector(`#b-ings .ingredient-row:nth-child(${idx+1}) .ing-inputs span`);
-  if (pctSpan) pctSpan.textContent = pct.toFixed(4) + '%';
+  const g = Math.max(0, parseFloat(String(raw).replace(',', '.')) || 0);
+  const gs = currentGrams(v);
+  gs[idx] = g;
+  // a version whose total was 0 (all rows empty) keeps the others at 0
+  applyGrams(v, gs);
+  refreshAmounts(idx);
   refreshTotals();
-  refreshIngWarning(idx);
+  v.ingredients.forEach((_, k) => refreshIngWarning(k));
+  refreshEthanolInfo();
+}
+// update the side labels (and the concentrate field) without touching the field being typed in
+function refreshAmounts(skipIdx) {
+  const v = BS.versions[BS.activeVersion];
+  const rows = document.querySelectorAll('#b-ings .ingredient-row');
+  v.ingredients.forEach((ing, k) => {
+    const side = rows[k] && rows[k].querySelector('.ing-side');
+    if (side) side.textContent = inputMode === 'g' ? fmtPct(ing.pct) + '%' : ((+ing.pct || 0) / 100 * (+v.totalMl || 0)).toFixed(4) + ' g';
+    if (inputMode === 'g' && k !== skipIdx) {
+      const inp = rows[k] && rows[k].querySelector('.ing-num');
+      if (inp && document.activeElement !== inp) inp.value = +((+ing.pct || 0) / 100 * (+v.totalMl || 0)).toFixed(4);
+    }
+  });
+  const c = document.getElementById('b-ml');
+  if (c && document.activeElement !== c) c.value = (+v.totalMl || 0).toFixed(3).replace(/\.?0+$/, '');
 }
 
 function bSetDilution(idx, pct) {
@@ -1711,6 +1841,7 @@ function bSetDilution(idx, pct) {
 
 function refreshIngWarning(idx) {
   const v = BS.versions[BS.activeVersion];
+  useStrength(v);
   const ing = v.ingredients[idx];
   const row = document.querySelector(`#b-ings .ingredient-row:nth-child(${idx+1})`);
   if (!row) return;
@@ -1730,13 +1861,16 @@ function refreshIngWarning(idx) {
 }
 
 function refreshTotals() {
+  refreshBuilderAnalytics();
   const v = BS.versions[BS.activeVersion];
   const total = v.ingredients.reduce((s, i) => s + (+i.pct || 0), 0);
   const ok = Math.abs(total - 100) < 0.05;
   const over = total > 100.05;
+  const tg = document.getElementById('b-total-g');
+  if (tg) tg.textContent = ((+v.totalMl || 0) * total / 100).toFixed(3) + ' g';
   const tv = document.getElementById('b-total');
   if (tv) {
-    tv.textContent = total.toFixed(4) + '%';
+    tv.textContent = fmtPct(total) + '%';
     tv.className = 'total-val ' + (ok ? 'total-ok' : over ? 'total-over' : '');
   }
 }
@@ -1752,7 +1886,9 @@ function bAddVersion() {
 }
 
 function bRemoveIng(idx) {
-  BS.versions[BS.activeVersion].ingredients.splice(idx, 1);
+  const v = BS.versions[BS.activeVersion];
+  if (inputMode === 'g') { const gs = currentGrams(v); gs.splice(idx, 1); v.ingredients.splice(idx, 1); applyGrams(v, gs); }
+  else v.ingredients.splice(idx, 1);
   renderBuilder();
 }
 
@@ -1827,9 +1963,14 @@ function filterIngPick(q) {
   document.getElementById('ing-pick-list').innerHTML = ingPickList(mols);
 }
 
+function pushRow(row) {
+  const v = BS.versions[BS.activeVersion];
+  if (inputMode === 'g') { const gs = currentGrams(v); v.ingredients.push(row); gs.push(1); applyGrams(v, gs); }
+  else v.ingredients.push(row);
+}
 function bAddAcc(accId) {
   const a = accById(accId); if (!a) return;
-  BS.versions[BS.activeVersion].ingredients.push({ accId, name: a.name, family: 'Accord', pct: 1, dilPct: 100 });
+  pushRow({ accId, name: a.name, family: 'Accord', pct: 1, dilPct: 100 });
   closeSheet();
   renderBuilder();
 }
@@ -1837,7 +1978,7 @@ function bAddAcc(accId) {
 function bAddIng(molId) {
   const mol = state.molecules.find(m => m.id === molId);
   const v = BS.versions[BS.activeVersion];
-  v.ingredients.push({
+  pushRow({
     molId, name: mol.name, family: mol.family,
     pct: 1,
     dilPct: 100, // default: pure
@@ -1855,6 +1996,7 @@ function saveFormula() {
     notes: BS.notes,
     ...(BK === 'accords' ? { noteLinks: BS.noteLinks || [] } : {}),
     ...(BS.visionId ? { visionId: BS.visionId } : {}),
+    ...(BS.trials && BS.trials.length ? { trials: BS.trials } : {}),
     versions: BS.versions,
     activeVersion: BS.activeVersion,
     updatedAt: Date.now(),
@@ -1875,6 +2017,7 @@ function openFormulaDetail(id, kind) {
   const f = state[DK].find(x => x.id === id);
   if (!f) return;
   const v = f.versions[f.activeVersion || 0];
+  useStrength(v);
   const total = v.ingredients.reduce((s, i) => s + (+i.pct || 0), 0);
 
   showSheet('fDetail', esc(f.name), `
@@ -1885,14 +2028,14 @@ function openFormulaDetail(id, kind) {
     </div>
 
     <div class="detail-block" style="padding-bottom:8px">
-      <div class="detail-label">Ingredients — ${total.toFixed(4)}% · ${v.totalMl} ml concentrate${+v.ethanolMl > 0 ? ` + ${v.ethanolMl} ml ethanol = ${(+v.totalMl + +v.ethanolMl).toFixed(2)} ml total` : ''}</div>
+      <div class="detail-label">Ingredients — ${fmtPct(total)}% · ${(+v.totalMl || 0).toFixed(3).replace(/\.?0+$/, '')} g concentrate${+v.ethanolMl > 0 ? ` + ${v.ethanolMl} g ethanol = ${(+v.totalMl + +v.ethanolMl).toFixed(2)} ml total` : ''}</div>
     </div>
 
     ${v.ingredients.map(ing => {
       const col = familyColor(ing.family);
       const pct = +ing.pct || 0;
-      const ml  = (pct / 100 * v.totalMl).toFixed(4);
-      const purePct = ingPurePct(ing);
+      const ml  = (pct / 100 * v.totalMl).toFixed(4); // grams
+      const purePct = ingFinalPct(ing);
       const mol = state.molecules.find(m => m.id === ing.molId);
       const status = ifraStatus(ing, total);
       const dilLabel = (+ing.dilPct||100) < 100 ? ` · ${ing.dilPct}% dil.` : '';
@@ -1905,13 +2048,13 @@ function openFormulaDetail(id, kind) {
               <div style="font-size:14px;font-weight:500">${ing.accId ? '◎ ' : ''}${esc(ingDisplayName(ing))}</div>
               <div style="font-size:11px;color:var(--text3)">${ing.accId ? 'Accord · ' + accordSubText(ing) : [ing.family||'', dilLabel].filter(s=>s.trim()).join('')}</div>
               ${ing.accId ? (status !== 'ok' ? `<div class="fi-warn ${status === 'over' ? 'e' : 'w'}">⚠ ${status === 'over' ? 'IFRA exceeded' : 'Near IFRA limit'} inside accord</div>` : '') : `
-              ${status === 'over' ? `<div class="fi-warn e">⚠ IFRA exceeded (${purePct.toFixed(4)}% / ${mol?.ifra}% max)</div>` : ''}
-              ${status === 'warn' ? `<div class="fi-warn w">⚠ Near IFRA limit (${purePct.toFixed(4)}%)</div>` : ''}`}
+              ${status === 'over' ? `<div class="fi-warn e">⚠ IFRA exceeded at ${strengthLabel(IFRA_S)} (${fmtPct(purePct)}% / ${mol?.ifra}% max)</div>` : ''}
+              ${status === 'warn' ? `<div class="fi-warn w">⚠ Near IFRA limit at ${strengthLabel(IFRA_S)} (${fmtPct(purePct)}% / ${mol?.ifra}%)</div>` : ''}`}
             </div>
           </div>
           <div class="fi-right">
-            <div class="fi-pct">${pct.toFixed(4)}%</div>
-            <div class="fi-ml">${ml} ml</div>
+            <div class="fi-pct">${fmtPct(pct)}%</div>
+            <div class="fi-ml">${ml} g</div>
           </div>
         </div>
       `;
@@ -1920,6 +2063,7 @@ function openFormulaDetail(id, kind) {
     ${analyticsHTML(v)}
 
     ${DK === 'accords' ? accDetailLinksHTML(f) : ''}
+    ${trialsSectionHTML(f, DK)}
     ${f.visionId && state.visions.find(x => x.id === f.visionId) ? `<div class="detail-block"><div class="detail-label">From vision</div><div style="margin-top:6px"><button class="acc-vis-link" onclick="closeSheet();showPage('vision');openVisionDetail('${f.visionId}')">${esc(state.visions.find(x => x.id === f.visionId).name)}</button></div></div>` : ''}
 
     ${f.notes ? `
@@ -1930,7 +2074,9 @@ function openFormulaDetail(id, kind) {
     ` : ''}
 
     <div class="form-actions" style="margin-top:6px">
+      ${f.versions.length > 1 ? `<button class="btn btn-ghost" onclick="openCompareVersions('${id}','${DK}')">Compare</button>` : ''}
       <button class="btn btn-ghost" onclick="duplicateItem('${id}','${DK}')">Duplicate</button>
+      <button class="btn btn-ghost" onclick="openShareSheet('${id}','${DK}')">Share</button>
       <button class="btn btn-primary" onclick="openMakeSheet('${id}','${DK}')">Make</button>
       <button class="btn btn-ghost" onclick="closeSheet();openFormulaBuilder('${id}','${DK}')">Edit</button>
       <button class="btn btn-danger" onclick="deleteFormula('${id}')">Delete</button>
@@ -2115,7 +2261,7 @@ function openAccNotePicker() {
 }
 function accGridHTML() {
   const q = accPick.q.toLowerCase().trim().replace(/['`ʼ]/g, '’');
-  let notes = q ? shownNotes(ALL_NOTES_FLAT).filter(n => n.toLowerCase().includes(q) || (NOTE_ALIAS[n]||'').toLowerCase().includes(q)).slice(0, 120)
+  let notes = q ? searchNotes(q).slice(0, 120)
                 : shownNotes(FRAG_NOTES[accPick.cat] || []);
   if (!notes.length) return `<div class="note-grid-empty">Nothing found</div>`;
   const linked = new Set((BS.noteLinks || []).map(noteKey));
@@ -2166,7 +2312,7 @@ function showSheet(id, title, content, opts) {
   overlay.className = 'overlay';
   overlay.id = 'sheet-' + id;
   overlay.innerHTML = `
-    <div class="sheet${opts.tall ? ' tall' : ''}">
+    <div class="sheet${opts.tall ? ' tall' : ''}${opts.full ? ' full' : ''}">
       <div class="sheet-handle"></div>
       <div class="sheet-header">
         <span class="sheet-title">${title}</span>
@@ -2258,10 +2404,12 @@ function computeAnalytics(v) {
   });
 
   // ── IFRA risks ──
-  const ifraRisks = ings.map(ing => {
-    const mol = state.molecules.find(m => m.id === ing.molId);
-    if (!mol?.ifra) return null;
-    const purePct = ingPurePct(ing);
+  const S = useStrength(v);
+  const ifraRisks = actualContent(v).map(r => {
+    const mol = r.mol;
+    if (!(+mol?.ifra > 0)) return null;
+    const ing = { name: r.name };
+    const purePct = r.pure * S / 100;
     const limit = +mol.ifra;
     const status = purePct > limit ? 'over' : purePct > limit * 0.85 ? 'warn' : 'ok';
     return { name: ing.name, purePct, limit, status };
@@ -2312,11 +2460,13 @@ function analyticsHTML(v) {
   }).join('');
 
   // IFRA summary
+  const hints = balanceHints(v, an);
+  const hintsHTML = hints.length ? `<div class="an-section">${hints.map(([t, msg]) => `<div class="hint-row ${t}">${t === 'info' ? 'ℹ︎' : '⚠︎'} ${esc(msg)}</div>`).join('')}</div>` : '';
   const ifraHTML = an.ifraRisks.length ? an.ifraRisks.map(r => `
     <div class="ifra-summary-row">
       <div class="ifra-dot ${r.status}"></div>
       <div class="ifra-summary-name">${esc(r.name)}</div>
-      <div class="ifra-summary-val">${r.purePct.toFixed(4)}% / ${r.limit}% max</div>
+      <div class="ifra-summary-val">${fmtPct(r.purePct)}% / ${r.limit}% max</div>
     </div>
   `).join('') : `<div style="font-size:12px;color:var(--text3)">No IFRA-limited molecules</div>`;
 
@@ -2325,11 +2475,12 @@ function analyticsHTML(v) {
       <button class="analytics-toggle" onclick="toggleAnalytics(this)">
         <span class="analytics-toggle-label">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-          Formula Analytics
+          Formula Analytics${hints.length ? ` <span class="an-badge">${hints.length}</span>` : ''}
         </span>
-        <span class="analytics-chevron">▼</span>
+        <span class="analytics-chevron${ANALYTICS_OPEN ? ' open' : ''}">▼</span>
       </button>
-      <div class="analytics-body">
+      <div class="analytics-body${ANALYTICS_OPEN ? ' open' : ''}">
+        ${hintsHTML}
 
         <div class="an-section">
           <div class="an-label">Pyramid Distribution</div>
@@ -2358,8 +2509,10 @@ function analyticsHTML(v) {
           <div class="profile-grid">${profileHTML}</div>
         </div>
 
+        ${analyticsExtraHTML(v, an)}
+
         <div class="an-section" style="margin-bottom:0">
-          <div class="an-label">IFRA Risks</div>
+          <div class="an-label">IFRA at ${strengthLabel(IFRA_S)}</div>
           ${ifraHTML}
         </div>
 
@@ -2373,7 +2526,223 @@ function toggleAnalytics(btn) {
   const chevron = btn.querySelector('.analytics-chevron');
   const isOpen = body.classList.toggle('open');
   chevron.classList.toggle('open', isOpen);
+  ANALYTICS_OPEN = isOpen;
 }
+
+// ══════════════════════════════════════════════════════
+// ANALYTICS+ : odor life, evolution, cost, balance, actual content, version compare
+// ══════════════════════════════════════════════════════
+let ANALYTICS_OPEN = false;
+
+// Typical odor life on a blotter (hours), approximate, from general perfumery references.
+// Used only when the molecule's own "Odor life" field is empty.
+const TYPICAL_LIFE = {
+  '6790-58-5': 400, '139504-68-0': 400, '58567-11-6': 400, '211299-54-6': 400, '8023-85-6': 200,
+  '33704-61-9': 300, '54464-57-2': 400, '198404-98-7': 400, '8015-77-8': 12, '4602-84-0': 150,
+  '22457-23-4': 24, '9000-05-9': 400, '91-64-5': 350, '93-51-6': 72, '8016-26-0': 400,
+  '4940-11-8': 300, '8046-22-8': 400, '4707-47-5': 400, '1222-05-5': 400, '34902-57-3': 400,
+  '105-95-3': 400, '54982-83-1': 400, '116-26-7': 36, '5471-51-2': 400, '104-21-2': 48,
+  '67634-00-8': 24, '127-41-3': 200, '60-12-8': 36, '106-25-2': 36, '78-70-6': 12,
+  '1205-17-0': 200, '67634-15-5': 150, '24851-98-7': 400, '8000-25-7': 4, '106-72-9': 12,
+  '470-82-6': 2, '18479-58-8': 10, '5392-40-5': 8, '8007-75-8': 4, '98-55-5': 24,
+  '80-56-8': 1, '110-41-8': 200, '104-67-6': 300,
+  '5989-27-5': 2, '106-24-1': 48, '106-22-9': 48, '121-33-5': 400, '121-32-4': 400, '120-57-0': 300,
+  '140-11-4': 8, '120-72-9': 300, '928-96-1': 1, '111879-80-2': 400, '7779-50-2': 400,
+  '65113-99-7': 400, '28219-61-6': 400, '1506-02-1': 400, '8000-27-9': 400, '8016-96-4': 300,
+  '8014-09-3': 400, '8000-28-0': 6, '8008-56-8': 2, '8008-57-9': 2, '8007-01-0': 48,
+  '115-95-7': 10, '101-86-0': 400, '118-58-1': 400, '23696-85-7': 48, '127-51-5': 200,
+  '79-77-6': 200, '6413-10-1': 72, '77-53-2': 300, '7212-44-4': 72, '68647-72-3': 2,
+};
+const PYR_LIFE = { Top: 2, Heart: 24, Base: 200 };
+function molLife(m) {
+  if (!m) return { h: 24, src: 'guess' };
+  if (+m.life > 0) return { h: +m.life, src: 'yours' };
+  const cas = String(m.cas || '').trim();
+  if (TYPICAL_LIFE[cas]) return { h: TYPICAL_LIFE[cas], src: 'typical' };
+  if (PYR_LIFE[m.pyramid]) return { h: PYR_LIFE[m.pyramid], src: 'pyramid' };
+  return { h: 24, src: 'guess' };
+}
+
+// one row per molecule, after accords and dilutions: pure % in concentrate
+function actualContent(v) {
+  const m = new Map();
+  for (const i of expandIngs(v.ingredients)) {
+    const pure = ingPurePct(i);
+    const k = i.molId;
+    if (m.has(k)) m.get(k).pure += pure;
+    else m.set(k, { molId: k, name: i.name, family: i.family, pure, mol: state.molecules.find(x => x.id === k) });
+  }
+  return [...m.values()].sort((a, b) => b.pure - a.pure);
+}
+
+const STAGES = [[0, 'Spray'], [0.25, '15 min'], [1, '1 h'], [4, '4 h'], [12, '12 h'], [24, '24 h']];
+function evolution(v) {
+  const rows = actualContent(v).filter(r => r.pure > 0);
+  if (!rows.length) return null;
+  const k = Math.log(20); // after "odor life" hours about 5% is left
+  const start = rows.reduce((s, r) => s + r.pure, 0);
+  const guessed = rows.filter(r => molLife(r.mol).src !== 'yours').length;
+  const stages = STAGES.map(([t, label]) => {
+    const parts = rows.map(r => ({ r, val: r.pure * Math.exp(-k * t / molLife(r.mol).h) })).filter(p => p.val > 0);
+    const tot = parts.reduce((s, p) => s + p.val, 0);
+    parts.sort((a, b) => b.val - a.val);
+    return { label, left: tot / start * 100, parts: parts.map(p => ({ name: p.r.name, fam: p.r.family, share: tot ? p.val / tot * 100 : 0 })) };
+  });
+  return { stages, guessed, total: rows.length };
+}
+
+// cost: molecule price is ₴ per gram of the material as bought; a dilution costs proportionally less
+function costInfo(v) {
+  const ings = expandIngs(v.ingredients);
+  const total = ings.reduce((s, i) => s + (+i.pct || 0), 0) || 1;
+  const by = new Map(); const noPrice = new Set(); let perG = 0;
+  for (const i of ings) {
+    const mol = state.molecules.find(m => m.id === i.molId);
+    const price = parseFloat(String(mol?.cost || '').replace(',', '.'));
+    if (!(price > 0)) { noPrice.add(i.name); continue; }
+    const c = (+i.pct || 0) / total * price * (+i.dilPct || 100) / 100;
+    perG += c;
+    by.set(i.name, (by.get(i.name) || 0) + c);
+  }
+  const top = [...by.entries()].sort((a, b) => b[1] - a[1]);
+  return { perG, top, noPrice: [...noPrice] };
+}
+
+function balanceHints(v, an) {
+  const H = [];
+  const total = v.ingredients.reduce((s, i) => s + (+i.pct || 0), 0);
+  if (v.ingredients.length && Math.abs(total - 100) > 0.05) H.push(['warn', `Total is ${fmtPct(total)}% — it should add up to 100%`]);
+  const p = an.pyrPct;
+  if ((p.Unknown || 0) > 30) H.push(['info', `${p.Unknown.toFixed(0)}% has no Top/Heart/Base set — fill it in on the molecules for a better read`]);
+  else {
+    if ((p.Base || 0) < 15) H.push(['warn', `Only ${(p.Base || 0).toFixed(0)}% base — the scent may fade quickly`]);
+    if ((p.Top || 0) > 40) H.push(['warn', `Top notes are ${(p.Top).toFixed(0)}% — the opening may flash and disappear`]);
+    if ((p.Heart || 0) < 10 && (p.Top || 0) > 0 && (p.Base || 0) > 0) H.push(['info', `Very little heart (${(p.Heart || 0).toFixed(0)}%) — top may jump straight to base`]);
+  }
+  const big = v.ingredients.filter(i => (+i.pct || 0) / (total || 1) > 0.5);
+  big.forEach(i => H.push(['info', `${ingDisplayName(i)} is ${((+i.pct || 0) / (total || 1) * 100).toFixed(0)}% of the formula`]));
+  const batch = +v.totalMl || 0;
+  if (batch > 0) {
+    v.ingredients.forEach(i => {
+      const g = batch * (+i.pct || 0) / (total || 1);
+      if (g > 0 && g < 0.005) {
+        const k = Math.ceil(Math.log10(0.005 / g));
+        const sug = Math.max(1, Math.round(100 / Math.pow(10, k)));
+        H.push(['warn', `${ingDisplayName(i)}: only ${g.toFixed(4)} g in a ${batch} g batch — hard to weigh; use a ${sug}% dilution or a bigger batch`]);
+      }
+    });
+  }
+  const ifraOver = (an.ifraRisks || []).filter(r => r.status === 'over');
+  if (ifraOver.length) H.push(['err', `IFRA exceeded at ${strengthLabel(IFRA_S)}: ${ifraOver.map(r => r.name).join(', ')}`]);
+  return H;
+}
+
+function refreshBuilderAnalytics() {
+  clearTimeout(refreshBuilderAnalytics.t);
+  refreshBuilderAnalytics.t = setTimeout(() => {
+    const box = document.getElementById('b-analytics');
+    if (!box || !BS) return;
+    box.innerHTML = analyticsHTML(BS.versions[BS.activeVersion]);
+  }, 250);
+}
+
+function analyticsExtraHTML(v, an) {
+  const out = [];
+  // evolution
+  const ev = evolution(v);
+  if (ev) {
+    out.push(`
+      <div class="an-section">
+        <div class="an-label">How it evolves on a blotter</div>
+        ${ev.stages.map(s => `
+          <div class="ev-row">
+            <div class="ev-time">${s.label}</div>
+            <div style="flex:1;min-width:0">
+              <div class="stacked-bar" style="opacity:${Math.max(0.25, Math.min(1, s.left / 100 + 0.25)).toFixed(2)}">
+                ${s.parts.filter(p => p.share >= 1).map(p => `<div class="stacked-seg" title="${esc(p.name)}" style="width:${p.share.toFixed(1)}%;background:${familyColor(p.fam)}"></div>`).join('')}
+              </div>
+              <div class="ev-names">${s.parts.slice(0, 3).map(p => `${esc(p.name)} ${p.share.toFixed(0)}%`).join(' · ')}</div>
+            </div>
+            <div class="ev-left">${s.left >= 10 ? s.left.toFixed(0) : s.left.toFixed(1)}%</div>
+          </div>`).join('')}
+        <div class="an-note">Right column: how much of the scent is still there. Shares are by amount, not by how loud each material is — a powerful material at 1% can still lead. ${ev.guessed ? `Odor life for ${ev.guessed} of ${ev.total} molecules is a typical value or a guess from Top/Heart/Base — add your own in the molecule (“Odor life”) for a truer picture.` : ''}</div>
+      </div>`);
+  }
+  // actual content
+  const ac = actualContent(v);
+  if (ac.length) {
+    out.push(`
+      <div class="an-section">
+        <div class="an-label">Actual molecule content</div>
+        <div class="ac-head"><span>Molecule</span><span>in concentrate</span><span>in perfume ${strengthLabel(IFRA_S)}</span></div>
+        ${ac.map(r => { const lim = +r.mol?.ifra; const fin = r.pure * IFRA_S / 100; const st = lim > 0 ? (fin > lim ? 'over' : fin > lim * .85 ? 'warn' : 'ok') : '';
+          return `<div class="ac-row"><span>${st ? `<i class="ifra-dot ${st}"></i>` : ''}${esc(r.name)}</span><span>${fmtPct(r.pure)}%</span><span>${fmtPct(fin)}%${lim > 0 ? `<small> / ${lim}%</small>` : ''}</span></div>`; }).join('')}
+        <div class="an-note">After dilutions and accords. The dot shows IFRA status where a limit is set.</div>
+      </div>`);
+  }
+  // cost
+  const c = costInfo(v);
+  if (c.perG > 0) {
+    const S = IFRA_S, batch = +v.totalMl || 0;
+    const bottle = ml => c.perG * ml * S / 100;
+    out.push(`
+      <div class="an-section">
+        <div class="an-label">Cost</div>
+        <div class="mk-summary" style="margin-bottom:8px">
+          <div><b>₴${c.perG.toFixed(2)}</b><span>1 g concentrate</span></div>
+          ${batch ? `<div><b>₴${(c.perG * batch).toFixed(2)}</b><span>this ${batch} g batch</span></div>` : ''}
+          <div><b>₴${bottle(30).toFixed(0)} / ₴${bottle(50).toFixed(0)}</b><span>30 / 50 ml at ${S.toFixed(0)}%</span></div>
+        </div>
+        ${c.top.slice(0, 5).map(([n, val]) => `<div class="ac-row"><span>${esc(n)}</span><span>${(val / c.perG * 100).toFixed(0)}% of cost</span><span>₴${val.toFixed(2)}/g</span></div>`).join('')}
+        <div class="an-note">Concentrate only — ethanol and bottle not included. ${c.noPrice.length ? `No price for: ${c.noPrice.map(esc).join(', ')}.` : ''}</div>
+      </div>`);
+  } else if (c.noPrice.length) {
+    out.push(`<div class="an-section"><div class="an-label">Cost</div><div class="an-note" style="margin-top:0">Add prices (₴/g) to your molecules to see what this costs.</div></div>`);
+  }
+  return out.join('');
+}
+
+// ── version comparison ──
+function openCompareVersions(id, kind, a, b) {
+  const f = (state[kind] || []).find(x => x.id === id);
+  if (!f || f.versions.length < 2) return;
+  if (a == null) { b = f.activeVersion || 0; a = b > 0 ? b - 1 : 1; }
+  const VA = f.versions[a], VB = f.versions[b];
+  const key = i => i.accId ? 'a:' + i.accId : 'm:' + i.molId + '|' + (+i.dilPct || 100);
+  const map = new Map();
+  VA.ingredients.forEach(i => map.set(key(i), { name: ingDisplayName(i), a: +i.pct || 0, b: null }));
+  VB.ingredients.forEach(i => { const k = key(i); if (map.has(k)) map.get(k).b = +i.pct || 0; else map.set(k, { name: ingDisplayName(i), a: null, b: +i.pct || 0 }); });
+  const rows = [...map.values()].sort((x, y) => Math.max(y.a || 0, y.b || 0) - Math.max(x.a || 0, x.b || 0));
+  const SA = finalStrength(VA), SB = finalStrength(VB);
+  const anA = computeAnalytics(VA), anB = computeAnalytics(VB);
+  const cA = costInfo(VA).perG, cB = costInfo(VB).perG;
+  const ifraN = (V, S) => expandIngs(V.ingredients).filter(i => ifraStatus(i, 100, S) === 'over').length;
+  const pyr = an => an ? ['Top', 'Heart', 'Base'].map(k => (an.pyrPct[k] || 0).toFixed(0)).join(' / ') : '—';
+  const sel = (cur, js) => `<select onchange="${js}">${f.versions.map((ver, i) => `<option value="${i}"${i === cur ? ' selected' : ''}>${esc(ver.name)}</option>`).join('')}</select>`;
+  showSheet('compare', 'Compare versions', `
+    <div class="form-body" style="gap:10px">
+      <div class="field-row-2">
+        <div class="field">${sel(a, `openCompareVersions('${id}','${kind}',+this.value,${b})`)}</div>
+        <div class="field">${sel(b, `openCompareVersions('${id}','${kind}',${a},+this.value)`)}</div>
+      </div>
+      <div class="cmp-grid">
+        <span></span><b>${esc(VA.name)}</b><b>${esc(VB.name)}</b>
+        <span>Top / Heart / Base</span><span>${pyr(anA)}</span><span>${pyr(anB)}</span>
+        <span>Cost per g</span><span>${cA ? '₴' + cA.toFixed(2) : '—'}</span><span>${cB ? '₴' + cB.toFixed(2) : '—'}</span>
+        <span>IFRA over</span><span>${ifraN(VA, SA)} at ${SA.toFixed(0)}%</span><span>${ifraN(VB, SB)} at ${SB.toFixed(0)}%</span>
+        <span>Ingredients</span><span>${VA.ingredients.length}</span><span>${VB.ingredients.length}</span>
+      </div>
+    </div>
+    <div class="cmp-list">
+      <div class="cmp-row cmp-head"><span>Material, %</span><span>${esc(VA.name)}</span><span>${esc(VB.name)}</span><span>Δ</span></div>
+      ${rows.map(r => { const d = (r.b || 0) - (r.a || 0); const cls = r.a == null ? 'added' : r.b == null ? 'removed' : Math.abs(d) > 0.00005 ? 'changed' : '';
+        return `<div class="cmp-row ${cls}"><span>${esc(r.name)}${cls === 'added' ? ' <small>new</small>' : cls === 'removed' ? ' <small>removed</small>' : ''}</span>
+          <span>${r.a == null ? '—' : fmtPct(r.a)}</span><span>${r.b == null ? '—' : fmtPct(r.b)}</span>
+          <span class="${d > 0 ? 'up' : d < 0 ? 'down' : ''}">${Math.abs(d) < 0.00005 ? '' : (d > 0 ? '+' : '') + fmtPct(d)}</span></div>`; }).join('')}
+    </div>
+    <div class="form-actions"><button class="btn btn-primary" style="flex:1;justify-content:center" onclick="closeSheet()">Done</button></div>`);
+}
+
 
 // ══════════════════════════════════════════════════════
 // EXPORT / IMPORT BACKUP
@@ -3176,10 +3545,10 @@ function showVisionEditor(visId) {
       </div>
     </div>
 
-    <div style="padding:12px 16px 0">
+    <div class="vis-sticky" id="vis-sticky">
       <div class="search-wrap" style="margin-bottom:8px">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input class="search-input" placeholder="Search notes…" oninput="visSearch(this.value)" />
+        <input class="search-input" placeholder="Search notes…" autocomplete="off" autocorrect="off" spellcheck="false" onfocus="visSearchFocus()" oninput="visSearch(this.value)" />
       </div>
       <div class="vis-img-bar">
         <button class="vis-img-toggle${visionPickerState.imgMode?' on':''}" id="vis-img-toggle" onclick="visToggleImgMode()">
@@ -3191,12 +3560,14 @@ function showVisionEditor(visId) {
         <span class="vis-img-hint" id="vis-img-hint">${visionPickerState.imgMode ? 'Tap a note to set its picture' : 'Hold a note for info or to delete it'}</span>
       </div>
       <input type="file" accept="image/*" id="vis-img-input" style="display:none" onchange="visImgPicked(this)" />
-      <div class="note-cat-tabs" id="vis-cat-tabs">
+      <div class="note-cat-tabs" id="vis-cat-tabs" style="margin-bottom:0;padding-bottom:10px">
         ${Object.keys(FRAG_NOTES).map(cat => `
           <button class="note-cat-tab${visionPickerState.cat===cat?' active':''}"
             data-cat="${esc(cat)}" onclick="visSetCat('${esc(cat)}')">${esc(catName(cat))}</button>
         `).join('')}
       </div>
+    </div>
+    <div style="padding:10px 16px 0">
       <div class="note-grid" id="vis-note-grid">
         ${renderNoteGrid()}
       </div>
@@ -3207,7 +3578,14 @@ function showVisionEditor(visId) {
       <button class="btn btn-ghost" onclick="closeSheet()">Cancel</button>
       <button class="btn btn-primary" onclick="saveVision('${visId||''}')">Save</button>
     </div>
-  `);
+  `, { full: true });
+}
+// bring the search bar to the top of the sheet so the notes show right under it
+function visSearchFocus() {
+  const st = document.getElementById('vis-sticky');
+  const sheet = st && st.closest('.sheet');
+  if (!st || !sheet) return;
+  setTimeout(() => { sheet.scrollTo({ top: st.offsetTop - 4, behavior: 'smooth' }); }, 60);
 }
 
 // ── Custom note pictures (stored only on this device) ──
@@ -3342,7 +3720,7 @@ function renderNoteGrid(noFetch) {
   const q = visionPickerState.search.toLowerCase().trim().replace(/['`ʼ]/g, '’');
   let notes, more = 0;
   if (q) {
-    notes = shownNotes(ALL_NOTES_FLAT).filter(n => n.toLowerCase().includes(q) || (NOTE_ALIAS[n]||'').toLowerCase().includes(q));
+    notes = searchNotes(q);
     if (notes.length > 120) { more = notes.length - 120; notes = notes.slice(0, 120); }
   } else {
     notes = shownNotes(FRAG_NOTES[visionPickerState.cat] || []);
@@ -3381,6 +3759,7 @@ function visSetCat(cat) {
 
 function visSearch(q) {
   visionPickerState.search = q;
+  visSearchFocus();
   document.getElementById('vis-note-grid').innerHTML = renderNoteGrid();
 }
 
@@ -3644,7 +4023,7 @@ function makeBodyHTML() {
       ${hasAcc ? `<label class="mk-toggle"><input type="checkbox" ${MK.expand ? 'checked' : ''} onchange="mkSet('expand',this.checked)"> Weigh accords as separate molecules <span>(off = you have the accord premixed)</span></label>` : ''}
       <div class="mk-summary">
         <div><b>${concG.toFixed(2)} g</b><span>concentrate</span></div>
-        ${MK.mode === 'bottle' ? `<div><b>${ethMl.toFixed(2)} ml</b><span>ethanol</span></div>` : ''}
+        ${MK.mode === 'bottle' ? `<div><b>${(ethMl * 0.789).toFixed(2)} g</b><span>ethanol (${ethMl.toFixed(1)} ml)</span></div>` : ''}
         <div><b>${doneN}/${rows.length}</b><span>weighed</span></div>
       </div>
     </div>
@@ -3659,11 +4038,11 @@ function makeBodyHTML() {
         </div>`).join('')}
     </div>
     <div style="padding:8px 16px 0;font-size:11px;color:var(--text3);line-height:1.5">
-      “Scale” is the running total — what the scale should read after each material if you don’t tare. ${MK.mode === 'bottle' ? 'Ethanol is in ml; concentrate assumes about 1 g per ml.' : ''}
+      “Scale” is the running total — what the scale should read after each material if you don’t tare. ${MK.mode === 'bottle' ? 'The bottle size is its capacity in ml; everything you weigh is in grams (concentrate ≈ 1 g per ml, ethanol ≈ 0.79 g per ml).' : ''}
     </div>
     <div class="form-actions">
       <button class="btn btn-ghost" onclick="MK.done={};mkRefresh()">Reset ticks</button>
-      <button class="btn btn-primary" onclick="closeSheet()">Done</button>
+      <button class="btn btn-primary" onclick="mkSaveTrial()">Save trial</button>
     </div>`;
 }
 function mkRefresh() { const b = document.getElementById('make-body'); if (b) b.innerHTML = makeBodyHTML(); }
@@ -3953,7 +4332,7 @@ function gsResultsHTML(q) {
       .map(v => [esc(v.name), `${(v.notes || []).length} notes`, `closeSheet();showPage('vision');openVisionDetail('${v.id}')`])],
     ['Wishlist', (state.wishlist || []).filter(w => has(w.name, w.note, w.link)).slice(0, 20)
       .map(w => [esc(w.name) + (w.done ? ' <span style="color:var(--text3)">· bought</span>' : ''), [w.note, w.price ? '₴' + w.price : ''].filter(Boolean).join(' · '), `closeSheet();showPage('wishlist');openWishForm('${w.id}')`])],
-    ['Notes', shownNotes(ALL_NOTES_FLAT).filter(n => has(n, NOTE_ALIAS[n])).slice(0, 12)
+    ['Notes', searchNotes(q).slice(0, 12)
       .map(n => [esc(n), catName(NOTE_CAT_OF[n]), `openNoteSheet('${esc(n)}')`, noteArt(n).svg])],
   ].filter(g => g[1].length);
   if (!groups.length) return `<div class="gs-empty">Nothing found for “${esc(q)}”</div>`;
@@ -3977,8 +4356,289 @@ function duplicateItem(id, kind) {
   openFormulaBuilder(id, kind);
   BS.id = null;
   BS.name = f.name + ' copy';
+  BS.trials = [];
   renderBuilder();
   toast('Copy opened — rename and save');
+}
+
+
+// ══════════════════════════════════════════════════════
+// TRIAL JOURNAL — every batch you actually mix, with notes as it matures
+// ══════════════════════════════════════════════════════
+const DAY = 86400000;
+const CHECKPOINTS = [1, 7, 14, 30];
+function trialAge(t) { return Math.floor((Date.now() - t.date) / DAY); }
+function fmtDate(ts) { return new Date(ts).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: new Date(ts).getFullYear() === new Date().getFullYear() ? undefined : 'numeric' }); }
+function stars(n) { n = +n || 0; return n ? '★'.repeat(Math.floor(n)) + (n % 1 ? '½' : '') : ''; }
+// the checkpoint that is due: reached, but no note written on/after it
+function trialDue(t) {
+  const age = trialAge(t);
+  const lastDay = Math.max(-1, ...(t.notes || []).map(n => n.day));
+  const reached = CHECKPOINTS.filter(c => c > 1 && age >= c);
+  const c = reached.length ? reached[reached.length - 1] : null;
+  return c != null && lastDay < c ? c : null;
+}
+function findTrial(trialId) {
+  for (const kind of ['formulas', 'accords']) for (const f of state[kind] || []) {
+    const t = (f.trials || []).find(x => x.id === trialId);
+    if (t) return { f, t, kind };
+  }
+  return null;
+}
+function recordTrial(id, kind, grams, strength) {
+  const f = (state[kind] || []).find(x => x.id === id); if (!f) return null;
+  const vi = f.activeVersion || 0, v = f.versions[vi];
+  const t = {
+    id: uid(), date: Date.now(), version: v.name, versionIdx: vi,
+    grams: +(+grams || +v.totalMl || 0).toFixed(3), strength: strength || null,
+    recipe: v.ingredients.map(i => ({ name: ingDisplayName(i), pct: +i.pct || 0, dilPct: +i.dilPct || 100, accId: i.accId || undefined })),
+    notes: [],
+  };
+  f.trials = [t, ...(f.trials || [])];
+  save();
+  return t;
+}
+function mkSaveTrial() {
+  const { concG } = makeRows();
+  const t = recordTrial(MK.id, MK.kind, concG, MK.mode === 'bottle' ? +MK.strength : null);
+  if (!t) return;
+  toast('Trial saved — add notes as it matures');
+  closeSheet();
+  openTrialSheet(t.id);
+}
+function trialsSectionHTML(f, kind) {
+  const list = f.trials || [];
+  return `
+    <div class="detail-block">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div class="detail-label">Trials${list.length ? ` · ${list.length}` : ''}</div>
+        <button class="acc-link-add" style="padding:3px 10px" onclick="const t=recordTrial('${f.id}','${kind}');closeSheet();openTrialSheet(t.id)">+ Trial</button>
+      </div>
+      ${list.length ? list.map(t => {
+        const last = (t.notes || [])[t.notes.length - 1];
+        const due = trialDue(t);
+        return `
+        <div class="trial-row" onclick="openTrialSheet('${t.id}')">
+          <div style="flex:1;min-width:0">
+            <div class="trial-title">${fmtDate(t.date)} · ${esc(t.version)} · ${t.grams} g${t.strength ? ` · ${t.strength}%` : ''}</div>
+            <div class="trial-sub">${last ? `Day ${last.day}${last.rating ? ' · ' + stars(last.rating) : ''} — ${esc(last.text || '').slice(0, 70)}` : 'No notes yet'}</div>
+          </div>
+          ${due ? `<span class="trial-due">day ${due}</span>` : `<span class="trial-age">day ${trialAge(t)}</span>`}
+        </div>`;
+      }).join('') : `<div style="font-size:12px;color:var(--text3);margin-top:6px">Mixed a batch? Tap “Make”, weigh, then “Save trial” — or add one here.</div>`}
+    </div>`;
+}
+let TR = { rating: 0, on: 'Blotter' };
+function openTrialSheet(trialId) {
+  const hit = findTrial(trialId); if (!hit) return;
+  const { f, t, kind } = hit;
+  TR = { rating: 0, on: TR.on || 'Blotter' };
+  const age = trialAge(t);
+  showSheet('trial', esc(f.name) + ' · ' + esc(t.version), `
+    <div class="form-body" style="gap:12px">
+      <div class="mk-summary">
+        <div><b>${fmtDate(t.date)}</b><span>mixed</span></div>
+        <div><b>day ${age}</b><span>maceration</span></div>
+        <div><b>${t.grams} g</b><span>${t.strength ? t.strength + '% strength' : 'concentrate'}</span></div>
+      </div>
+      <details class="trial-recipe"><summary>Recipe as mixed</summary>
+        ${(t.recipe || []).map(r => `<div class="ac-row"><span>${r.accId ? '◎ ' : ''}${esc(r.name)}${r.dilPct < 100 ? ` <small>${r.dilPct}%</small>` : ''}</span><span>${fmtPct(r.pct)}%</span><span>${(r.pct / 100 * t.grams).toFixed(3)} g</span></div>`).join('')}
+      </details>
+      <div>
+        <div class="detail-label" style="margin-bottom:6px">Notes</div>
+        <div id="trial-notes">${trialNotesHTML(t)}</div>
+      </div>
+      <div class="trial-add">
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">${['Blotter', 'Skin', 'Fabric'].map(o => `<button class="mk-chip${TR.on === o ? ' on' : ''}" onclick="TR.on='${o}';this.parentElement.querySelectorAll('.mk-chip').forEach(b=>b.classList.toggle('on',b===this))">${o}</button>`).join('')}</div>
+        <textarea id="trial-text" placeholder="Day ${age}: how does it smell now?" style="width:100%;min-height:80px;border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 12px;background:var(--bg2);font-family:Inter,sans-serif;font-size:16px;line-height:1.45"></textarea>
+        <div class="trial-stars" id="trial-stars">${[1, 2, 3, 4, 5].map(n => `<button onclick="trSetRating(${n})">☆</button>`).join('')}<span>rating</span></div>
+        <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="trAddNote('${t.id}')">Add note</button>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-danger" onclick="trDelete('${t.id}')">Delete trial</button>
+      <button class="btn btn-ghost" onclick="closeSheet()">Close</button>
+    </div>`);
+}
+function trialNotesHTML(t) {
+  const ns = t.notes || [];
+  if (!ns.length) return `<div style="font-size:12px;color:var(--text3)">Nothing yet. Good moments to smell: day 1, 7, 14 and 30.</div>`;
+  return ns.slice().reverse().map(n => `
+    <div class="trial-note">
+      <div class="trial-note-head"><b>Day ${n.day}</b><span>${fmtDate(n.ts)}${n.on ? ' · ' + esc(n.on) : ''}</span>${n.rating ? `<span class="trial-st">${stars(n.rating)}</span>` : ''}
+        <button class="trial-note-x" onclick="trDelNote('${t.id}','${n.id}')">×</button></div>
+      ${n.text ? `<div class="trial-note-text">${esc(n.text)}</div>` : ''}
+    </div>`).join('');
+}
+function trSetRating(n) {
+  TR.rating = TR.rating === n ? 0 : n;
+  document.querySelectorAll('#trial-stars button').forEach((b, i) => { b.textContent = i < TR.rating ? '★' : '☆'; b.classList.toggle('on', i < TR.rating); });
+}
+function trAddNote(trialId) {
+  const hit = findTrial(trialId); if (!hit) return;
+  const txt = document.getElementById('trial-text').value.trim();
+  if (!txt && !TR.rating) { toast('Write a note or set a rating'); return; }
+  const t = hit.t;
+  t.notes = t.notes || [];
+  t.notes.push({ id: uid(), ts: Date.now(), day: trialAge(t), text: txt, rating: TR.rating, on: TR.on });
+  save();
+  document.getElementById('trial-text').value = '';
+  trSetRating(0);
+  document.getElementById('trial-notes').innerHTML = trialNotesHTML(t);
+  toast('Note added');
+  const b = document.getElementById('trial-banner'); if (b) b.remove();
+}
+function trDelNote(trialId, noteId) {
+  const hit = findTrial(trialId); if (!hit) return;
+  hit.t.notes = (hit.t.notes || []).filter(n => n.id !== noteId);
+  save();
+  document.getElementById('trial-notes').innerHTML = trialNotesHTML(hit.t);
+}
+function trDelete(trialId) {
+  const hit = findTrial(trialId); if (!hit) return;
+  const sheet = document.querySelector('#sheet-trial .sheet'); if (!sheet) return;
+  const conf = document.createElement('div');
+  conf.style.cssText = 'padding:16px;display:flex;gap:8px;align-items:center;border-top:1px solid var(--border)';
+  conf.innerHTML = `<span style="flex:1;font-size:13px;color:var(--text2)">Delete this trial and its notes?</span>
+    <button class="btn btn-ghost btn-sm" onclick="this.parentElement.remove()">Cancel</button>
+    <button class="btn btn-danger btn-sm" onclick="trDeleteConfirm('${trialId}')">Delete</button>`;
+  sheet.appendChild(conf); sheet.scrollTop = sheet.scrollHeight;
+}
+function trDeleteConfirm(trialId) {
+  const hit = findTrial(trialId); if (!hit) return;
+  hit.f.trials = hit.f.trials.filter(t => t.id !== trialId);
+  save(); closeSheet(); toast('Trial deleted'); render();
+}
+// on open: remind about trials that reached day 7/14/30 without a note
+function trialReminder() {
+  const due = [];
+  for (const kind of ['formulas', 'accords']) for (const f of state[kind] || []) for (const t of f.trials || []) {
+    const d = trialDue(t); if (d) due.push({ f, t, d });
+  }
+  if (!due.length || document.getElementById('trial-banner')) return;
+  let seen = 0; try { seen = +localStorage.getItem('lab_trial_reminded_v1') || 0; } catch (e) {}
+  if (Date.now() - seen < DAY / 2) return;
+  const first = due[0];
+  const el = document.createElement('div');
+  el.id = 'trial-banner'; el.className = 'backup-banner'; el.style.bottom = 'calc(env(safe-area-inset-bottom, 0px) + 134px)';
+  el.innerHTML = `<span>${esc(first.f.name)} ${esc(first.t.version)} is day ${first.d} — time to smell${due.length > 1 ? ` (+${due.length - 1} more)` : ''}</span>
+    <button class="btn btn-primary btn-sm" onclick="this.parentElement.remove();openTrialSheet('${first.t.id}')">Open</button>
+    <button class="backup-banner-x" onclick="try{localStorage.setItem('lab_trial_reminded_v1',Date.now())}catch(e){};this.parentElement.remove()" aria-label="Later">×</button>`;
+  document.body.appendChild(el);
+}
+
+// ══════════════════════════════════════════════════════
+// SHARE A FORMULA — text or picture card
+// ══════════════════════════════════════════════════════
+let SH = null;
+function shareRows(f) {
+  const v = f.versions[f.activeVersion || 0];
+  const T = +v.totalMl || 0;
+  const total = v.ingredients.reduce((s, i) => s + (+i.pct || 0), 0) || 1;
+  return v.ingredients.map(i => {
+    const mol = i.molId ? state.molecules.find(m => m.id === i.molId) : null;
+    let dil = '';
+    if ((+i.dilPct || 100) < 100) { const d = (mol?.dilutions || []).find(d => typeof d === 'object' && +d.pct === +i.dilPct); dil = d?.label || `${i.dilPct}%`; }
+    return { name: ingDisplayName(i), acc: !!i.accId, dil, g: T * (+i.pct || 0) / total, pct: (+i.pct || 0) / total * 100, sub: i.accId ? expandIngs([i]).map(x => x.name).join(', ') : '' };
+  });
+}
+function shareText(f, kind) {
+  const v = f.versions[f.activeVersion || 0];
+  const rows = shareRows(f);
+  const T = +v.totalMl || 0;
+  const S = finalStrength(v);
+  const lines = [
+    `${f.name.toUpperCase()} · ${v.name}${kind === 'accords' ? ' (accord)' : ''}`,
+    `${T.toFixed(3).replace(/\.?0+$/, '')} g concentrate${kind === 'formulas' ? ` · ${strengthLabel(S)}` : ''}`,
+    '',
+    ...rows.map(r => `${r.acc ? '◎ ' : ''}${r.name}${r.dil ? ` (${r.dil})` : ''} — ${r.g.toFixed(3)} g · ${fmtPct(r.pct)}%${r.sub ? `\n   ${r.sub}` : ''}`),
+    '',
+    `Total ${T.toFixed(3)} g · 100%`,
+  ];
+  if (SH && SH.notes && f.notes) lines.push('', f.notes);
+  return lines.join('\n');
+}
+function openShareSheet(id, kind) {
+  const f = (state[kind] || []).find(x => x.id === id); if (!f) return;
+  SH = { id, kind, notes: false };
+  showSheet('share', 'Share ' + (kind === 'accords' ? 'accord' : 'formula'), `
+    <div class="form-body" style="gap:10px">
+      <pre class="share-pre" id="share-pre">${esc(shareText(f, kind))}</pre>
+      ${f.notes ? `<label class="mk-toggle"><input type="checkbox" onchange="SH.notes=this.checked;document.getElementById('share-pre').textContent=shareText(state[SH.kind].find(x=>x.id===SH.id),SH.kind)"> Include notes</label>` : ''}
+      <div id="share-msg" style="font-size:12px;color:var(--text2);text-align:center"></div>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-ghost" onclick="shareCopy()">Copy text</button>
+      <button class="btn btn-ghost" onclick="shareImage()">Picture</button>
+      <button class="btn btn-primary" onclick="shareSend()">Share…</button>
+    </div>`);
+}
+function shareSay(t) { const el = document.getElementById('share-msg'); if (el) el.textContent = t; }
+function shareCopy() {
+  const f = state[SH.kind].find(x => x.id === SH.id); const txt = shareText(f, SH.kind);
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(() => shareSay('Copied ✓')).catch(() => shareSay('Select the text above and copy it'));
+  else shareSay('Select the text above and copy it');
+}
+function shareSend() {
+  const f = state[SH.kind].find(x => x.id === SH.id); const txt = shareText(f, SH.kind);
+  if (navigator.share) navigator.share({ title: f.name, text: txt }).catch(() => {});
+  else shareCopy();
+}
+function shareCanvas(f, kind) {
+  const v = f.versions[f.activeVersion || 0];
+  const rows = shareRows(f);
+  const W = 1080, P = 72, rowH = 74;
+  const H = P * 2 + 230 + rows.reduce((s, r) => s + rowH + (r.sub ? 34 : 0), 0) + 120;
+  const c = document.createElement('canvas'); c.width = W; c.height = H;
+  const x = c.getContext('2d');
+  x.fillStyle = '#ffffff'; x.fillRect(0, 0, W, H);
+  const font = (w, s) => `${w} ${s}px Inter, -apple-system, Helvetica, Arial, sans-serif`;
+  x.fillStyle = '#111110'; x.font = font(600, 30); x.letterSpacing = '6px'; x.fillText('LAB', P, P + 30); x.letterSpacing = '0px';
+  x.font = font(600, 64); x.fillText(f.name, P, P + 130);
+  const T = +v.totalMl || 0, S = finalStrength(v);
+  x.fillStyle = '#7a7a76'; x.font = font(400, 30);
+  x.fillText(`${v.name}${kind === 'accords' ? ' · accord' : ''} · ${T.toFixed(3).replace(/\.?0+$/, '')} g concentrate${kind === 'formulas' ? ' · ' + strengthLabel(S) : ''}`, P, P + 185);
+  let y = P + 250;
+  x.strokeStyle = '#e8e6e1'; x.lineWidth = 2;
+  x.beginPath(); x.moveTo(P, y - 20); x.lineTo(W - P, y - 20); x.stroke();
+  for (const r of rows) {
+    x.fillStyle = '#111110'; x.font = font(500, 34);
+    let name = (r.acc ? '◎ ' : '') + r.name + (r.dil ? `  (${r.dil})` : '');
+    while (x.measureText(name).width > W - P * 2 - 340 && name.length > 4) name = name.slice(0, -2) + '…';
+    x.fillText(name, P, y + 22);
+    x.textAlign = 'right';
+    x.fillText(r.g.toFixed(3) + ' g', W - P - 150, y + 22);
+    x.fillStyle = '#7a7a76'; x.font = font(400, 30); x.fillText(fmtPct(r.pct) + '%', W - P, y + 22);
+    x.textAlign = 'left';
+    if (r.sub) { x.font = font(400, 24); x.fillStyle = '#9a9a96'; let sb = r.sub; while (x.measureText(sb).width > W - P * 2 - 40 && sb.length > 4) sb = sb.slice(0, -2) + '…'; x.fillText(sb, P + 40, y + 58); y += 34; }
+    y += rowH;
+    x.beginPath(); x.moveTo(P, y - 34); x.lineTo(W - P, y - 34); x.stroke();
+  }
+  x.fillStyle = '#111110'; x.font = font(600, 34); x.fillText('Total', P, y + 20);
+  x.textAlign = 'right'; x.fillText(T.toFixed(3) + ' g', W - P - 150, y + 20); x.fillText('100%', W - P, y + 20); x.textAlign = 'left';
+  return c;
+}
+function shareImage() {
+  const f = state[SH.kind].find(x => x.id === SH.id);
+  const c = shareCanvas(f, SH.kind);
+  const name = f.name.replace(/[^\p{L}\p{N}]+/gu, '-').replace(/^-|-$/g, '') + '.png';
+  c.toBlob(blob => {
+    if (!blob) { shareSay('Could not draw the picture'); return; }
+    if (window.claude && typeof window.claude.use === 'function') {
+      window.claude.use('downloads').then(dl => { if (!dl) throw 0; return dl.save({ filename: name, data: blob }); })
+        .then(() => shareSay('Saved ✓')).catch(() => shareSay('Saving pictures isn’t available here'));
+      return;
+    }
+    let file = null; try { file = new File([blob], name, { type: 'image/png' }); } catch (e) {}
+    if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+      navigator.share({ files: [file], title: f.name }).catch(() => {});
+      return;
+    }
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
+    shareSay('Picture downloaded ✓');
+  }, 'image/png');
 }
 
 // ── INIT ──
@@ -3988,6 +4648,7 @@ packLoad();
 setupOffline();
 setupPersist();
 setTimeout(backupReminder, 1200);
+setTimeout(trialReminder, 1600);
 </script>
 </body>
 </html>
