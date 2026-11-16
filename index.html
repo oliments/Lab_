@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="Lab" />
@@ -191,6 +191,14 @@
       max-height: 92dvh; overflow-y: auto; overflow-x: hidden;
     }
     .overlay.open .sheet { transform: translateY(0); }
+    /* iPhone zooms into any field with text under 16px — keep fields at 16px on touch devices */
+    @supports (-webkit-touch-callout: none) {
+      input, select, textarea, .search-input, .field input, .field select, .field textarea, .ing-num { font-size: 16px !important; }
+    }
+    /* tall sheets: search stays at the top, results right under it, above the keyboard */
+    .sheet.tall { height: 92dvh; display: flex; flex-direction: column; overflow: hidden; }
+    .sheet.tall .sheet-scroll { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+    .sheet.tall .sheet-top { flex-shrink: 0; }
 
     .sheet-handle { width: 32px; height: 3px; background: var(--border2); border-radius: 2px; margin: 10px auto 0; }
 
@@ -1754,14 +1762,14 @@ function openAddIngredient() {
   const accOk = BK === 'formulas' && (state.accords || []).length;
   if (!state.molecules.length && !accOk) { toast('Add molecules first'); return; }
   showSheet('ingPick', 'Add ingredient', `
-    <div style="padding:12px 16px 0">
+    <div class="sheet-top" style="padding:12px 16px 8px;border-bottom:1px solid var(--border)">
       <div class="search-wrap" style="margin-bottom:0">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input class="search-input" placeholder="Search…" oninput="filterIngPick(this.value)" />
+        <input class="search-input" placeholder="Search molecules${BK === 'formulas' && (state.accords||[]).length ? ' and accords' : ''}…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" oninput="filterIngPick(this.value)" />
       </div>
     </div>
-    <div id="ing-pick-list" style="margin-top:8px">${ingPickList(state.molecules)}</div>
-  `);
+    <div class="sheet-scroll" id="ing-pick-list">${ingPickList(sortedMols(''))}</div>
+  `, { tall: true });
   ingPickQuery = '';
 }
 
@@ -1799,9 +1807,23 @@ function ingPickList(mols) {
   }).join('');
 }
 
+// best matches first: name starts with the query, then a word starts with it, then anywhere
+function sortedMols(q) {
+  q = String(q || '').toLowerCase().trim();
+  const score = m => {
+    const n = m.name.toLowerCase();
+    if (!q) return 0;
+    if (n.startsWith(q)) return 3;
+    if (n.split(/[\s\-]+/).some(w => w.startsWith(q))) return 2;
+    if (n.includes(q) || (m.cas || '').includes(q)) return 1;
+    return -1;
+  };
+  return state.molecules.map(m => [m, score(m)]).filter(x => x[1] >= 0)
+    .sort((a, b) => b[1] - a[1] || a[0].name.localeCompare(b[0].name)).map(x => x[0]);
+}
 function filterIngPick(q) {
   ingPickQuery = q;
-  const mols = state.molecules.filter(m => m.name.toLowerCase().includes(q.toLowerCase()));
+  const mols = sortedMols(q);
   document.getElementById('ing-pick-list').innerHTML = ingPickList(mols);
 }
 
@@ -2075,19 +2097,21 @@ let accPick = { cat: null, q: '' };
 function openAccNotePicker() {
   accPick = { cat: accPick.cat || Object.keys(FRAG_NOTES)[0], q: '' };
   showSheet('accNotes', 'Link notes', `
-    <div style="padding:12px 16px 0">
+    <div class="sheet-top" style="padding:12px 16px 0">
       <div class="search-wrap" style="margin-bottom:8px">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input class="search-input" placeholder="Search notes…" oninput="accPick.q=this.value;accRenderGrid()" />
+        <input class="search-input" placeholder="Search notes…" autocomplete="off" autocorrect="off" spellcheck="false" oninput="accPick.q=this.value;accRenderGrid()" />
       </div>
       <div class="note-cat-tabs">
         ${Object.keys(FRAG_NOTES).map(cat => `<button class="note-cat-tab${accPick.cat===cat?' active':''}" onclick="accSetCat(this,'${esc(cat)}')">${esc(catName(cat))}</button>`).join('')}
       </div>
-      <div class="vis-img-hint" style="margin:-4px 0 10px">Hold a note for info</div>
+    </div>
+    <div class="sheet-scroll" style="padding:4px 16px 0">
+      <div class="vis-img-hint" style="margin:0 0 10px">Hold a note for info</div>
       <div class="note-grid" id="acc-note-grid">${accGridHTML()}</div>
     </div>
-    <div class="form-actions"><button class="btn btn-primary" style="flex:1;justify-content:center" onclick="closeSheet()">Done</button></div>
-  `);
+    <div class="form-actions sheet-top"><button class="btn btn-primary" style="flex:1;justify-content:center" onclick="closeSheet()">Done</button></div>
+  `, { tall: true });
 }
 function accGridHTML() {
   const q = accPick.q.toLowerCase().trim().replace(/['`ʼ]/g, '’');
@@ -2133,7 +2157,8 @@ function accDetailLinksHTML(f) {
 // ══════════════════════════════════════════════════════
 let sheetStack = [];
 
-function showSheet(id, title, content) {
+function showSheet(id, title, content, opts) {
+  opts = opts || {};
   let old = document.getElementById('sheet-' + id);
   if (old) old.remove();
 
@@ -2141,7 +2166,7 @@ function showSheet(id, title, content) {
   overlay.className = 'overlay';
   overlay.id = 'sheet-' + id;
   overlay.innerHTML = `
-    <div class="sheet">
+    <div class="sheet${opts.tall ? ' tall' : ''}">
       <div class="sheet-handle"></div>
       <div class="sheet-header">
         <span class="sheet-title">${title}</span>
@@ -3902,13 +3927,13 @@ function backupReminder() {
 // ══════════════════════════════════════════════════════
 function openGlobalSearch() {
   showSheet('gsearch', 'Search', `
-    <div style="padding:12px 16px 0">
+    <div class="sheet-top" style="padding:12px 16px 4px">
       <div class="search-wrap" style="margin-bottom:4px">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input class="search-input" id="gs-input" placeholder="Molecules, formulas, accords, notes…" oninput="gsRender(this.value)" />
+        <input class="search-input" id="gs-input" placeholder="Molecules, formulas, accords, notes…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" oninput="gsRender(this.value)" />
       </div>
     </div>
-    <div id="gs-results" style="padding:0 16px 24px">${gsResultsHTML('')}</div>`);
+    <div class="sheet-scroll" id="gs-results" style="padding:0 16px 24px">${gsResultsHTML('')}</div>`, { tall: true });
   setTimeout(() => { const i = document.getElementById('gs-input'); if (i) i.focus(); }, 60);
 }
 function gsRender(q) { const b = document.getElementById('gs-results'); if (b) b.innerHTML = gsResultsHTML(q); }
