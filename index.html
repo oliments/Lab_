@@ -622,7 +622,21 @@
     .wish-art svg, .wish-art img { width: 24px; height: 24px; display: block; border-radius: 6px; }
     .wish-note { font-size: 12px; color: var(--text3); margin-top: 2px; }
     .wish-price { font-size: 13px; color: var(--text2); font-variant-numeric: tabular-nums; }
+    .wish-link { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--text2); background: var(--bg2); flex-shrink: 0; }
     .wish-total { text-align: right; font-size: 13px; color: var(--text2); padding-top: 10px; }
+    .header-search { width: 32px; height: 32px; border-radius: 50%; border: none; background: var(--bg2); color: var(--text2); display: flex; align-items: center; justify-content: center; cursor: pointer; }
+    .gs-empty { font-size: 13px; color: var(--text3); padding: 18px 0; text-align: center; }
+    .gs-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); cursor: pointer; }
+    .gs-name { font-size: 14px; font-weight: 500; }
+    .gs-sub { font-size: 11px; color: var(--text3); margin-top: 1px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .gs-art { width: 32px; height: 32px; border-radius: 8px; background: #f5f4f1; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .gs-art svg { width: 28px; height: 28px; } .gs-art img { width: 30px; height: 30px; border-radius: 7px; }
+    .backup-banner { position: fixed; left: 12px; right: 12px; bottom: calc(env(safe-area-inset-bottom, 0px) + 74px); z-index: 150;
+      display: flex; align-items: center; gap: 10px; padding: 10px 10px 10px 14px; border-radius: 14px;
+      background: #fff; border: 1px solid var(--border); box-shadow: 0 6px 24px rgba(0,0,0,.12); font-size: 13px; color: var(--text2); max-width: 536px; margin: 0 auto; }
+    .backup-banner span { flex: 1; }
+    .backup-banner-x { border: none; background: none; font-size: 20px; color: var(--text3); padding: 0 4px; cursor: pointer; }
+    .form-actions { flex-wrap: wrap; }
     .note-grid-empty { grid-column: 1 / -1; text-align: center; font-size: 12px; color: var(--text3); padding: 14px 0; }
     .note-have-dot {
       position: absolute; top: 2px; right: 2px;
@@ -650,7 +664,11 @@
 <div id="app">
   <header>
     <div class="header-inner">
-      <div><span class="logo">Lab</span></div>
+      <div style="display:flex;align-items:center;gap:10px"><span class="logo">Lab</span>
+        <button class="header-search" onclick="openGlobalSearch()" aria-label="Search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7.5"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
+        </button>
+      </div>
       <div id="header-action"></div>
     </div>
   </header>
@@ -1890,6 +1908,7 @@ function openFormulaDetail(id, kind) {
     ` : ''}
 
     <div class="form-actions" style="margin-top:6px">
+      <button class="btn btn-ghost" onclick="duplicateItem('${id}','${DK}')">Duplicate</button>
       <button class="btn btn-primary" onclick="openMakeSheet('${id}','${DK}')">Make</button>
       <button class="btn btn-ghost" onclick="closeSheet();openFormulaBuilder('${id}','${DK}')">Edit</button>
       <button class="btn btn-danger" onclick="deleteFormula('${id}')">Delete</button>
@@ -2360,7 +2379,7 @@ function exportBackup() {
     window.claude.use('downloads').then(dl => {
       if (!dl) throw { code: 'unavailable' };
       return dl.save({ filename: name, data: json });
-    }).then(() => backupSay('Saved ✓'))
+    }).then(() => { markBackedUp(); backupSay('Saved ✓'); })
       .catch(e => backupSay(e && e.code === 'declined' ? 'Not saved' : 'Saving isn’t available here — use “Copy backup text” below'));
     return;
   }
@@ -2368,7 +2387,7 @@ function exportBackup() {
   try { file = new File([json], name, { type: 'application/json' }); } catch (e) {}
   if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
     navigator.share({ files: [file], title: name })
-      .then(() => backupSay('Saved ✓ — check the place you picked (e.g. Files)'))
+      .then(() => { markBackedUp(); backupSay('Saved ✓ — check the place you picked (e.g. Files)'); })
       .catch(e => { if (!e || e.name !== 'AbortError') backupSay('Couldn’t open the share sheet — use “Copy backup text” below'); });
     return;
   }
@@ -2377,7 +2396,7 @@ function exportBackup() {
     const a = document.createElement('a');
     a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(url), 4000);
-    backupSay('Downloaded ✓ — look in your Downloads folder');
+    markBackedUp(); backupSay('Downloaded ✓ — look in your Downloads folder');
   } catch (e) {
     backupSay('Download isn’t available here — use “Copy backup text” below');
   }
@@ -2385,7 +2404,7 @@ function exportBackup() {
 
 function copyBackup() {
   const json = backupJSON();
-  const done = () => backupSay('Copied ✓ — paste it into Notes or a .json file');
+  const done = () => { markBackedUp(); backupSay('Copied ✓ — paste it into Notes or a .json file'); };
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(json).then(done).catch(() => showBackupText(json));
   } else showBackupText(json);
@@ -2459,7 +2478,7 @@ function openBackupSheet() {
             <div style="font-size:11px;color:var(--text3)">visions</div>
           </div>
         </div>
-        <div style="margin-top:8px;font-size:11px;color:var(--text3)">${lastSaved}</div>
+        <div style="margin-top:8px;font-size:11px;color:var(--text3)">${lastBackupText()}</div>
       </div>
 
       <div>
@@ -3638,12 +3657,44 @@ function mkToggle(key) {
 // ══════════════════════════════════════════════════════
 // WISHLIST
 // ══════════════════════════════════════════════════════
+// "https://shop.ua/ua/hedione-hc-10-g-p1234.html" → "Hedione HC 10 G"
+function nameFromUrl(u) {
+  let url; try { url = new URL(String(u).trim()); } catch (e) { return ''; }
+  const generic = /^(ua|uk|en|ru|pl|de|product|products|p|item|items|goods|tovar|catalog|catalogue|shop|store|collections?|category|categories|c|dp|gp|index|amp)$/i;
+  const segs = url.pathname.split('/').filter(Boolean).map(x => { try { return decodeURIComponent(x); } catch (e) { return x; } })
+    .map(x => x.replace(/\.(html?|php|aspx?)$/i, ''))
+    .filter(x => /[a-zа-яіїєґ]/i.test(x) && !generic.test(x) && !/^[a-z]{0,2}\d+$/i.test(x) && !/^(?=.*\d)[A-Z0-9]{8,}$/.test(x));
+  let seg = segs[segs.length - 1];
+  if (!seg) {
+    const q = url.searchParams.get('name') || url.searchParams.get('product') || url.searchParams.get('q');
+    seg = q || '';
+  }
+  if (!seg) return url.hostname.replace(/^www\./, '');
+  let words = seg.replace(/[-_+.]+/g, ' ').split(/\s+/).filter(Boolean);
+  while (words.length > 1 && /^(p|id|sku|art)?\d{3,}$/i.test(words[words.length - 1])) {
+    words.pop();
+    if (words.length > 1 && /^(p|id|sku|art)$/i.test(words[words.length - 1])) words.pop();
+  }
+  return words.map(w => /^(hc|eo|fcf|mna|dpg|ipm|tec)$/i.test(w) ? w.toUpperCase()
+    : /^(g|г|гр|ml|мл|kg|кг|oz|\d+(g|г|ml|мл|kg|кг))$/i.test(w) ? w.toLowerCase()
+    : w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+}
+function linkHost(u) { try { return new URL(u).hostname.replace(/^www\./, ''); } catch (e) { return ''; } }
+function isUrl(t) { return /^https?:\/\/\S+$/i.test(String(t || '').trim()); }
+async function wishPasteLink() {
+  let t = '';
+  try { t = (await navigator.clipboard.readText()).trim(); } catch (e) {}
+  if (!isUrl(t)) { openWishForm(null, ''); toast('Paste the link into the Link field'); return; }
+  if (state.wishlist.some(w => !w.done && w.link === t)) { toast('This link is already in wishlist'); return; }
+  openWishForm(null, t);
+}
+
 function wishAdd(name, opts) {
   opts = opts || {};
   name = String(name || '').trim();
   if (!name) return false;
   if (state.wishlist.some(w => !w.done && w.name.toLowerCase() === name.toLowerCase())) { if (!opts.silent) toast('Already in wishlist'); return false; }
-  state.wishlist.unshift({ id: uid(), name, note: opts.note || '', price: opts.price || '', fromNote: opts.fromNote || '', done: false, createdAt: Date.now() });
+  state.wishlist.unshift({ id: uid(), name, note: opts.note || '', price: opts.price || '', link: opts.link || '', fromNote: opts.fromNote || '', done: false, createdAt: Date.now() });
   save();
   if (!opts.silent) toast(`“${name}” added to wishlist`);
   if (state.page === 'wishlist') renderWishlist();
@@ -3651,10 +3702,16 @@ function wishAdd(name, opts) {
 }
 function renderWishlist() {
   document.getElementById('header-action').innerHTML = `
-    <button class="btn btn-primary btn-sm" onclick="openWishForm()">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-      Add
-    </button>`;
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost btn-sm" onclick="wishPasteLink()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.07 0l3-3a5 5 0 00-7.07-7.07l-1.5 1.5"/><path d="M14 11a5 5 0 00-7.07 0l-3 3a5 5 0 007.07 7.07l1.5-1.5"/></svg>
+        Paste link
+      </button>
+      <button class="btn btn-primary btn-sm" onclick="openWishForm()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add
+      </button>
+    </div>`;
   const todo = state.wishlist.filter(w => !w.done), done = state.wishlist.filter(w => w.done);
   const sum = todo.reduce((s, w) => s + (parseFloat(String(w.price).replace(',', '.')) || 0), 0);
   const row = w => `
@@ -3662,8 +3719,9 @@ function renderWishlist() {
       <button class="wish-check" onclick="wishToggle('${w.id}')">${w.done ? '✓' : ''}</button>
       <div class="wish-main" onclick="openWishForm('${w.id}')">
         <div class="wish-name">${w.fromNote ? `<span class="wish-art">${noteArt(w.fromNote).svg}</span>` : ''}${esc(w.name)}</div>
-        ${w.note ? `<div class="wish-note">${esc(w.note)}</div>` : ''}
+        ${(w.note || w.link) ? `<div class="wish-note">${esc([w.note, w.link && !String(w.note).includes(linkHost(w.link)) ? linkHost(w.link) : ''].filter(Boolean).join(' · '))}</div>` : ''}
       </div>
+      ${w.link ? `<a class="wish-link" href="${esc(w.link)}" target="_blank" rel="noopener" title="Open link"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg></a>` : ''}
       ${w.price ? `<div class="wish-price">₴${esc(w.price)}</div>` : ''}
       ${w.done ? `<button class="acc-vis-link" style="flex-shrink:0" onclick="wishToMolecule('${w.id}')">+ Molecule</button>` : ''}
     </div>`;
@@ -3676,7 +3734,7 @@ function renderWishlist() {
       <div class="empty">
         <div class="empty-icon">♡</div>
         <h3>Nothing here yet</h3>
-        <p>Add materials you want to buy — or tap “+ wishlist” on a missing note in Vision</p>
+        <p>Copy a product link and tap “Paste link” — or tap “+ wish” on a missing note in Vision</p>
       </div>` : `
       ${todo.map(row).join('')}
       ${sum > 0 ? `<div class="wish-total">To buy: <b>₴${sum.toFixed(2)}</b></div>` : ''}
@@ -3686,11 +3744,17 @@ function renderWishlist() {
 }
 function wishToggle(id) { const w = state.wishlist.find(x => x.id === id); if (!w) return; w.done = !w.done; save(); renderWishlist(); }
 function wishClearDone() { state.wishlist = state.wishlist.filter(w => !w.done); save(); renderWishlist(); }
-function openWishForm(id) {
+let wishAutoName = true;
+function openWishForm(id, presetLink) {
   const w = id ? state.wishlist.find(x => x.id === id) : null;
+  const link = w ? (w.link || '') : (presetLink || '');
+  const name = w ? w.name : (link ? nameFromUrl(link) : '');
+  wishAutoName = !w;
   showSheet('wish', w ? 'Edit item' : 'Add to wishlist', `
     <div class="form-body">
-      <div class="field"><label>Material</label><input id="w-name" placeholder="e.g. Hedione HC" value="${esc(w?.name || '')}" /></div>
+      <div class="field"><label>Link <span style="font-weight:400;text-transform:none;color:var(--text3)">optional — the name fills in by itself</span></label>
+        <input id="w-link" type="url" inputmode="url" placeholder="https://…" value="${esc(link)}" oninput="wishLinkTyped(this.value)" /></div>
+      <div class="field"><label>Material</label><input id="w-name" placeholder="e.g. Hedione HC" value="${esc(name)}" oninput="wishAutoName=false" /></div>
       <div class="field"><label>Note <span style="font-weight:400;text-transform:none;color:var(--text3)">supplier, amount, link…</span></label><input id="w-note" placeholder="e.g. 10 g · Belova" value="${esc(w?.note || '')}" /></div>
       <div class="field"><label>Price, ₴ <span style="font-weight:400;text-transform:none;color:var(--text3)">optional</span></label><input id="w-price" type="number" inputmode="decimal" step="0.01" value="${esc(w?.price || '')}" /></div>
     </div>
@@ -3698,14 +3762,20 @@ function openWishForm(id) {
       ${w ? `<button class="btn btn-danger" onclick="wishDelete('${w.id}')">Delete</button>` : `<button class="btn btn-ghost" onclick="closeSheet()">Cancel</button>`}
       <button class="btn btn-primary" onclick="wishSave('${w ? w.id : ''}')">Save</button>
     </div>`);
-  setTimeout(() => { const i = document.getElementById('w-name'); if (i && !w) i.focus(); }, 50);
+  if (!w && !link) setTimeout(() => { const i = document.getElementById('w-link'); if (i) i.focus(); }, 50);
+}
+function wishLinkTyped(v) {
+  if (!wishAutoName || !isUrl(v)) return;
+  const n = document.getElementById('w-name'); if (n) n.value = nameFromUrl(v);
 }
 function wishSave(id) {
   const name = document.getElementById('w-name').value.trim();
   if (!name) { toast('Enter a name'); return; }
   const note = document.getElementById('w-note').value.trim(), price = document.getElementById('w-price').value.trim();
-  if (id) { const w = state.wishlist.find(x => x.id === id); Object.assign(w, { name, note, price }); save(); }
-  else if (!wishAdd(name, { note, price, silent: true })) { toast('Already in wishlist'); return; }
+  let link = document.getElementById('w-link').value.trim();
+  if (link && !/^https?:\/\//i.test(link)) link = 'https://' + link;
+  if (id) { const w = state.wishlist.find(x => x.id === id); Object.assign(w, { name, note, price, link }); save(); }
+  else if (!wishAdd(name, { note, price, link, silent: true })) { toast('Already in wishlist'); return; }
   closeSheet(); if (state.page === 'wishlist') renderWishlist(); else toast('Added to wishlist');
 }
 function wishDelete(id) { state.wishlist = state.wishlist.filter(w => w.id !== id); save(); closeSheet(); renderWishlist(); }
@@ -3788,10 +3858,111 @@ function dcSaveToMol() {
   if (state.page === 'molecules') render();
 }
 
+
+// ══════════════════════════════════════════════════════
+// OFFLINE + DATA PROTECTION
+// ══════════════════════════════════════════════════════
+function inClaudeFrame() { try { return window.self !== window.top; } catch (e) { return true; } }
+function setupOffline() {
+  if (!('serviceWorker' in navigator) || (location.protocol !== 'https:' && location.hostname !== 'localhost') || inClaudeFrame()) return;
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+function setupPersist() {
+  try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {}); } catch (e) {}
+}
+const BACKUP_KEY = 'lab_last_backup_v1', REMIND_KEY = 'lab_backup_reminded_v1';
+function markBackedUp() { try { localStorage.setItem(BACKUP_KEY, String(Date.now())); } catch (e) {} const b = document.getElementById('backup-banner'); if (b) b.remove(); }
+function lastBackupAt() { try { return +localStorage.getItem(BACKUP_KEY) || 0; } catch (e) { return 0; } }
+function daysAgo(t) { return Math.floor((Date.now() - t) / 86400000); }
+function lastBackupText() {
+  const t = lastBackupAt();
+  if (!t) return 'Never backed up';
+  const d = daysAgo(t);
+  return 'Last backup: ' + (d === 0 ? 'today' : d === 1 ? 'yesterday' : d + ' days ago');
+}
+function backupReminder() {
+  const hasData = state.molecules.length + state.formulas.length + (state.accords || []).length + (state.visions || []).length > 0;
+  if (!hasData) return;
+  const last = lastBackupAt();
+  if (last && daysAgo(last) < 7) return;
+  let reminded = 0; try { reminded = +localStorage.getItem(REMIND_KEY) || 0; } catch (e) {}
+  if (reminded && Date.now() - reminded < 86400000) return;
+  if (document.getElementById('backup-banner')) return;
+  const el = document.createElement('div');
+  el.id = 'backup-banner';
+  el.className = 'backup-banner';
+  el.innerHTML = `<span>${last ? `No backup for ${daysAgo(last)} days` : 'You haven’t saved a backup yet'}</span>
+    <button class="btn btn-primary btn-sm" onclick="openBackupSheet()">Back up</button>
+    <button class="backup-banner-x" onclick="try{localStorage.setItem('${REMIND_KEY}',Date.now())}catch(e){};this.parentElement.remove()" aria-label="Later">×</button>`;
+  document.body.appendChild(el);
+}
+
+// ══════════════════════════════════════════════════════
+// GLOBAL SEARCH
+// ══════════════════════════════════════════════════════
+function openGlobalSearch() {
+  showSheet('gsearch', 'Search', `
+    <div style="padding:12px 16px 0">
+      <div class="search-wrap" style="margin-bottom:4px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input class="search-input" id="gs-input" placeholder="Molecules, formulas, accords, notes…" oninput="gsRender(this.value)" />
+      </div>
+    </div>
+    <div id="gs-results" style="padding:0 16px 24px">${gsResultsHTML('')}</div>`);
+  setTimeout(() => { const i = document.getElementById('gs-input'); if (i) i.focus(); }, 60);
+}
+function gsRender(q) { const b = document.getElementById('gs-results'); if (b) b.innerHTML = gsResultsHTML(q); }
+function gsResultsHTML(q) {
+  q = String(q || '').toLowerCase().trim().replace(/['`ʼ]/g, '’');
+  if (!q) return `<div class="gs-empty">Search everything in Lab — by name, CAS, description or ingredient</div>`;
+  const has = (...xs) => xs.some(x => String(x || '').toLowerCase().includes(q));
+  const ingNames = v => (v?.ingredients || []).map(i => ingDisplayName(i)).join(' ');
+  const groups = [
+    ['Molecules', state.molecules.filter(m => has(m.name, m.cas, m.family, m.notes, m.tips)).slice(0, 20)
+      .map(m => [esc(m.name), [m.family, m.cas].filter(Boolean).join(' · '), `closeSheet();showPage('molecules');openMoleculeDetail('${m.id}')`])],
+    ['Formulas', state.formulas.filter(f => has(f.name, f.notes, ingNames(accVersion(f)))).slice(0, 20)
+      .map(f => [esc(f.name), `${accVersion(f).ingredients.length} ingredients`, `closeSheet();showPage('formulas');openFormulaDetail('${f.id}','formulas')`])],
+    ['Accords', (state.accords || []).filter(a => has(a.name, a.notes, ingNames(accVersion(a)), (a.noteLinks || []).join(' '))).slice(0, 20)
+      .map(a => ['◎ ' + esc(a.name), (a.noteLinks || []).join(', ') || `${accVersion(a).ingredients.length} molecules`, `closeSheet();showPage('accords');openFormulaDetail('${a.id}','accords')`])],
+    ['Visions', (state.visions || []).filter(v => has(v.name, v.desc, (v.notes || []).map(n => n.name).join(' '))).slice(0, 20)
+      .map(v => [esc(v.name), `${(v.notes || []).length} notes`, `closeSheet();showPage('vision');openVisionDetail('${v.id}')`])],
+    ['Wishlist', (state.wishlist || []).filter(w => has(w.name, w.note, w.link)).slice(0, 20)
+      .map(w => [esc(w.name) + (w.done ? ' <span style="color:var(--text3)">· bought</span>' : ''), [w.note, w.price ? '₴' + w.price : ''].filter(Boolean).join(' · '), `closeSheet();showPage('wishlist');openWishForm('${w.id}')`])],
+    ['Notes', shownNotes(ALL_NOTES_FLAT).filter(n => has(n, NOTE_ALIAS[n])).slice(0, 12)
+      .map(n => [esc(n), catName(NOTE_CAT_OF[n]), `openNoteSheet('${esc(n)}')`, noteArt(n).svg])],
+  ].filter(g => g[1].length);
+  if (!groups.length) return `<div class="gs-empty">Nothing found for “${esc(q)}”</div>`;
+  return groups.map(([title, rows]) => `
+    <div class="vision-section-label">${title}</div>
+    ${rows.map(([name, sub, js, art]) => `
+      <div class="gs-row" onclick="${js}">
+        ${art ? `<span class="gs-art">${art}</span>` : ''}
+        <div style="flex:1;min-width:0"><div class="gs-name">${name}</div>${sub ? `<div class="gs-sub">${esc(sub)}</div>` : ''}</div>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" style="color:var(--text3);flex-shrink:0"><path d="M9 6l6 6-6 6"/></svg>
+      </div>`).join('')}`).join('');
+}
+
+// ══════════════════════════════════════════════════════
+// DUPLICATE formula / accord
+// ══════════════════════════════════════════════════════
+function duplicateItem(id, kind) {
+  const f = (state[kind] || []).find(x => x.id === id);
+  if (!f) return;
+  closeSheet();
+  openFormulaBuilder(id, kind);
+  BS.id = null;
+  BS.name = f.name + ' copy';
+  renderBuilder();
+  toast('Copy opened — rename and save');
+}
+
 // ── INIT ──
 load();
 render();
 packLoad();
+setupOffline();
+setupPersist();
+setTimeout(backupReminder, 1200);
 </script>
 </body>
 </html>
