@@ -693,6 +693,44 @@
     .trial-stars button.on { color: #c8901a; }
     .trial-stars span { font-size: 11px; color: var(--text3); margin-left: 6px; }
     .share-pre { white-space: pre-wrap; font-family: ui-monospace, Menlo, monospace; font-size: 12px; line-height: 1.5; background: var(--bg2); border-radius: 10px; padding: 12px; margin: 0; max-height: 46dvh; overflow: auto; }
+    .ing-swap { border: none; background: var(--bg2); color: var(--text2); width: 26px; height: 26px; border-radius: 50%; font-size: 13px; cursor: pointer; margin-right: 4px; flex-shrink: 0; }
+    .insp { display: flex; flex-direction: column; gap: 10px; background: var(--bg2); border-radius: 12px; padding: 12px; }
+    .insp-label { font-size: 11px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text2); }
+    .insp-label span { font-weight: 400; text-transform: none; letter-spacing: 0; color: var(--text3); margin-left: 4px; }
+    .insp-photos { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+    .insp-photos::-webkit-scrollbar { display: none; }
+    .insp-ph { position: relative; flex-shrink: 0; }
+    .insp-ph img { width: 76px; height: 76px; object-fit: cover; border-radius: 10px; display: block; background: #e8e6e1; }
+    .insp-ph b { position: absolute; top: -5px; right: -5px; width: 20px; height: 20px; border-radius: 50%; background: var(--text); color: #fff; font-size: 13px; line-height: 20px; text-align: center; font-weight: 400; cursor: pointer; }
+    .insp-add { flex-shrink: 0; width: 76px; height: 76px; border-radius: 10px; border: 1.5px dashed var(--border2); background: none; color: var(--text2); font-family: Inter, sans-serif; font-size: 12px; cursor: pointer; }
+    .insp-pal { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+    .insp-sw { width: 30px; height: 30px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 1px var(--border); cursor: pointer; padding: 0; }
+    .insp-sw.add { background: #fff; color: var(--text2); font-size: 16px; line-height: 1; }
+    .insp-refs { display: flex; flex-direction: column; gap: 6px; }
+    .insp-ref { display: flex; align-items: center; gap: 8px; background: #fff; border-radius: 8px; padding: 7px 10px; font-size: 13px; }
+    .insp-ref span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .insp-ref small { color: var(--text3); margin-left: 6px; font-size: 11px; }
+    .insp-ref b { color: var(--text3); font-weight: 400; cursor: pointer; padding: 0 4px; }
+    .insp-view { padding: 12px 16px 6px; }
+    .insp-photos.big img { height: 140px; width: auto; max-width: 220px; object-fit: cover; border-radius: 12px; flex-shrink: 0; cursor: pointer; background: #e8e6e1; min-width: 100px; }
+    .insp-palbar { display: flex; height: 22px; border-radius: 8px; overflow: hidden; margin-top: 10px; }
+    .insp-palbar span { flex: 1; }
+    .insp-palbar.thin { height: 6px; margin: -2px 0 10px; border-radius: 4px; }
+    .vision-card { position: relative; }
+    .vision-card:has(.vision-card-ph) { padding-right: 72px; }
+    .vision-card-ph { position: absolute; right: 14px; bottom: 14px; width: 44px; height: 44px; border-radius: 8px; object-fit: cover; }
+    .header-search.on { background: var(--text); color: #fff; }
+    .hdr-badge { position: absolute; top: -3px; right: -3px; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 8px; background: #c8501e; color: #fff; font-size: 10px; font-weight: 600; line-height: 16px; text-align: center; }
+    .nb-card { border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; cursor: pointer; background: #fff; }
+    .nb-top { display: flex; align-items: baseline; gap: 10px; }
+    .nb-title { flex: 1; font-size: 15px; font-weight: 600; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .nb-pin { color: #c8501e; font-size: 9px; margin-right: 6px; vertical-align: 2px; }
+    .nb-date { font-size: 11px; color: var(--text3); flex-shrink: 0; }
+    .nb-body { font-size: 13px; color: var(--text2); line-height: 1.45; margin-top: 4px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; white-space: pre-line; }
+    .nb-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 8px; }
+    .nb-tags span { font-size: 11px; padding: 2px 8px; border-radius: 10px; background: var(--bg2); color: var(--text2); }
+    .nb-title-in { border: none; outline: none; font-family: Inter, sans-serif; font-size: 20px !important; font-weight: 600; padding: 4px 0; width: 100%; background: none; color: var(--text); }
+    .nb-body-in { border: none; outline: none; resize: none; font-family: Inter, sans-serif; font-size: 16px; line-height: 1.55; min-height: 180px; width: 100%; background: none; color: var(--text); padding: 0; }
     .note-grid-empty { grid-column: 1 / -1; text-align: center; font-size: 12px; color: var(--text3); padding: 14px 0; }
     .note-have-dot {
       position: absolute; top: 2px; right: 2px;
@@ -724,6 +762,10 @@
         <button class="header-search" onclick="openGlobalSearch()" aria-label="Search">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7.5"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
         </button>
+        <button class="header-search" id="hdr-wish" onclick="showPage(state.page === 'wishlist' ? (state.prevPage || 'molecules') : 'wishlist')" aria-label="Wishlist" style="position:relative">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"/><path d="M6 6L5 3H2"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>
+          <span class="hdr-badge" id="hdr-wish-badge" style="display:none">0</span>
+        </button>
       </div>
       <div id="header-action"></div>
     </div>
@@ -746,9 +788,9 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
       Vision
     </button>
-    <button class="nav-btn" id="nav-wishlist" onclick="showPage('wishlist')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 6h15l-1.5 9h-12z"/><path d="M6 6L5 3H2"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>
-      Wishlist
+    <button class="nav-btn" id="nav-notebook" onclick="showPage('notebook')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 3h11a2 2 0 012 2v14a2 2 0 01-2 2H6z"/><path d="M6 3v18M4 7h4M4 12h4M4 17h4M10 8h6M10 12h5"/></svg>
+      Notebook
     </button>
   </nav>
 </div>
@@ -778,6 +820,7 @@ let state = {
   formulas: [],
   accords: [],
   wishlist: [],
+  notebook: [],
   families: [],
   visions: [],
   page: 'molecules',
@@ -805,12 +848,14 @@ function load() {
     const vis = localStorage.getItem('mara_visions_v1');
     const acc = localStorage.getItem('mara_accords_v1');
     const wl  = localStorage.getItem('lab_wishlist_v1');
+    const nbk = localStorage.getItem('lab_notebook_v1');
     if (m)   state.molecules = JSON.parse(m);
     if (f)   state.formulas  = JSON.parse(f);
     if (fam) state.families  = JSON.parse(fam);
     if (vis) state.visions   = JSON.parse(vis);
     if (acc) state.accords   = JSON.parse(acc);
     if (wl)  state.wishlist  = JSON.parse(wl);
+    if (nbk) state.notebook  = JSON.parse(nbk);
   } catch(e) {}
 }
 
@@ -821,6 +866,8 @@ function save() {
   localStorage.setItem('mara_visions_v1',  JSON.stringify(state.visions));
   localStorage.setItem('mara_accords_v1',  JSON.stringify(state.accords));
   localStorage.setItem('lab_wishlist_v1',  JSON.stringify(state.wishlist));
+  localStorage.setItem('lab_notebook_v1',  JSON.stringify(state.notebook));
+  setTimeout(updateWishBadge, 0);
 }
 
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
@@ -840,25 +887,29 @@ function toast(msg) {
 
 // ── NAV ──
 function showPage(p) {
+  if (p === 'wishlist' && state.page !== 'wishlist') state.prevPage = state.page;
   state.page = p; state.filter = 'all'; state.pyramidFilter = 'all';
   state.filterMode = 'families'; state.search = '';
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('nav-' + p).classList.add('active');
+  const nb = document.getElementById('nav-' + p); if (nb) nb.classList.add('active');
   render();
+  window.scrollTo(0, 0);
 }
 function render() {
+  setTimeout(updateWishBadge, 0);
   if (state.page === 'molecules') renderMolecules();
   else if (state.page === 'vision') renderVision();
   else if (state.page === 'accords') renderFormulas('accords');
   else if (state.page === 'wishlist') renderWishlist();
+  else if (state.page === 'notebook') renderNotebook();
   else renderFormulas('formulas');
 }
 
 // ══════════════════════════════════════════════════════
 // MOLECULES — LIST (grouped by family)
 // ══════════════════════════════════════════════════════
-function renderMolecules() {
-  document.getElementById('header-action').innerHTML = `
+function renderMolecules(listOnly) {
+  if (!listOnly) document.getElementById('header-action').innerHTML = `
     <div style="display:flex;gap:8px">
       <button class="btn btn-ghost btn-sm" onclick="openBackupSheet()" title="Backup & Restore">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -902,18 +953,7 @@ function renderMolecules() {
 
   const PYR_COLORS = { Top: '#c4a84a', Heart: '#d4a5b5', Base: '#7a7a9e' };
 
-  document.getElementById('main-content').innerHTML = `
-    <div class="section-head">
-      <h1 class="section-title">Molecules</h1>
-      <span class="count-badge">${state.molecules.length}</span>
-    </div>
-
-    <div class="search-wrap">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input class="search-input" placeholder="Search by name or CAS…" value="${esc(state.search)}"
-        oninput="state.search=this.value;renderMolecules()" />
-    </div>
-
+  const resultsHTML = `
     <div style="display:flex;background:var(--bg2);border-radius:8px;padding:3px;margin-bottom:14px;gap:2px">
       <button id="ft-families"
         style="flex:1;padding:6px;border:none;border-radius:6px;font-family:Inter,sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all 0.15s;background:${state.filterMode!=='notes'?'#fff':'transparent'};color:${state.filterMode!=='notes'?'var(--text)':'var(--text3)'};box-shadow:${state.filterMode!=='notes'?'0 1px 3px rgba(0,0,0,0.08)':'none'}"
@@ -968,6 +1008,22 @@ function renderMolecules() {
         </div>
       `;
     }).join('')}
+  `;
+  const box = document.getElementById('mol-results');
+  if (listOnly && box) { box.innerHTML = resultsHTML; return; }
+  document.getElementById('main-content').innerHTML = `
+    <div class="section-head">
+      <h1 class="section-title">Molecules</h1>
+      <span class="count-badge">${state.molecules.length}</span>
+    </div>
+
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="search-input" placeholder="Search by name or CAS…" value="${esc(state.search)}"
+        oninput="state.search=this.value;renderMolecules(true)" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+    </div>
+
+    <div id="mol-results">${resultsHTML}</div>
   `;
 }
 
@@ -1066,6 +1122,8 @@ function openMoleculeForm(id) {
         <div class="field-hint">How long it stays noticeable on a blotter — used for the “how it evolves” analytics</div>
       </div>
 
+      ${strengthChipsField(v)}
+
       <div class="field">
         <label>Stock (g)</label>
         <input id="f-stock" type="number" step="0.01" placeholder="e.g. 10.00" value="${esc(v.stock||'')}" />
@@ -1156,6 +1214,7 @@ function saveMolecule() {
     notes:    document.getElementById('f-notes').value.trim(),
     tips:     document.getElementById('f-tips').value.trim(),
     life:     document.getElementById('f-life').value,
+    impact:   document.getElementById('f-impact').value,
   };
 
   if (editMolId) {
@@ -1180,6 +1239,7 @@ function openMoleculeDetail(id) {
     m.ifra  ? ['IFRA limit', m.ifra + '%'] : null,
     m.stock ? ['Stock', m.stock + ' g'] : null,
     (() => { const L = molLife(m); return L.src === 'yours' ? ['Odor life', L.h + ' h'] : L.src === 'typical' ? ['Odor life', '≈ ' + L.h + ' h (typical)'] : null; })(),
+    (() => { const S = molStrength(m); return S.src === 'yours' ? ['Strength', STRENGTH_LEVELS[S.lvl]] : S.src === 'typical' ? ['Strength', '≈ ' + STRENGTH_LEVELS[S.lvl] + ' (typical)'] : null; })(),
     m.cost  ? ['Cost', '₴' + parseFloat(m.cost).toFixed(2) + '/g'] : null,
   ].filter(Boolean);
 
@@ -1221,6 +1281,8 @@ function openMoleculeDetail(id) {
         <div class="detail-val" style="color:var(--text2);line-height:1.6;margin-top:4px">${esc(m.notes)}</div>
       </div>
     ` : ''}
+
+    ${similarBlockHTML(m)}
 
     ${m.tips ? `
       <div class="detail-block">
@@ -1751,6 +1813,7 @@ function builderIngsList(v) {
             <div class="ing-name-text">${ing.accId ? '◎ ' : ''}${esc(ingDisplayName(ing))}</div>
             ${ing.accId ? `<div class="ing-family-text">Accord · ${accordSubText(ing)}</div>` : ing.family ? `<div class="ing-family-text">${esc(ing.family)}</div>` : ''}
           </div>
+          ${ing.molId ? `<button class="ing-swap" title="Swap for something similar" onclick="openSwapSheet(${idx})">⇄</button>` : ''}
           <button class="ing-del" onclick="bRemoveIng(${idx})">×</button>
         </div>
 
@@ -2580,10 +2643,12 @@ function evolution(v) {
   const rows = actualContent(v).filter(r => r.pure > 0);
   if (!rows.length) return null;
   const k = Math.log(20); // after "odor life" hours about 5% is left
-  const start = rows.reduce((s, r) => s + r.pure, 0);
-  const guessed = rows.filter(r => molLife(r.mol).src !== 'yours').length;
+  // what you smell grows slower than the amount (≈ square root) and depends on how strong the material is
+  const loud = (r, amt) => STRENGTH_FACTOR[molStrength(r.mol).lvl] * Math.sqrt(Math.max(0, amt));
+  const start = rows.reduce((s, r) => s + loud(r, r.pure), 0);
+  const guessed = rows.filter(r => molLife(r.mol).src !== 'yours' || molStrength(r.mol).src !== 'yours').length;
   const stages = STAGES.map(([t, label]) => {
-    const parts = rows.map(r => ({ r, val: r.pure * Math.exp(-k * t / molLife(r.mol).h) })).filter(p => p.val > 0);
+    const parts = rows.map(r => ({ r, val: loud(r, r.pure * Math.exp(-k * t / molLife(r.mol).h)) })).filter(p => p.val > 0);
     const tot = parts.reduce((s, p) => s + p.val, 0);
     parts.sort((a, b) => b.val - a.val);
     return { label, left: tot / start * 100, parts: parts.map(p => ({ name: p.r.name, fam: p.r.family, share: tot ? p.val / tot * 100 : 0 })) };
@@ -2665,7 +2730,7 @@ function analyticsExtraHTML(v, an) {
             </div>
             <div class="ev-left">${s.left >= 10 ? s.left.toFixed(0) : s.left.toFixed(1)}%</div>
           </div>`).join('')}
-        <div class="an-note">Right column: how much of the scent is still there. Shares are by amount, not by how loud each material is — a powerful material at 1% can still lead. ${ev.guessed ? `Odor life for ${ev.guessed} of ${ev.total} molecules is a typical value or a guess from Top/Heart/Base — add your own in the molecule (“Odor life”) for a truer picture.` : ''}</div>
+        <div class="an-note">Right column: how much of the scent is still there. Shares estimate what you smell: how much there is, how strong each material is and how long it lasts. ${ev.guessed ? `For ${ev.guessed} of ${ev.total} molecules odor life or strength is a typical value or a guess — set your own (“Odor life”, “Odor strength”) in the molecule for a truer picture.` : ''}</div>
       </div>`);
   }
   // actual content
@@ -2757,6 +2822,7 @@ function backupJSON() {
     accords:   state.accords || [],
     visions:   state.visions || [],
     wishlist:  state.wishlist || [],
+    notebook:  state.notebook || [],
     families:  state.families || [],
   }, null, 2);
 }
@@ -2819,7 +2885,7 @@ function importPicked(input) {
     backupSay(`
       <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-sm);padding:12px;color:var(--text2);line-height:1.5">
         Replace current data with this backup?<br>
-        <b>${data.molecules.length}</b> molecules · <b>${data.formulas.length}</b> formulas${data.accords ? ` · <b>${data.accords.length}</b> accords` : ''}${data.visions ? ` · <b>${data.visions.length}</b> visions` : ''}${data.wishlist ? ` · <b>${data.wishlist.length}</b> in wishlist` : ''}
+        <b>${data.molecules.length}</b> molecules · <b>${data.formulas.length}</b> formulas${data.accords ? ` · <b>${data.accords.length}</b> accords` : ''}${data.visions ? ` · <b>${data.visions.length}</b> visions` : ''}${data.wishlist ? ` · <b>${data.wishlist.length}</b> in wishlist` : ''}${data.notebook ? ` · <b>${data.notebook.length}</b> notes` : ''}
         <div style="display:flex;gap:8px;margin-top:10px">
           <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="pendingImport=null;backupSay('')">Cancel</button>
           <button class="btn btn-danger" style="flex:1" onclick="confirmImport()">Replace</button>
@@ -2835,6 +2901,7 @@ function confirmImport() {
   if (data.accords) state.accords = data.accords;
   if (data.visions) state.visions = data.visions;
   if (data.wishlist) state.wishlist = data.wishlist;
+  if (data.notebook) state.notebook = data.notebook;
   pendingImport = null;
   save(); closeSheet(); render();
   toast(`Imported: ${data.molecules.length} molecules, ${data.formulas.length} formulas`);
@@ -2874,6 +2941,10 @@ function openBackupSheet() {
           <div>
             <div style="font-size:22px;font-weight:600">${(state.wishlist||[]).length}</div>
             <div style="font-size:11px;color:var(--text3)">wishlist</div>
+          </div>
+          <div>
+            <div style="font-size:22px;font-weight:600">${(state.notebook||[]).length}</div>
+            <div style="font-size:11px;color:var(--text3)">notes</div>
           </div>
         </div>
         <div style="margin-top:8px;font-size:11px;color:var(--text3)">${lastBackupText()}</div>
@@ -3331,8 +3402,12 @@ function noteArt(n) {
 const PACK = { map: {}, count: 0 };
 function packDB() {
   return new Promise((res, rej) => {
-    const r = indexedDB.open('mara_lab', 1);
-    r.onupgradeneeded = () => r.result.createObjectStore('notePack');
+    const r = indexedDB.open('mara_lab', 2);
+    r.onupgradeneeded = () => {
+      const db = r.result;
+      if (!db.objectStoreNames.contains('notePack')) db.createObjectStore('notePack');
+      if (!db.objectStoreNames.contains('visPhotos')) db.createObjectStore('visPhotos');
+    };
     r.onsuccess = () => res(r.result);
     r.onerror = () => rej(r.error);
   });
@@ -3477,6 +3552,7 @@ function renderVision() {
       </div>
     ` : `<div class="vision-projects">${visions.map(v => visionCard(v)).join('')}</div>`}
   `;
+  hydratePhotos();
 }
 
 function visionCard(vis) {
@@ -3485,6 +3561,8 @@ function visionCard(vis) {
   const haveCount = allNotes.filter(n => noteInCollection(n.name)).length;
   return `
     <div class="vision-card" onclick="openVisionDetail('${vis.id}')">
+      ${(vis.palette || []).length ? `<div class="insp-palbar thin">${vis.palette.map(c => `<span style="background:${c}"></span>`).join('')}</div>` : ''}
+      ${(vis.photos || []).length ? `<img class="vision-card-ph" data-photo="${vis.photos[0]}" alt="">` : ''}
       <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
         <div class="vision-card-name">${esc(vis.name)}</div>
         <span style="font-size:11px;color:var(--text3);flex-shrink:0;margin-top:2px">${haveCount}/${allNotes.length}</span>
@@ -3519,6 +3597,7 @@ function showVisionEditor(visId) {
     });
   }
 
+  VIS_EDIT = { photos: [...(existing?.photos || [])], refs: (existing?.refs || []).map(r => ({ ...r })), palette: [...(existing?.palette || [])] };
   const selectedNames = Object.keys(visionPickerState.selected);
 
   showSheet('visionEdit', visId ? 'Edit Vision' : 'New Vision', `
@@ -3531,6 +3610,7 @@ function showVisionEditor(visId) {
         <label>Description <span style="font-weight:400;text-transform:none;color:var(--text3)">optional</span></label>
         <input id="vis-desc" placeholder="Mood, inspiration…" value="${esc(existing?.desc||'')}" />
       </div>
+      ${inspEditorHTML()}
     </div>
 
     <div style="padding:0 16px 8px;border-bottom:1px solid var(--border)">
@@ -3583,6 +3663,7 @@ function showVisionEditor(visId) {
       <button class="btn btn-primary" onclick="saveVision('${visId||''}')">Save</button>
     </div>
   `, { full: true });
+  hydratePhotos();
 }
 // bring the search bar to the top of the sheet so the notes show right under it
 function visSearchFocus() {
@@ -3808,11 +3889,14 @@ function saveVision(existingId) {
     name: n,
     pyramid: visionPickerState.pyramid[n] || '',
   }));
+  const prev = existingId ? state.visions.find(v => v.id === existingId) : null;
   const vis = {
     id: existingId || uid(),
     name, desc, notes,
+    photos: VIS_EDIT.photos.slice(), refs: VIS_EDIT.refs.slice(), palette: VIS_EDIT.palette.slice(),
     updatedAt: Date.now(),
   };
+  if (prev) photoDel((prev.photos || []).filter(id => !vis.photos.includes(id)));
   if (existingId) {
     state.visions = state.visions.map(v => v.id === existingId ? vis : v);
     toast('Vision updated');
@@ -3849,6 +3933,7 @@ function openVisionDetail(id) {
   };
 
   showSheet('visionDetail', esc(vis.name), `
+    ${inspViewHTML(vis)}
     ${vis.desc ? `<div style="padding:10px 16px;font-size:13px;color:var(--text2);border-bottom:1px solid var(--border)">${esc(vis.desc)}</div>` : ''}
 
     <div style="padding:10px 16px 0;display:flex;gap:12px">
@@ -3886,6 +3971,7 @@ function openVisionDetail(id) {
       <button class="btn btn-danger" onclick="deleteVision('${id}')">Delete</button>
     </div>
   `);
+  hydratePhotos();
 }
 
 function deleteVision(id) {
@@ -3906,6 +3992,8 @@ function deleteVision(id) {
 }
 
 function confirmDeleteVision(id) {
+  const gone = state.visions.find(v => v.id === id);
+  if (gone) photoDel(gone.photos || []);
   state.visions = state.visions.filter(v => v.id !== id);
   save(); closeSheet(); toast('Deleted'); renderVision();
 }
@@ -4142,7 +4230,7 @@ function renderWishlist() {
       <div class="empty">
         <div class="empty-icon">♡</div>
         <h3>Nothing here yet</h3>
-        <p>Copy a product link and tap “Paste link” — or tap “+ wish” on a missing note in Vision</p>
+        <p>Copy a product link and tap “Paste link” — or tap “+ wish” on a missing note in Vision. The cart button at the top brings you here from anywhere.</p>
       </div>` : `
       ${todo.map(row).join('')}
       ${sum > 0 ? `<div class="wish-total">To buy: <b>₴${sum.toFixed(2)}</b></div>` : ''}
@@ -4165,6 +4253,7 @@ function openWishForm(id, presetLink) {
       <div class="field"><label>Material</label><input id="w-name" placeholder="e.g. Hedione HC" value="${esc(name)}" oninput="wishAutoName=false" /></div>
       <div class="field"><label>Note <span style="font-weight:400;text-transform:none;color:var(--text3)">supplier, amount, link…</span></label><input id="w-note" placeholder="e.g. 10 g · Belova" value="${esc(w?.note || '')}" /></div>
       <div class="field"><label>Price, ₴ <span style="font-weight:400;text-transform:none;color:var(--text3)">optional</span></label><input id="w-price" type="number" inputmode="decimal" step="0.01" value="${esc(w?.price || '')}" /></div>
+      ${w && !w.done ? (() => { const sim = wishSimilar(w); return sim.length ? `<div><div class="detail-label" style="margin-bottom:4px">You already have something similar</div>${simListHTML(sim, x => `closeSheet();showPage('molecules');openMoleculeDetail('${x.id}')`)}</div>` : ''; })() : ''}
     </div>
     <div class="form-actions">
       ${w ? `<button class="btn btn-danger" onclick="wishDelete('${w.id}')">Delete</button>` : `<button class="btn btn-ghost" onclick="closeSheet()">Cancel</button>`}
@@ -4313,7 +4402,7 @@ function openGlobalSearch() {
     <div class="sheet-top" style="padding:12px 16px 4px">
       <div class="search-wrap" style="margin-bottom:4px">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input class="search-input" id="gs-input" placeholder="Molecules, formulas, accords, notes…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" oninput="gsRender(this.value)" />
+        <input class="search-input" id="gs-input" placeholder="Molecules, formulas, notebook, notes…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" oninput="gsRender(this.value)" />
       </div>
     </div>
     <div class="sheet-scroll" id="gs-results" style="padding:0 16px 24px">${gsResultsHTML('')}</div>`, { tall: true });
@@ -4334,6 +4423,8 @@ function gsResultsHTML(q) {
       .map(a => ['◎ ' + esc(a.name), (a.noteLinks || []).join(', ') || `${accVersion(a).ingredients.length} molecules`, `closeSheet();showPage('accords');openFormulaDetail('${a.id}','accords')`])],
     ['Visions', (state.visions || []).filter(v => has(v.name, v.desc, (v.notes || []).map(n => n.name).join(' '))).slice(0, 20)
       .map(v => [esc(v.name), `${(v.notes || []).length} notes`, `closeSheet();showPage('vision');openVisionDetail('${v.id}')`])],
+    ['Notebook', (state.notebook || []).filter(e => has(e.title, e.body, (e.tags || []).join(' '))).slice(0, 20)
+      .map(e => [esc(e.title || String(e.body || '').split('\n')[0].slice(0, 60) || 'Untitled'), (e.tags || []).join(', ') || fmtDate(e.updatedAt), `closeSheet();showPage('notebook');openNbEditor('${e.id}')`])],
     ['Wishlist', (state.wishlist || []).filter(w => has(w.name, w.note, w.link)).slice(0, 20)
       .map(w => [esc(w.name) + (w.done ? ' <span style="color:var(--text3)">· bought</span>' : ''), [w.note, w.price ? '₴' + w.price : ''].filter(Boolean).join(' · '), `closeSheet();showPage('wishlist');openWishForm('${w.id}')`])],
     ['Notes', searchNotes(q).slice(0, 12)
@@ -4643,6 +4734,442 @@ function shareImage() {
     setTimeout(() => URL.revokeObjectURL(url), 4000);
     shareSay('Picture downloaded ✓');
   }, 'image/png');
+}
+
+
+// ══════════════════════════════════════════════════════
+// ODOR STRENGTH — how loud a material is, not just how much of it there is
+// ══════════════════════════════════════════════════════
+const STRENGTH_LEVELS = ['', 'Weak', 'Medium', 'Strong', 'Very strong'];
+const STRENGTH_FACTOR = [1, 0.5, 1, 2.5, 6];
+// typical impact (1 weak … 4 very strong), approximate, by CAS — used only when the field is empty
+const TYPICAL_STRENGTH = {
+  '6790-58-5': 3, '139504-68-0': 2, '58567-11-6': 3, '211299-54-6': 4, '8023-85-6': 2, '33704-61-9': 3,
+  '54464-57-2': 1, '198404-98-7': 4, '8015-77-8': 2, '4602-84-0': 1, '22457-23-4': 3, '9000-05-9': 1,
+  '91-64-5': 2, '93-51-6': 4, '8016-26-0': 3, '4940-11-8': 3, '8046-22-8': 2, '4707-47-5': 3,
+  '1222-05-5': 2, '34902-57-3': 1, '105-95-3': 1, '54982-83-1': 1, '116-26-7': 4, '5471-51-2': 1,
+  '104-21-2': 2, '67634-00-8': 3, '127-41-3': 2, '60-12-8': 1, '106-25-2': 2, '78-70-6': 2,
+  '1205-17-0': 2, '67634-15-5': 4, '24851-98-7': 1, '8000-25-7': 3, '106-72-9': 4, '470-82-6': 3,
+  '18479-58-8': 3, '5392-40-5': 3, '8007-75-8': 2, '98-55-5': 2, '80-56-8': 2, '110-41-8': 4,
+  '104-67-6': 3, '121-33-5': 3, '121-32-4': 4, '120-72-9': 4, '928-96-1': 3, '5989-27-5': 2,
+};
+function molStrength(m) {
+  if (m && +m.impact > 0) return { lvl: +m.impact, src: 'yours' };
+  const t = m && TYPICAL_STRENGTH[String(m.cas || '').trim()];
+  if (t) return { lvl: t, src: 'typical' };
+  return { lvl: 2, src: 'guess' };
+}
+function strengthChipsField(v) {
+  const typ = TYPICAL_STRENGTH[String(v.cas || '').trim()];
+  const cur = +v.impact || 0;
+  return `
+    <div class="field">
+      <label>Odor strength ${typ && !cur ? `<span style="text-transform:none;font-weight:400;color:var(--text3)">typical: ${STRENGTH_LEVELS[typ]}</span>` : ''}</label>
+      <input type="hidden" id="f-impact" value="${cur || ''}" />
+      <div style="display:flex;gap:6px;flex-wrap:wrap" id="f-impact-chips">
+        ${[1, 2, 3, 4].map(l => `<button type="button" class="mk-chip${cur === l ? ' on' : ''}" onclick="const i=document.getElementById('f-impact');i.value=i.value==='${l}'?'':'${l}';this.parentElement.querySelectorAll('.mk-chip').forEach((b,k)=>b.classList.toggle('on',String(k+1)===i.value))">${STRENGTH_LEVELS[l]}</button>`).join('')}
+      </div>
+      <div class="field-hint">How loud it is at the same %: e.g. Hedione is weak, Safranal very strong. Makes “how it evolves” closer to what you smell.</div>
+    </div>`;
+}
+
+// ══════════════════════════════════════════════════════
+// SUBSTITUTES — what in your collection is closest
+// ══════════════════════════════════════════════════════
+const SIM_STOP = new Set(('допов нагад харак відті арома запах тонки тонко легки легко вираж вловл злегк ледве нотам нотки нюанс аромат ароматом запах запаху характер характером відтін відтінк відтінками відтінком нотами нотки ноти нотою нюанс нюанси нюансами нагад нагадує доповн доповнений доповнені тонкими тонкий тонкі легким легкий легкою злегка ледве вловим виражен вираженим характерн який яка якіє що та з із і й в у на до для від при як має також дуже більш with and the of a an to in notes note nuance nuances hint hints slight slightly').split(' '));
+const SIM_WORD = {};
+function simTokens(text) {
+  const out = new Set();
+  String(text || '').toLowerCase().split(/[^a-zа-яіїєґ’']+/i).forEach(w => {
+    if (w.length < 4) return;
+    const st = w.slice(0, 5);
+    if (SIM_STOP.has(w) || SIM_STOP.has(st)) return;
+    if (!SIM_WORD[st] || w.length < SIM_WORD[st].length) SIM_WORD[st] = w;
+    out.add(st);
+  });
+  return out;
+}
+function molTokens(m) { return simTokens([m.name, m.notes, m.tips].join(' ')); }
+function similarMolecules(target, opts) {
+  opts = opts || {};
+  const tTok = target.tokens || molTokens(target);
+  const exclude = new Set([target.id, ...(opts.exclude || [])]);
+  return state.molecules.filter(m => !exclude.has(m.id)).map(m => {
+    const mt = molTokens(m);
+    const shared = [...tTok].filter(x => mt.has(x));
+    const cos = tTok.size && mt.size ? shared.length / Math.sqrt(tTok.size * mt.size) : 0;
+    let score = cos * 6, why = [];
+    if (target.family && m.family === target.family) { score += 3; why.push(m.family); }
+    if (target.pyramid && m.pyramid === target.pyramid) { score += 1; why.push(m.pyramid); }
+    if (shared.length) why.push(shared.slice(0, 3).map(x => SIM_WORD[x] || x).join(', '));
+    return { m, score, why };
+  }).filter(x => x.score >= (opts.min || 1.6)).sort((a, b) => b.score - a.score).slice(0, opts.limit || 5);
+}
+function simListHTML(list, onPick) {
+  if (!list.length) return `<div style="font-size:12px;color:var(--text3)">Nothing close enough in your collection yet.</div>`;
+  return list.map(({ m, why }) => `
+    <div class="gs-row" onclick="${onPick(m)}">
+      <div class="family-dot" style="background:${familyColor(m.family)}"></div>
+      <div style="flex:1;min-width:0"><div class="gs-name">${esc(m.name)}</div><div class="gs-sub">${esc(why.join(' · '))}</div></div>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" style="color:var(--text3);flex-shrink:0"><path d="M9 6l6 6-6 6"/></svg>
+    </div>`).join('');
+}
+function similarBlockHTML(m) {
+  const list = similarMolecules(m, { limit: 4 });
+  if (!list.length) return '';
+  return `<div class="detail-block"><div class="detail-label" style="margin-bottom:4px">Similar in your collection</div>
+    ${simListHTML(list, x => `closeSheet();openMoleculeDetail('${x.id}')`)}</div>`;
+}
+function openSwapSheet(idx) {
+  const v = BS.versions[BS.activeVersion];
+  const ing = v.ingredients[idx];
+  const mol = state.molecules.find(m => m.id === ing.molId);
+  if (!mol) return;
+  const inForm = v.ingredients.map(i => i.molId).filter(Boolean);
+  const list = similarMolecules(mol, { exclude: inForm, limit: 8, min: 1 });
+  showSheet('swap', 'Swap ' + esc(mol.name), `
+    <div class="form-body" style="gap:6px">
+      <div style="font-size:12px;color:var(--text3)">Closest materials you have — by family, Top/Heart/Base and description. The amount stays the same.</div>
+      ${simListHTML(list, x => `bSwap(${idx},'${x.id}')`)}
+    </div>`);
+}
+function bSwap(idx, molId) {
+  const v = BS.versions[BS.activeVersion];
+  const m = state.molecules.find(x => x.id === molId); if (!m) return;
+  const old = v.ingredients[idx];
+  v.ingredients[idx] = { molId: m.id, name: m.name, family: m.family, pct: old.pct, dilPct: 100 };
+  closeSheet(); renderBuilder(); toast(`${old.name} → ${m.name}`);
+}
+// for a wishlist item: what you already have that could stand in
+function wishSimilar(w) {
+  const words = [w.name, w.note];
+  if (w.fromNote) words.push(w.fromNote, NOTE_ALIAS[w.fromNote] || '');
+  const direct = w.fromNote ? noteMolecules(w.fromNote) : [];
+  const tokens = simTokens(words.join(' '));
+  const list = similarMolecules({ id: '_', tokens }, { limit: 4, min: 0.8 });
+  const seen = new Set();
+  return [...direct.map(m => ({ m, why: ['matches the note'] })), ...list].filter(x => !seen.has(x.m.id) && seen.add(x.m.id)).slice(0, 4);
+}
+
+// ══════════════════════════════════════════════════════
+// VISION INSPIRATION — photos, references, colour palette
+// ══════════════════════════════════════════════════════
+const PHOTO_CACHE = {};
+async function photoGet(id) {
+  if (PHOTO_CACHE[id]) return PHOTO_CACHE[id];
+  try {
+    const db = await packDB();
+    const v = await new Promise(r => { const q = db.transaction('visPhotos').objectStore('visPhotos').get(id); q.onsuccess = () => r(q.result); q.onerror = () => r(null); });
+    if (v) PHOTO_CACHE[id] = v;
+    return v || null;
+  } catch (e) { return null; }
+}
+async function photoPut(id, data) {
+  PHOTO_CACHE[id] = data;
+  const db = await packDB();
+  await new Promise((res, rej) => { const tx = db.transaction('visPhotos', 'readwrite'); tx.objectStore('visPhotos').put(data, id); tx.oncomplete = res; tx.onerror = () => rej(tx.error); });
+}
+async function photoDel(ids) {
+  try { const db = await packDB(); const tx = db.transaction('visPhotos', 'readwrite'); ids.forEach(id => { tx.objectStore('visPhotos').delete(id); delete PHOTO_CACHE[id]; }); } catch (e) {}
+}
+// <img data-photo="id"> get their picture after the HTML is on screen
+function hydratePhotos() {
+  document.querySelectorAll('img[data-photo]:not([src])').forEach(async img => {
+    const d = await photoGet(img.dataset.photo);
+    if (d) img.src = d; else img.style.visibility = 'hidden';
+  });
+}
+function resizeImage(file, max, q) {
+  return new Promise((res, rej) => {
+    const fr = new FileReader();
+    fr.onload = () => {
+      const im = new Image();
+      im.onload = () => {
+        const k = Math.min(1, max / Math.max(im.width, im.height));
+        const c = document.createElement('canvas'); c.width = Math.round(im.width * k); c.height = Math.round(im.height * k);
+        c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
+        res(c.toDataURL('image/jpeg', q));
+      };
+      im.onerror = rej; im.src = fr.result;
+    };
+    fr.onerror = rej; fr.readAsDataURL(file);
+  });
+}
+// a few dominant colours of a picture
+function paletteFrom(dataUrl, n) {
+  return new Promise(res => {
+    const im = new Image();
+    im.onload = () => {
+      const S = 48, c = document.createElement('canvas'); c.width = S; c.height = S;
+      const x = c.getContext('2d'); x.drawImage(im, 0, 0, S, S);
+      const d = x.getImageData(0, 0, S, S).data, bins = new Map();
+      for (let i = 0; i < d.length; i += 4) {
+        const r = d[i], g = d[i + 1], b = d[i + 2];
+        const k = (r >> 4) << 8 | (g >> 4) << 4 | (b >> 4);
+        const e = bins.get(k) || { n: 0, r: 0, g: 0, b: 0 }; e.n++; e.r += r; e.g += g; e.b += b; bins.set(k, e);
+      }
+      const cols = [...bins.values()].sort((a, b) => b.n - a.n).map(e => [e.r / e.n, e.g / e.n, e.b / e.n]);
+      const out = [];
+      for (const col of cols) {
+        if (out.every(o => Math.hypot(o[0] - col[0], o[1] - col[1], o[2] - col[2]) > 48)) out.push(col);
+        if (out.length >= (n || 5)) break;
+      }
+      res(out.map(c => '#' + c.map(v => Math.round(v).toString(16).padStart(2, '0')).join('')));
+    };
+    im.onerror = () => res([]); im.src = dataUrl;
+  });
+}
+function refFromInput(t) {
+  t = String(t || '').trim();
+  if (!t) return null;
+  if (!isUrl(t)) return { id: uid(), title: t, link: '' };
+  let title = nameFromUrl(t);
+  try {
+    const u = new URL(t);
+    if (/fragrantica\./.test(u.hostname)) {
+      const seg = u.pathname.split('/').filter(Boolean);
+      const i = seg.findIndex(s => /^(perfume|parfum|parfem|parfume)$/i.test(s));
+      if (i >= 0 && seg[i + 2]) title = (decodeURIComponent(seg[i + 1]) + ' ' + decodeURIComponent(seg[i + 2]).replace(/\.html?$/, '').replace(/-\d+$/, '')).replace(/-/g, ' ');
+    }
+  } catch (e) {}
+  return { id: uid(), title, link: t };
+}
+let VIS_EDIT = { photos: [], refs: [], palette: [] };
+function inspEditorHTML() {
+  return `
+    <div class="insp" id="insp-box">${inspEditorInner()}</div>
+    <input type="file" accept="image/*" multiple id="insp-photo-input" style="display:none" onchange="inspAddPhotos(this)" />
+    <input type="color" id="insp-color" style="position:absolute;opacity:0;pointer-events:none;width:0;height:0" onchange="inspAddColor(this.value)" />`;
+}
+function inspEditorInner() {
+  const E = VIS_EDIT;
+  return `
+    <div class="insp-label">Inspiration <span>photos stay on this device</span></div>
+    <div class="insp-photos">
+      ${E.photos.map(id => `<div class="insp-ph"><img data-photo="${id}" alt=""><b onclick="inspDelPhoto('${id}')">×</b></div>`).join('')}
+      <button class="insp-add" onclick="document.getElementById('insp-photo-input').click()">+ Photo</button>
+    </div>
+    <div class="insp-pal">
+      ${E.palette.map((c, i) => `<button class="insp-sw" style="background:${c}" title="Remove" onclick="VIS_EDIT.palette.splice(${i},1);inspRefresh()"></button>`).join('')}
+      <button class="insp-sw add" onclick="document.getElementById('insp-color').click()">+</button>
+      ${E.photos.length ? `<button class="mk-chip" onclick="inspPaletteFromPhotos()">Colours from photos</button>` : ''}
+    </div>
+    <div class="insp-refs">
+      ${E.refs.map(r => `<div class="insp-ref"><span>${esc(r.title)}${r.link ? `<small>${esc(linkHost(r.link))}</small>` : ''}</span><b onclick="VIS_EDIT.refs=VIS_EDIT.refs.filter(x=>x.id!=='${r.id}');inspRefresh()">×</b></div>`).join('')}
+      <div style="display:flex;gap:6px">
+        <input id="insp-ref-in" class="search-input" style="padding-left:12px" placeholder="Reference perfume or link…" autocomplete="off" onkeydown="if(event.key==='Enter'){event.preventDefault();inspAddRef()}" />
+        <button class="btn btn-ghost btn-sm" onclick="inspAddRef()">Add</button>
+      </div>
+    </div>`;
+}
+function inspRefresh() { const b = document.getElementById('insp-box'); if (b) { b.innerHTML = inspEditorInner(); hydratePhotos(); } }
+async function inspAddPhotos(input) {
+  const files = [...(input.files || [])].slice(0, 8);
+  for (const f of files) {
+    try {
+      const data = await resizeImage(f, 900, 0.82);
+      const id = 'ph_' + uid();
+      await photoPut(id, data);
+      VIS_EDIT.photos.push(id);
+      if (!VIS_EDIT.palette.length) VIS_EDIT.palette = await paletteFrom(data, 5);
+    } catch (e) { toast('Could not read a photo'); }
+  }
+  input.value = '';
+  inspRefresh();
+}
+async function inspPaletteFromPhotos() {
+  const all = [];
+  for (const id of VIS_EDIT.photos.slice(0, 4)) { const d = await photoGet(id); if (d) all.push(...await paletteFrom(d, 3)); }
+  VIS_EDIT.palette = all.slice(0, 6);
+  inspRefresh();
+}
+function inspDelPhoto(id) { VIS_EDIT.photos = VIS_EDIT.photos.filter(x => x !== id); inspRefresh(); }
+function inspAddColor(c) { if (VIS_EDIT.palette.length < 8) VIS_EDIT.palette.push(c); inspRefresh(); }
+function inspAddRef() {
+  const inp = document.getElementById('insp-ref-in');
+  const r = refFromInput(inp && inp.value);
+  if (!r) return;
+  VIS_EDIT.refs.push(r);
+  inspRefresh();
+}
+function inspViewHTML(vis) {
+  const ph = vis.photos || [], pal = vis.palette || [], refs = vis.refs || [];
+  if (!ph.length && !pal.length && !refs.length) return '';
+  return `
+    <div class="insp-view">
+      ${ph.length ? `<div class="insp-photos big">${ph.map(id => `<img data-photo="${id}" alt="" onclick="openPhoto('${id}')">`).join('')}</div>` : ''}
+      ${pal.length ? `<div class="insp-palbar">${pal.map(c => `<span style="background:${c}"></span>`).join('')}</div>` : ''}
+      ${refs.length ? `<div class="acc-links-row" style="margin-top:8px">${refs.map(r => r.link ? `<a class="acc-vis-link" style="text-decoration:none" href="${esc(r.link)}" target="_blank" rel="noopener">${esc(r.title)} ↗</a>` : `<span class="acc-vis-link">${esc(r.title)}</span>`).join('')}</div>` : ''}
+    </div>`;
+}
+function openPhoto(id) {
+  showSheet('photo', 'Inspiration', `<div style="padding:12px 16px 20px"><img data-photo="${id}" alt="" style="width:100%;border-radius:12px;display:block"></div>`);
+  hydratePhotos();
+}
+
+
+// ══════════════════════════════════════════════════════
+// NOTEBOOK — insights, accord ideas, references, things to try
+// ══════════════════════════════════════════════════════
+const NB_TAGS = ['Insight', 'Accord idea', 'Reference', 'To try'];
+let NB = { q: '', tag: '' };
+function nbMentions(text) {
+  const t = String(text || '').toLowerCase();
+  return state.molecules.filter(m => m.name && m.name.length > 2 && t.includes(m.name.toLowerCase()))
+    .sort((a, b) => b.name.length - a.name.length)
+    .filter((m, i, arr) => !arr.slice(0, i).some(x => x.name.toLowerCase().includes(m.name.toLowerCase())))
+    .sort((a, b) => t.indexOf(a.name.toLowerCase()) - t.indexOf(b.name.toLowerCase()));
+}
+function renderNotebook() {
+  document.getElementById('header-action').innerHTML = `
+    <button class="btn btn-primary btn-sm" onclick="openNbEditor()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      New
+    </button>`;
+  const all = state.notebook || [];
+  document.getElementById('main-content').innerHTML = `
+    <div class="section-head">
+      <h1 class="section-title">Notebook</h1>
+      <span class="count-badge">${all.length}</span>
+    </div>
+    ${all.length ? `
+      <div class="search-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input class="search-input" placeholder="Search notes…" value="${esc(NB.q)}" autocomplete="off" oninput="NB.q=this.value;nbRenderList()" />
+      </div>
+      <div class="note-cat-tabs" style="margin-bottom:12px">
+        ${['', ...NB_TAGS].map(t => `<button class="note-cat-tab${NB.tag === t ? ' active' : ''}" onclick="NB.tag='${t}';renderNotebook()">${t || 'All'}</button>`).join('')}
+      </div>
+      <div id="nb-list">${nbListHTML()}</div>
+    ` : `
+      <div class="empty">
+        <div class="empty-icon">✎</div>
+        <h3>Your lab notebook</h3>
+        <p>Jot down insights, accords you discover, references and ideas to try</p>
+      </div>`}`;
+}
+function nbRenderList() { const l = document.getElementById('nb-list'); if (l) l.innerHTML = nbListHTML(); }
+function nbListHTML() {
+  const q = NB.q.toLowerCase().trim();
+  const list = (state.notebook || []).filter(e => (!NB.tag || (e.tags || []).includes(NB.tag)) &&
+    (!q || [e.title, e.body, (e.tags || []).join(' ')].join(' ').toLowerCase().includes(q)))
+    .sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0) || b.updatedAt - a.updatedAt);
+  if (!list.length) return `<div class="gs-empty">Nothing here</div>`;
+  return list.map(e => {
+    const body = String(e.body || '').trim();
+    return `
+      <div class="nb-card" onclick="openNbEditor('${e.id}')">
+        <div class="nb-top">
+          <div class="nb-title">${e.pinned ? '<span class="nb-pin">●</span>' : ''}${esc(e.title || body.split('\n')[0].slice(0, 60) || 'Untitled')}</div>
+          <div class="nb-date">${fmtDate(e.updatedAt)}</div>
+        </div>
+        ${body && e.title ? `<div class="nb-body">${esc(body.slice(0, 180))}</div>` : body.split('\n').length > 1 ? `<div class="nb-body">${esc(body.split('\n').slice(1).join(' ').slice(0, 180))}</div>` : ''}
+        ${(e.tags || []).length ? `<div class="nb-tags">${e.tags.map(t => `<span>${esc(t)}</span>`).join('')}</div>` : ''}
+      </div>`;
+  }).join('');
+}
+let NBE = null;
+function openNbEditor(id) {
+  const e = id ? (state.notebook || []).find(x => x.id === id) : null;
+  NBE = { id: e ? e.id : null, tags: [...(e?.tags || (NB.tag ? [NB.tag] : []))], pinned: !!e?.pinned };
+  showSheet('nb', e ? 'Note' : 'New note', `
+    <div class="form-body" style="gap:10px">
+      <input id="nb-title" class="nb-title-in" placeholder="Title" value="${esc(e?.title || '')}" autocomplete="off" />
+      <div style="display:flex;gap:6px;flex-wrap:wrap" id="nb-tagbar">${nbTagBar()}</div>
+      <textarea id="nb-body" class="nb-body-in" placeholder="Write anything — an insight, an accord (e.g. “Hedione 4 g, Iso E Super 2 g, Ambroxan 0.5 g”), a reference…" oninput="nbAutoGrow(this);nbMentionsRefresh()">${esc(e?.body || '')}</textarea>
+      <div id="nb-mentions">${nbMentionsHTML(e?.body || '')}</div>
+    </div>
+    <div class="form-actions">
+      ${e ? `<button class="btn btn-danger" onclick="nbDelete('${e.id}')">Delete</button>` : `<button class="btn btn-ghost" onclick="closeSheet()">Cancel</button>`}
+      <button class="btn btn-ghost" id="nb-pin" onclick="NBE.pinned=!NBE.pinned;this.textContent=NBE.pinned?'Unpin':'Pin'">${NBE.pinned ? 'Unpin' : 'Pin'}</button>
+      <button class="btn btn-primary" onclick="nbSave()">Save</button>
+    </div>`, { full: true });
+  setTimeout(() => { const b = document.getElementById('nb-body'); if (b) { nbAutoGrow(b); if (!e) document.getElementById('nb-title').focus(); } }, 60);
+}
+function nbTagBar() {
+  return NB_TAGS.map(t => `<button class="mk-chip${NBE.tags.includes(t) ? ' on' : ''}" onclick="nbToggleTag('${t}')">${t}</button>`).join('');
+}
+function nbToggleTag(t) {
+  NBE.tags = NBE.tags.includes(t) ? NBE.tags.filter(x => x !== t) : [...NBE.tags, t];
+  document.getElementById('nb-tagbar').innerHTML = nbTagBar();
+}
+function nbAutoGrow(el) { el.style.height = 'auto'; el.style.height = Math.max(180, el.scrollHeight + 2) + 'px'; }
+function nbMentionsHTML(text) {
+  const ms = nbMentions(text);
+  if (!ms.length) return '';
+  const lines = nbAccordLines(text);
+  return `
+    <div class="detail-label" style="margin-bottom:6px">Mentioned molecules</div>
+    <div class="acc-links-row" style="margin-top:0">${ms.map(m => `<button class="acc-vis-link" onclick="openMoleculeDetail('${m.id}')">${esc(m.name)}</button>`).join('')}</div>
+    ${lines.length >= 2 ? `<button class="btn btn-ghost" style="width:100%;justify-content:center;margin-top:10px" onclick="nbToAccord()">Turn into an accord (${lines.length} materials)</button>` : ''}`;
+}
+let nbMentionTimer = null;
+function nbMentionsRefresh() {
+  clearTimeout(nbMentionTimer);
+  nbMentionTimer = setTimeout(() => { const b = document.getElementById('nb-body'), box = document.getElementById('nb-mentions'); if (b && box) box.innerHTML = nbMentionsHTML(b.value); }, 300);
+}
+// "Hedione 4 g, Iso E Super 2" → [{mol, amount}] — one material per line or comma-separated
+function nbAccordLines(text) {
+  const parts = String(text || '').split(/\n|;|,(?!\d)/).map(s => s.trim()).filter(Boolean);
+  const out = [], seen = new Set();
+  for (const p of parts) {
+    const m = nbMentions(p)[0];
+    if (!m || seen.has(m.id)) continue;
+    const rest = p.toLowerCase().replace(m.name.toLowerCase(), ' ');
+    const num = rest.match(/(\d+(?:[.,]\d+)?)/);
+    seen.add(m.id);
+    out.push({ mol: m, amount: num ? parseFloat(num[1].replace(',', '.')) : 1 });
+  }
+  return out;
+}
+function nbToAccord() {
+  const title = document.getElementById('nb-title').value.trim();
+  const body = document.getElementById('nb-body').value;
+  const lines = nbAccordLines(body);
+  if (lines.length < 2) return;
+  nbSave(true);
+  closeSheet();
+  showPage('accords');
+  openFormulaBuilder(null, 'accords');
+  BS.name = title || 'Accord from notebook';
+  BS.notes = 'From notebook: ' + (title || body.split('\n')[0]).slice(0, 80);
+  const v = BS.versions[0];
+  v.ingredients = lines.map(l => ({ molId: l.mol.id, name: l.mol.name, family: l.mol.family, pct: 0, dilPct: 100 }));
+  applyGrams(v, lines.map(l => l.amount));
+  inputMode = 'g';
+  renderBuilder();
+  toast('Check the amounts and save');
+}
+function nbSave(silent) {
+  const title = document.getElementById('nb-title').value.trim();
+  const body = document.getElementById('nb-body').value.replace(/\s+$/, '');
+  if (!title && !body) { if (!silent) toast('Write something first'); return; }
+  state.notebook = state.notebook || [];
+  if (NBE.id) {
+    const e = state.notebook.find(x => x.id === NBE.id);
+    Object.assign(e, { title, body, tags: NBE.tags, pinned: NBE.pinned, updatedAt: Date.now() });
+  } else {
+    const e = { id: uid(), title, body, tags: NBE.tags, pinned: NBE.pinned, createdAt: Date.now(), updatedAt: Date.now() };
+    state.notebook.unshift(e); NBE.id = e.id;
+  }
+  save();
+  if (!silent) { closeSheet(); toast('Saved'); }
+  if (state.page === 'notebook') renderNotebook();
+}
+function nbDelete(id) {
+  const sheet = document.querySelector('#sheet-nb .sheet'); if (!sheet) return;
+  const conf = document.createElement('div');
+  conf.style.cssText = 'padding:16px;display:flex;gap:8px;align-items:center;border-top:1px solid var(--border)';
+  conf.innerHTML = `<span style="flex:1;font-size:13px;color:var(--text2)">Delete this note?</span>
+    <button class="btn btn-ghost btn-sm" onclick="this.parentElement.remove()">Cancel</button>
+    <button class="btn btn-danger btn-sm" onclick="state.notebook=state.notebook.filter(x=>x.id!=='${id}');save();closeSheet();toast('Deleted');renderNotebook()">Delete</button>`;
+  sheet.appendChild(conf); sheet.scrollTop = sheet.scrollHeight;
+}
+function updateWishBadge() {
+  const b = document.getElementById('hdr-wish-badge'); if (!b) return;
+  const n = (state.wishlist || []).filter(w => !w.done).length;
+  b.textContent = n; b.style.display = n ? '' : 'none';
+  const btn = document.getElementById('hdr-wish'); if (btn) btn.classList.toggle('on', state.page === 'wishlist');
 }
 
 // ── INIT ──
