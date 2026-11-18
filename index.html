@@ -2286,6 +2286,12 @@ function openNoteSheet(n) {
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>
         Open on Fragrantica
       </a>
+      <div class="detail-label" style="margin-bottom:-6px">Picture</div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="visionPickerState.imgTarget='${esc(k)}';window._afterPic=()=>openNoteSheet('${esc(k)}');document.getElementById('ns-img-input').click()">${art.pic ? 'Change picture' : 'Add picture'}</button>
+        ${noteImgs[k] ? `<button class="btn btn-ghost" style="justify-content:center" onclick="delete noteImgs['${esc(k)}'];saveNoteImgs();openNoteSheet('${esc(k)}');render()">Remove</button>` : ''}
+        <input type="file" accept="image/*" id="ns-img-input" style="display:none" onchange="visImgPicked(this)" />
+      </div>
       ${mols.length ? `<div><div class="detail-label">Your molecules</div><div class="note-sheet-list">${mols.map(m => `<span>${esc(m.name)}</span>`).join('')}</div></div>` : ''}
       <div>
         <div class="detail-label">Your accords</div>
@@ -2849,6 +2855,7 @@ function backupJSON() {
     visions:   state.visions || [],
     wishlist:  state.wishlist || [],
     notebook:  state.notebook || [],
+    extraNotes: extraNotes,
     families:  state.families || [],
   }, null, 2);
 }
@@ -2928,6 +2935,7 @@ function confirmImport() {
   if (data.visions) state.visions = data.visions;
   if (data.wishlist) state.wishlist = data.wishlist;
   if (data.notebook) state.notebook = data.notebook;
+  if (data.extraNotes && typeof data.extraNotes === 'object') { addNotesToBase(Object.keys(data.extraNotes), data.extraNotes); }
   pendingImport = null;
   save(); closeSheet(); render();
   toast(`Imported: ${data.molecules.length} molecules, ${data.formulas.length} formulas`);
@@ -3046,6 +3054,16 @@ const FRAG_NOTES = {
 // Ukrainian note name -> key in NOTE_ICONS (English)
 const NOTE_ALIAS = {"Бергамот": "Bergamot", "Лимон": "Lemon", "Апельсин": "Orange", "Грейпфрут": "Grapefruit", "Мандарин": "Mandarin", "Лайм": "Lime", "Юзу": "Yuzu", "Тангерин": "Tangerine", "Червоний Апельсин": "Blood Orange", "Неролі": "Neroli", "Петитгрейн (листя цитрусових)": "Petitgrain", "Цедрат": "Citron", "Кумкват": "Kumquat", "Клементин": "Clementine", "Помело": "Pomelo", "Літцеа Кубеба": "Litsea Cubeba", "Цвіт апельсину": "Orange Blossom", "Гіркий апельсин": "Bitter Orange", "Троянда": "Rose", "Жасмин": "Jasmine", "Лаванда": "Lavender", "Фіалка": "Violet", "Ірис": "Iris", "Півонія": "Peony", "Магнолія": "Magnolia", "Гарденія": "Gardenia", "Тубероза": "Tuberose", "Іланг-іланг": "Ylang-Ylang", "Герань": "Geranium", "Гвоздика": "Carnation", "Цвіт вишні": "Cherry Blossom", "Фрезія": "Freesia", "Геліотроп": "Heliotrope", "Мімоза": "Mimosa", "Нарцис": "Narcissus", "Османтус": "Osmanthus", "Корінь ірису": "Orris Root", "Білі квіти": "White Flowers", "Лілія": "Lily", "Лотос": "Lotus", "Гіацинт": "Hyacinth", "Вістерія": "Wisteria", "Квітка тіаре": "Tiare Flower", "Франжипані": "Frangipani", "Жимолость": "Honeysuckle", "Цикламен": "Cyclamen", "Цвіт персика": "Peach Blossom", "Персик": "Peach", "Яблуко": "Apple", "Груша": "Pear", "Малина": "Raspberry", "Чорна смородина": "Blackcurrant", "Полуниця": "Strawberry", "Слива": "Plum", "Абрикос": "Apricot", "Вишня": "Cherry", "Манго": "Mango", "Ананас": "Pineapple", "Диня": "Melon", "Лічі": "Lychee", "Ожина": "Blackberry", "Маракуйя": "Passion Fruit", "Папая": "Papaya", "Гуава": "Guava", "Інжир": "Fig", "Айва": "Quince", "Червона смородина (порічка)": "Redcurrant", "Нектарин": "Nectarine", "Гранат": "Pomegranate", "Журавлина": "Cranberry", "Кавун": "Watermelon", "Кокос": "Coconut", "Сандал": "Sandalwood", "Кедр": "Cedarwood", "Ветивер": "Vetiver", "Пачулі": "Patchouli", "Дерево Агар (Уд)": "Agarwood (Oud)", "Дерево Гуаяк": "Guaiac Wood", "Береза": "Birch", "Кипарис": "Cypress", "Сосна": "Pine", "Ялівець": "Juniper", "Палісандр": "Rosewood", "Червоне дерево": "Mahogany", "Кашмеран": "Cashmeran", "Iso E Super": "Iso E Super", "Аміріс (Американський сандал)": "Amyris", "Папірус": "Papyrus", "Тикове Дерево": "Teak Wood", "Плавник": "Driftwood", "Дуб": "Oakwood", "Дерево Хінокі": "Hinoki", "Бамбук": "Bamboo", "Чорне дерево": "Ebony", "Мускус": "Musk", "Амброксан": "Ambroxan", "Сіра Амбра": "Ambergris", "Амбра": "Amber", "Лабданум": "Labdanum", "Цивета": "Civet", "Касторіум": "Castoreum", "Бензоїн": "Benzoin", "Стиракс": "Styrax", "Боби тонка": "Tonka Bean", "Перець": "Black Pepper", "Кардамон": "Cardamom", "Кориця": "Cinnamon", "Імбир": "Ginger", "Мускатний горіх": "Nutmeg", "Шафран": "Saffron", "Рожевий перець": "Pink Pepper", "Зірчатий аніс": "Star Anise", "Коріандр": "Coriander", "Кмин": "Cumin", "Зелений Перець Чилі": "Chili Pepper", "Куркума": "Turmeric", "Ваніль": "Vanilla", "Пажитник (грибна трава)": "Fenugreek", "Лавр": "Bay Leaf", "Трава": "Grass", "Базилік": "Basil", "М’ята": "Mint", "Розмарин": "Rosemary", "Чебрець": "Thyme", "Шавлія": "Sage", "Лист фіалки": "Violet Leaf", "Гальбанум": "Galbanum", "Лист томату": "Tomato Leaf", "Лист інжиру": "Fig Leaf", "Артемізія (полин)": "Artemisia", "Папороть": "Fern", "Ромашка": "Chamomile", "Майоран": "Marjoram", "Евкаліпт": "Eucalyptus", "Чай": "Tea", "Вербена Лимонна": "Lemon Verbena", "Тархун": "Tarragon", "Вербена": "Verbena", "Карамель": "Caramel", "Шоколад": "Chocolate", "Кава": "Coffee", "Мигдаль": "Almond", "Мед": "Honey", "Праліне": "Praline", "Солодка вата": "Cotton Candy", "Маршмелоу": "Marshmallow", "Попкорн": "Popcorn", "Ром": "Rum", "Віскі": "Whiskey", "Червоне Вино": "Wine", "Тютюн": "Tobacco", "Марципан": "Marzipan", "Морські Ноти": "Sea Notes", "Водяні Ноти": "Aquatic Notes", "Ноти дощу": "Rain", "Озонові ноти": "Ozonic", "Альдегіди": "Aldehydes", "Морські водорості": "Kelp", "Морська Сіль": "Sea Salt", "Повітряні ноти": "Clean Air", "Сніг": "Snow", "Дубовий Мох": "Oakmoss", "Земля": "Soil", "Саксонський мох": "Moss", "Гриби": "Mushroom", "Трюфель": "Truffle", "Березовий дьоготь": "Birch Tar", "Дим": "Smoke", "Ладан": "Incense", "Мирро": "Myrrh", "Елемі": "Elemi", "Копаль": "Copal", "Олібанум": "Olibanum", "Перу Бальзам": "Peru Balsam", "Бальзам Толу": "Tolu Balsam", "Сомалійський Опопонакс": "Opoponax", "Мастикове Дерево": "Mastic", "Шкіра": "Leather", "Замша": "Suede", "Хутро": "Fur", "Віск": "Beeswax", "Тальк": "Talc", "Рисова Пудра": "Rice Powder"};
 
+// Notes Fragrantica has that the original list missed, plus every new note found in pasted perfumes
+const FRAG_EXTRA = { 'Дикі Ягоди': 'Фрукти, овочі та горіхи', 'Біла Деревина': 'Дерева і мохи', 'Мох': 'Дерева і мохи' };
+let extraNotes = {};
+try { extraNotes = JSON.parse(localStorage.getItem('lab_extra_notes_v1') || '{}') || {}; } catch (e) { extraNotes = {}; }
+function saveExtraNotes() { try { localStorage.setItem('lab_extra_notes_v1', JSON.stringify(extraNotes)); } catch (e) {} }
+function knownNote(n) { const l = n.toLowerCase(); return Object.values(FRAG_NOTES).some(a => a.some(x => x.toLowerCase() === l)); }
+for (const [n, cat] of Object.entries({ ...FRAG_EXTRA, ...extraNotes })) {
+  if (!FRAG_NOTES[cat] || knownNote(n)) continue;
+  FRAG_NOTES[cat].push(n); FRAG_NOTES[cat].sort((a, b) => a.localeCompare(b, 'uk'));
+}
 const NOTE_CAT_OF = {};
 for (const [cat, arr] of Object.entries(FRAG_NOTES)) for (const n of arr) if (!NOTE_CAT_OF[n]) NOTE_CAT_OF[n] = cat;
 // ── NOTE ART: drawn illustrations for every note ──
@@ -3420,7 +3438,7 @@ for (const [ua, en] of Object.entries(NOTE_ALIAS)) if (!NOTE_EN2UA[en]) NOTE_EN2
 function noteArt(n) {
   const ua = NOTE_CAT_OF[n] ? n : (NOTE_EN2UA[n] || n);
   const a = NOTE_ART.art(ua, NOTE_CAT_OF[ua]);
-  const pic = (typeof noteImgs !== 'undefined' && noteImgs[ua]) || PACK.map[ua];
+  const pic = (typeof noteImgs !== 'undefined' && noteImgs[ua]) || PACK.map[ua] || PACK.map['~' + packNormKey(ua)];
   return pic ? { ...a, bg: '#f5f4f1', svg: `<img class="note-pic" src="${pic}" alt="">`, pic: true } : { ...a, bg: '#f5f4f1' };
 }
 
@@ -3444,7 +3462,7 @@ async function packLoad() {
     const st = db.transaction('notePack').objectStore('notePack');
     const [keys, vals] = await Promise.all([st.getAllKeys(), st.getAll()].map(q => new Promise(r => { q.onsuccess = () => r(q.result); q.onerror = () => r([]); })));
     PACK.map = {}; keys.forEach((k, i) => PACK.map[k] = vals[i]);
-    PACK.count = keys.length;
+    PACK.count = keys.filter(k => k[0] !== '~').length;
     if (PACK.count) render();
   } catch (e) {}
 }
@@ -3496,7 +3514,7 @@ async function packImport(input) {
     for (const f of entries) {
       const base = f.name.split('/').pop().replace(/\.[^.]+$/, '');
       const note = packMatch(base, out);
-      if (!note) { skipped++; continue; }
+      if (!note) { skipped++; out['~' + packNormKey(base.replace(/_\d+$/, ''))] = `data:${mime(f.name)};base64,` + await f.async('base64'); continue; }
       out[note] = `data:${mime(f.name)};base64,` + await f.async('base64');
       if (++i % 100 === 0) say(`Importing… ${i}`);
     }
@@ -3507,8 +3525,8 @@ async function packImport(input) {
       tx.oncomplete = res; tx.onerror = () => rej(tx.error);
     });
     Object.assign(PACK.map, out);
-    PACK.count = Object.keys(PACK.map).length;
-    say(`<b>${PACK.count}</b> pictures imported${skipped ? ` · ${skipped} files didn’t match a note` : ''}`);
+    PACK.count = Object.keys(PACK.map).filter(k => k[0] !== '~').length;
+    say(`<b>${PACK.count}</b> pictures imported${skipped ? ` · ${skipped} more kept for notes that get added later` : ''}`);
     toast(`Imported ${Object.keys(out).length} pictures`);
     const g = document.getElementById('vis-note-grid'); if (g) g.innerHTML = renderNoteGrid();
     const ag = document.getElementById('acc-note-grid'); if (ag) ag.innerHTML = accGridHTML();
@@ -3738,7 +3756,8 @@ function visImgPicked(input) {
         toast('Storage is full — remove some pictures first');
         return;
       }
-      document.getElementById('vis-note-grid').innerHTML = renderNoteGrid();
+      const g = document.getElementById('vis-note-grid'); if (g) g.innerHTML = renderNoteGrid();
+      if (window._afterPic) { const f = window._afterPic; window._afterPic = null; f(); try { render(); } catch (e) {} }
     };
     img.onerror = () => toast('Could not read this image');
     img.src = reader.result;
@@ -5272,6 +5291,31 @@ function matchItem(item) {
   if (close) return close.n;
   return null;
 }
+// guess a category for a new note from notes that share a word with it ("Біла Деревина" → woods)
+function guessNoteCat(name) {
+  const words = name.toLowerCase().split(/\s+/).filter(w => w.length >= 3);
+  const votes = {};
+  for (const [cat, arr] of Object.entries(FRAG_NOTES)) for (const n of arr)
+    for (const w of n.toLowerCase().split(/\s+/)) if (words.some(x => wordsClose(x, w) || (x.length >= 3 && x === w))) votes[cat] = (votes[cat] || 0) + 1;
+  const best = Object.entries(votes).sort((a, b) => b[1] - a[1])[0];
+  return best ? best[0] : 'Поза категоріями';
+}
+// add notes that aren't in the base yet; returns how many were added
+function addNotesToBase(names, cats = {}) {
+  let added = 0;
+  for (const raw of names) {
+    const n = String(raw || '').trim();
+    if (!n || n.length > 40 || knownNote(n)) continue;
+    const cat = FRAG_NOTES[cats[n]] ? cats[n] : guessNoteCat(n);
+    extraNotes[n] = cat;
+    FRAG_NOTES[cat].push(n); FRAG_NOTES[cat].sort((a, b) => a.localeCompare(b, 'uk'));
+    NOTE_CAT_OF[n] = cat;
+    ALL_NOTES_FLAT.push(n); ALL_NOTES_FLAT.sort((a, b) => a.localeCompare(b, 'uk'));
+    added++;
+  }
+  if (added) { NOTE_MATCH = null; PACK_INDEX = null; saveExtraNotes(); }
+  return added;
+}
 function parseItems(seg) {
   const out = [];
   const items = String(seg).split(/[,;\n•·|]|\s+(?:і|й|та|and|и|&)\s+/i)
@@ -5385,11 +5429,12 @@ function pfSave() {
   if (!perfNotes(PF.tiers).length) { toast('No notes yet — paste the pyramid'); return; }
   if (PF.target === 'new' || String(PF.target).startsWith('edit:')) {
     const notes = tierNotes(PF.tiers);
+    const added = addNotesToBase(notes.map(x => x.name));
     let vis;
     if (PF.target === 'new') { vis = { id: uid(), name, link, notes, updatedAt: Date.now() }; state.visions = [vis, ...(state.visions || [])]; }
     else { vis = state.visions.find(v => v.id === PF.target.slice(5)); Object.assign(vis, { name, link, notes, updatedAt: Date.now() }); }
     save(); closeSheet(); renderVision(); openVisionDetail(vis.id);
-    toast(PF.target === 'new' ? `${name} added` : 'Saved');
+    toast((PF.target === 'new' ? `${name} added` : 'Saved') + (added ? ` · ${added} new note${added > 1 ? 's' : ''} in the base` : ''));
     return;
   }
   const p = { id: uid(), name, link, top: PF.tiers.top, heart: PF.tiers.heart, base: PF.tiers.base, other: PF.tiers.other, addedAt: Date.now() };
