@@ -731,6 +731,22 @@
     .nb-tags span { font-size: 11px; padding: 2px 8px; border-radius: 10px; background: var(--bg2); color: var(--text2); }
     .nb-title-in { border: none; outline: none; font-family: Inter, sans-serif; font-size: 20px !important; font-weight: 600; padding: 4px 0; width: 100%; background: none; color: var(--text); }
     .nb-body-in { border: none; outline: none; resize: none; font-family: Inter, sans-serif; font-size: 16px; line-height: 1.55; min-height: 180px; width: 100%; background: none; color: var(--text); padding: 0; }
+    .pf-tier { display: flex; gap: 8px; align-items: flex-start; margin-top: 6px; }
+    .pf-tier-label { width: 44px; flex-shrink: 0; font-size: 10px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--text3); padding-top: 7px; }
+    .pf-tier .acc-links-row { flex: 1; }
+    .pf-add { background: var(--bg2); border-radius: 10px; padding: 10px; margin-top: 10px; }
+    .pf-add #pf-sugg { margin-top: 6px; }
+    .pf-card { border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; margin-top: 10px; }
+    .pf-head { display: flex; align-items: baseline; gap: 8px; }
+    .pf-name { flex: 1; font-size: 15px; font-weight: 600; color: var(--text); text-decoration: none; }
+    .pf-have { font-size: 11px; color: var(--text3); flex-shrink: 0; }
+    .acc-note-chip.have { box-shadow: inset 0 0 0 1.5px #4a9a4a; }
+    .vc-row { display: flex; flex-wrap: wrap; gap: 5px; flex: 1; }
+    .vc-chip { display: inline-flex; align-items: center; gap: 5px; padding: 2px 9px 2px 2px; border-radius: 16px; background: var(--bg2); font-size: 12px; color: var(--text2); }
+    .vc-chip svg, .vc-chip img.note-pic { width: 22px; height: 22px; border-radius: 50%; display: block; flex-shrink: 0; }
+    .vc-chip.have { background: #e8f3e6; color: #2d6a2d; }
+    .vision-card .pf-tier { margin-top: 8px; }
+    .vision-card .pf-tier-label { padding-top: 5px; }
     .note-grid-empty { grid-column: 1 / -1; text-align: center; font-size: 12px; color: var(--text3); padding: 14px 0; }
     .note-have-dot {
       position: absolute; top: 2px; right: 2px;
@@ -3543,12 +3559,17 @@ let visionPickerState = { cat: Object.keys(FRAG_NOTES)[0], search: '', selected:
 
 function renderVision() {
   document.getElementById('header-action').innerHTML = `
-    <button class="btn btn-primary btn-sm" onclick="openVisionNew()">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-      New
-    </button>`;
-
-  const visions = state.visions || [];
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost btn-sm" onclick="openNoteBase()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+        Notes
+      </button>
+      <button class="btn btn-primary btn-sm" onclick="openPerfumeSheet('new')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        New
+      </button>
+    </div>`;
+  const visions = (state.visions || []).slice().sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
   document.getElementById('main-content').innerHTML = `
     <div class="section-head">
       <h1 class="section-title">Vision</h1>
@@ -3557,35 +3578,27 @@ function renderVision() {
     ${visions.length === 0 ? `
       <div class="empty">
         <div class="empty-icon">◉</div>
-        <h3>No visions yet</h3>
-        <p>Build a fragrance vision from Fragrantica notes,<br>see what's in your collection</p>
+        <h3>Perfumes you love</h3>
+        <p>Tap “New”, paste a pyramid from Fragrantica —<br>see which notes you can already cover</p>
       </div>
     ` : `<div class="vision-projects">${visions.map(v => visionCard(v)).join('')}</div>`}
   `;
-  hydratePhotos();
 }
 
 function visionCard(vis) {
-  const allNotes = vis.notes || [];
-  const preview = allNotes.slice(0, 8);
-  const haveCount = allNotes.filter(n => noteInCollection(n.name)).length;
+  const all = vis.notes || [];
+  const have = all.filter(n => noteInCollection(n.name)).length;
+  const tiers = visTiers(vis);
+  const rows = TIERS.filter(([t]) => tiers[t].length);
   return `
     <div class="vision-card" onclick="openVisionDetail('${vis.id}')">
-      ${(vis.palette || []).length ? `<div class="insp-palbar thin">${vis.palette.map(c => `<span style="background:${c}"></span>`).join('')}</div>` : ''}
-      ${(vis.photos || []).length ? `<img class="vision-card-ph" data-photo="${vis.photos[0]}" alt="">` : ''}
       <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
         <div class="vision-card-name">${esc(vis.name)}</div>
-        <span style="font-size:11px;color:var(--text3);flex-shrink:0;margin-top:2px">${haveCount}/${allNotes.length}</span>
+        <span style="font-size:11px;color:var(--text3);flex-shrink:0;margin-top:2px">${have}/${all.length}</span>
       </div>
-      ${vis.desc ? `<div style="font-size:12px;color:var(--text3);margin-top:3px">${esc(vis.desc)}</div>` : ''}
-      <div class="vision-card-notes-row">
-        ${preview.map(n => {
-          const have = noteInCollection(n.name);
-          const pyrClass = n.pyramid ? n.pyramid.toLowerCase() : '';
-          return `<span class="vision-note-chip ${have?'have':''} ${pyrClass}">${esc(n.name)}</span>`;
-        }).join('')}
-        ${allNotes.length > 8 ? `<span class="vision-note-chip">+${allNotes.length - 8}</span>` : ''}
-      </div>
+      ${rows.map(([t, label]) => `
+        <div class="pf-tier">${rows.length > 1 || t !== 'other' ? `<div class="pf-tier-label">${label}</div>` : ''}
+          <div class="vc-row">${tiers[t].map(visChip).join('')}</div></div>`).join('')}
     </div>
   `;
 }
@@ -3607,7 +3620,7 @@ function showVisionEditor(visId) {
     });
   }
 
-  VIS_EDIT = { photos: [...(existing?.photos || [])], refs: (existing?.refs || []).map(r => ({ ...r })), palette: [...(existing?.palette || [])] };
+  VIS_EDIT = { photos: [...(existing?.photos || [])], refs: (existing?.refs || []).map(r => ({ ...r })), palette: [...(existing?.palette || [])], perfumes: (existing?.perfumes || []).map(p => ({ ...p })) };
   const selectedNames = Object.keys(visionPickerState.selected);
 
   showSheet('visionEdit', visId ? 'Edit Vision' : 'New Vision', `
@@ -3620,12 +3633,13 @@ function showVisionEditor(visId) {
         <label>Description <span style="font-weight:400;text-transform:none;color:var(--text3)">optional</span></label>
         <input id="vis-desc" placeholder="Mood, inspiration…" value="${esc(existing?.desc||'')}" />
       </div>
+      ${perfEditorHTML()}
       ${inspEditorHTML()}
     </div>
 
     <div style="padding:0 16px 8px;border-bottom:1px solid var(--border)">
       <div style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text2);margin-bottom:8px">
-        Selected notes <span style="font-weight:400;color:var(--text3)">(${selectedNames.length})</span>
+        Selected notes <span id="vis-sel-count" style="font-weight:400;color:var(--text3)">(${selectedNames.length})</span>
       </div>
       <div id="vis-selected-chips" style="display:flex;flex-wrap:wrap;gap:6px;min-height:28px">
         ${selectedNames.length === 0
@@ -3698,7 +3712,7 @@ function visToggleImgMode() {
   const l = document.getElementById('vis-img-toggle-label');
   if (l) l.textContent = on ? 'Done' : 'Pictures';
   const h = document.getElementById('vis-img-hint');
-  if (h) h.textContent = on ? 'Tap a note to set its picture' : 'Hold a note for info or to delete it';
+  if (h) h.textContent = on ? 'Tap a note to set its picture' : (visionPickerState.browse ? 'Tap a note for info' : 'Hold a note for info or to delete it');
   document.getElementById('vis-note-grid').innerHTML = renderNoteGrid();
 }
 function visImgPicked(input) {
@@ -3859,6 +3873,7 @@ function visSearch(q) {
 }
 
 function visToggleNote(name) {
+  if (visionPickerState.browse && !visionPickerState.imgMode) { openNoteSheet(name); return; }
   if (visionPickerState.imgMode) {
     visionPickerState.imgTarget = name;
     const inp = document.getElementById('vis-img-input');
@@ -3903,7 +3918,7 @@ function saveVision(existingId) {
   const vis = {
     id: existingId || uid(),
     name, desc, notes,
-    photos: VIS_EDIT.photos.slice(), refs: VIS_EDIT.refs.slice(), palette: VIS_EDIT.palette.slice(),
+    photos: VIS_EDIT.photos.slice(), refs: VIS_EDIT.refs.slice(), palette: VIS_EDIT.palette.slice(), perfumes: VIS_EDIT.perfumes.slice(),
     updatedAt: Date.now(),
   };
   if (prev) photoDel((prev.photos || []).filter(id => !vis.photos.includes(id)));
@@ -3942,9 +3957,14 @@ function openVisionDetail(id) {
     `;
   };
 
+  const tiers = visTiers(vis);
   showSheet('visionDetail', esc(vis.name), `
-    ${inspViewHTML(vis)}
-    ${vis.desc ? `<div style="padding:10px 16px;font-size:13px;color:var(--text2);border-bottom:1px solid var(--border)">${esc(vis.desc)}</div>` : ''}
+    ${vis.link ? `<div style="padding:10px 16px 0"><a class="acc-vis-link" style="text-decoration:none" href="${esc(vis.link)}" target="_blank" rel="noopener">Open on Fragrantica ↗</a></div>` : ''}
+    <div style="padding:6px 16px 4px">
+      ${TIERS.filter(([t]) => tiers[t].length).map(([t, label]) => `
+        <div class="pf-tier"><div class="pf-tier-label">${label}</div>
+          <div class="acc-links-row" style="margin-top:0">${tiers[t].map(n => pfChip(n, t, false)).join('')}</div></div>`).join('')}
+    </div>
 
     <div style="padding:10px 16px 0;display:flex;gap:12px">
       <div style="text-align:center">
@@ -3973,11 +3993,11 @@ function openVisionDetail(id) {
     </div>
 
     <div class="form-body" style="padding-bottom:0;gap:8px">
-      <button class="btn btn-primary" style="justify-content:center" onclick="visionToFormula('${id}')">Create formula from this vision</button>
+      <button class="btn btn-primary" style="justify-content:center" onclick="visionToFormula('${id}')">Create formula from this</button>
       ${missingNotes.length ? `<button class="btn btn-ghost" style="justify-content:center" onclick="missingToWishlist('${id}')">Add ${missingNotes.length} missing to wishlist</button>` : ''}
     </div>
     <div class="form-actions" style="margin-top:8px">
-      <button class="btn btn-ghost" onclick="closeSheet();showVisionEditor('${id}')">Edit</button>
+      <button class="btn btn-ghost" onclick="closeSheet();openPerfumeSheet('edit:${id}')">Edit</button>
       <button class="btn btn-danger" onclick="deleteVision('${id}')">Delete</button>
     </div>
   `);
@@ -4431,7 +4451,7 @@ function gsResultsHTML(q) {
       .map(f => [esc(f.name), `${accVersion(f).ingredients.length} ingredients`, `closeSheet();showPage('formulas');openFormulaDetail('${f.id}','formulas')`])],
     ['Accords', (state.accords || []).filter(a => has(a.name, a.notes, ingNames(accVersion(a)), (a.noteLinks || []).join(' '))).slice(0, 20)
       .map(a => ['◎ ' + esc(a.name), (a.noteLinks || []).join(', ') || `${accVersion(a).ingredients.length} molecules`, `closeSheet();showPage('accords');openFormulaDetail('${a.id}','accords')`])],
-    ['Visions', (state.visions || []).filter(v => has(v.name, v.desc, (v.notes || []).map(n => n.name).join(' '))).slice(0, 20)
+    ['Visions', (state.visions || []).filter(v => has(v.name, v.desc, (v.notes || []).map(n => n.name).join(' '), (v.perfumes || []).map(p => p.name).join(' '))).slice(0, 20)
       .map(v => [esc(v.name), `${(v.notes || []).length} notes`, `closeSheet();showPage('vision');openVisionDetail('${v.id}')`])],
     ['Notebook', (state.notebook || []).filter(e => has(e.title, e.body, (e.tags || []).join(' '))).slice(0, 20)
       .map(e => [esc(e.title || String(e.body || '').split('\n')[0].slice(0, 60) || 'Untitled'), (e.tags || []).join(', ') || fmtDate(e.updatedAt), `closeSheet();showPage('notebook');openNbEditor('${e.id}')`])],
@@ -4944,7 +4964,7 @@ function refFromInput(t) {
   } catch (e) {}
   return { id: uid(), title, link: t };
 }
-let VIS_EDIT = { photos: [], refs: [], palette: [] };
+let VIS_EDIT = { photos: [], refs: [], palette: [], perfumes: [] };
 function inspEditorHTML() {
   return `
     <div class="insp" id="insp-box">${inspEditorInner()}</div>
@@ -5182,8 +5202,353 @@ function updateWishBadge() {
   const btn = document.getElementById('hdr-wish'); if (btn) btn.classList.toggle('on', state.page === 'wishlist');
 }
 
+
+// ══════════════════════════════════════════════════════
+// PERFUMES YOU LOVE — paste a pyramid from Fragrantica into a vision
+// ══════════════════════════════════════════════════════
+const TIERS = [['top', 'Top', 'Top'], ['heart', 'Heart', 'Heart'], ['base', 'Base', 'Base'], ['other', 'Notes', '']];
+const TIER_HEAD = {
+  top: /(верхн[іяi]\s+нот[иaу]?|верхние\s+ноты|нот[иa]\s+верху|ноти\s+голови|початков[іi]\s+нот[иa]|top\s+notes?|head\s+notes?)/gi,
+  heart: /(нот[иa]\s+серц[яi]|ноты\s+сердца|серцев[іi]\s+нот[иa]|середн[іi]\s+нот[иa]|средние\s+ноты|нот[иa]\s+середини|middle\s+notes?|heart\s+notes?)/gi,
+  base: /(базов[іi]\s+нот[иa]|базовые\s+ноты|нот[иa]\s+баз[иы]|нот[иa]\s+основи|кінцев[іi]\s+нот[иa]|base\s+notes?)/gi,
+};
+const PYR_STOP = /(голос|відгук|отзыв|review|схож|similar|стійк|стойк|longevity|шлейф|sillage|rating|рейтинг|fragrantica|реклама|коментар|comment)/i;
+let NOTE_MATCH = null;
+function noteMatchIndex() {
+  if (NOTE_MATCH) return NOTE_MATCH;
+  const norm = x => x.toLowerCase().replace(/['`ʼ]/g, '’');
+  const list = [];
+  for (const n of ALL_NOTES_FLAT) {
+    list.push({ k: norm(n), n });
+    if (NOTE_ALIAS[n] && NOTE_ALIAS[n] !== n) list.push({ k: norm(NOTE_ALIAS[n]), n });
+  }
+  list.sort((a, b) => b.k.length - a.k.length);
+  return NOTE_MATCH = list;
+}
+// all notes from the base that appear in a piece of text, in text order
+function findNotesIn(text) {
+  const t = String(text || '').toLowerCase().replace(/['`ʼ]/g, '’');
+  const L = /[\p{L}]/u;
+  const taken = new Array(t.length).fill(false), hits = [];
+  const free = (a, b) => { for (let i = a; i < b; i++) if (taken[i]) return false; return true; };
+  const mark = (a, b, n) => { for (let i = a; i < b; i++) taken[i] = true; hits.push({ at: a, n }); };
+  for (const { k, n } of noteMatchIndex()) {
+    if (k.length < 3) continue;
+    let i = t.indexOf(k);
+    while (i >= 0) {
+      const e = i + k.length;
+      if (!L.test(t[i - 1] || ' ') && !L.test(t[e] || ' ') && free(i, e)) mark(i, e, n);
+      i = t.indexOf(k, i + 1);
+    }
+  }
+  // Ukrainian endings: "троянди", "бергамоту" → single-word notes of 5+ letters
+  for (const { k, n } of noteMatchIndex()) {
+    if (k.length < 5 || /\s/.test(k) || hits.some(h => h.n === n)) continue;
+    const stem = k.slice(0, -1).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const re = new RegExp('(^|[^\\p{L}])(' + stem + '\\p{L}{0,3})(?=[^\\p{L}]|$)', 'gu');
+    let m;
+    while ((m = re.exec(t))) {
+      const a = m.index + m[1].length, b = a + m[2].length;
+      if (free(a, b)) { mark(a, b, n); break; }
+    }
+  }
+  const seen = new Set();
+  return hits.sort((a, b) => a.at - b.at).map(h => h.n).filter(n => !seen.has(n) && seen.add(n));
+}
+// one listed item ("Шафрану", "Дикі Ягоди") → the note from the base, or the item itself as your own note
+function wordsClose(a, b) {
+  if (a === b) return true;
+  if (a.length < 4 || b.length < 4) return false;
+  let i = 0; while (i < a.length && i < b.length && a[i] === b[i]) i++;
+  return i >= 4 && i >= Math.max(a.length, b.length) - 2;
+}
+function matchItem(item) {
+  const norm = x => x.toLowerCase().replace(/['`ʼ]/g, '’').trim();
+  const it = norm(item);
+  const idx = noteMatchIndex();
+  const exact = idx.find(x => x.k === it); if (exact) return exact.n;
+  const w = it.split(/\s+/);
+  const close = idx.find(x => { const kw = x.k.split(/\s+/); return kw.length === w.length && kw.every((k, i) => wordsClose(k, w[i])); });
+  if (close) return close.n;
+  return null;
+}
+function parseItems(seg) {
+  const out = [];
+  const items = String(seg).split(/[,;\n•·|]|\s+(?:і|й|та|and|и|&)\s+/i)
+    .map(x => x.replace(/^[\s:\-–—.]+|[\s.:!]+$/g, '').trim()).filter(x => /\p{L}/u.test(x));
+  for (const item of items) {
+    const words = item.split(/\s+/).length;
+    if (words > 4 || item.length > 40) { out.push(...findNotesIn(item)); continue; }
+    const n = matchItem(item);
+    out.push(n || item.charAt(0).toUpperCase() + item.slice(1));
+  }
+  return out;
+}
+function parsePyramid(text) {
+  text = String(text || '');
+  const heads = [];
+  for (const [tier, re] of Object.entries(TIER_HEAD)) {
+    re.lastIndex = 0; let m;
+    while ((m = re.exec(text))) heads.push({ tier, a: m.index, b: m.index + m[0].length });
+  }
+  heads.sort((x, y) => x.a - y.a);
+  const out = { top: [], heart: [], base: [], other: [] };
+  const used = new Set();
+  const add = (tier, list) => list.forEach(n => { if (!used.has(n)) { used.add(n); out[tier].push(n); } });
+  if (!heads.length) { add('other', parseItems(text.replace(/^\s*(ноти|notes|ноты)\s*:/i, ''))); return out; }
+  heads.forEach((h, i) => {
+    let seg = text.slice(h.b, i + 1 < heads.length ? heads[i + 1].a : h.b + 600);
+    const stop = seg.search(PYR_STOP);
+    if (stop >= 0) { const nl = seg.lastIndexOf('\n', stop); seg = seg.slice(0, nl >= 0 ? nl : stop); }
+    add(h.tier, parseItems(seg));
+  });
+  return out;
+}
+function perfNotes(p) { return ['top', 'heart', 'base', 'other'].flatMap(t => (p[t] || []).map(n => ({ n, t }))); }
+
+let PF = null;   // the perfume being added
+function openPerfumeSheet(target) {
+  const ed = String(target).startsWith('edit:') ? state.visions.find(v => v.id === target.slice(5)) : null;
+  PF = { target, link: ed?.link || '', name: ed?.name || '', nameTouched: !!ed, text: '', tiers: ed ? visTiers(ed) : { top: [], heart: [], base: [], other: [] }, addTier: 'top', take: false };
+  showSheet('perf', ed ? 'Edit' : 'Add a perfume', `
+    <div class="form-body" style="gap:12px">
+      <div class="field"><label>Fragrantica link <span style="font-weight:400;text-transform:none;color:var(--text3)">optional</span></label>
+        <input id="pf-link" type="url" inputmode="url" placeholder="https://www.fragrantica…/perfume/…" autocomplete="off" value="${esc(PF.link)}" oninput="pfLink(this.value)" /></div>
+      <div class="field"><label>Name</label><input id="pf-name" placeholder="e.g. Portrait of a Lady" autocomplete="off" value="${esc(PF.name)}" oninput="PF.name=this.value;PF.nameTouched=true" /></div>
+      <div class="field"><label>Notes</label>
+        <textarea id="pf-text" placeholder="On the perfume page select the pyramid (Top notes… Middle notes… Base notes…), copy and paste it here. Extra text around it is fine." style="min-height:110px" oninput="pfParse(this.value)"></textarea>
+        <button class="btn btn-ghost btn-sm" style="align-self:flex-start;margin-top:6px" onclick="pfPaste()">Paste</button></div>
+      <div id="pf-preview">${pfPreviewHTML()}</div>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-ghost" onclick="closeSheet()">Cancel</button>
+      <button class="btn btn-primary" onclick="pfSave()">${ed ? 'Save' : 'Add perfume'}</button>
+    </div>`, { full: true });
+}
+function pfLink(v) {
+  PF.link = v.trim();
+  if (!PF.nameTouched && isUrl(PF.link)) {
+    const r = refFromInput(PF.link);
+    const nm = document.getElementById('pf-name'); if (nm && r) { nm.value = r.title; PF.name = r.title; }
+  }
+}
+async function pfPaste() {
+  let t = '';
+  try { t = await navigator.clipboard.readText(); } catch (e) {}
+  if (!t) { toast('Paste into the Notes field'); document.getElementById('pf-text').focus(); return; }
+  if (isUrl(t.trim()) && !document.getElementById('pf-link').value) { document.getElementById('pf-link').value = t.trim(); pfLink(t); return; }
+  document.getElementById('pf-text').value = t; pfParse(t);
+}
+let pfTimer = null;
+function pfParse(v) {
+  PF.text = v;
+  clearTimeout(pfTimer);
+  pfTimer = setTimeout(() => {
+    PF.tiers = parsePyramid(v);
+    const box = document.getElementById('pf-preview'); if (box) box.innerHTML = pfPreviewHTML();
+  }, 250);
+}
+function pfChip(n, tier, removable) {
+  const art = noteArt(n), have = noteInCollection(n);
+  return `<span class="acc-note-chip${have ? ' have' : ''}" style="background:${art.bg}" onclick="event.stopPropagation();openNoteSheet('${esc(n)}')">${art.svg}<span>${esc(n)}</span>${removable ? `<b onclick="event.stopPropagation();pfRemove('${tier}','${esc(n)}')">×</b>` : ''}</span>`;
+}
+function pfPreviewHTML() {
+  const total = perfNotes(PF.tiers).length;
+  return `
+    ${TIERS.filter(([t]) => PF.tiers[t].length || t !== 'other').map(([t, label]) => `
+      <div class="pf-tier">
+        <div class="pf-tier-label">${label}</div>
+        <div class="acc-links-row" style="margin-top:0">${PF.tiers[t].map(n => pfChip(n, t, true)).join('') || '<span style="font-size:12px;color:var(--text3)">—</span>'}</div>
+      </div>`).join('')}
+    <div class="pf-add">
+      <div style="display:flex;gap:4px">${TIERS.map(([t, label]) => `<button class="mk-chip${PF.addTier === t ? ' on' : ''}" onclick="PF.addTier='${t}';document.getElementById('pf-preview').innerHTML=pfPreviewHTML()">${label}</button>`).join('')}</div>
+      <input class="search-input" style="padding-left:12px;margin-top:6px" placeholder="Add a missing note…" autocomplete="off" autocorrect="off" spellcheck="false" oninput="pfSuggest(this.value)" id="pf-add-in" />
+      <div id="pf-sugg" class="acc-links-row"></div>
+    </div>
+    `;
+}
+function pfSuggest(q) {
+  const box = document.getElementById('pf-sugg'); if (!box) return;
+  box.innerHTML = q.trim() ? searchNotes(q).slice(0, 8).map(n => `<button class="acc-vis-link" onclick="pfAddNote('${esc(n)}')">${esc(n)}</button>`).join('') : '';
+}
+function pfAddNote(n) {
+  for (const t of Object.keys(PF.tiers)) PF.tiers[t] = PF.tiers[t].filter(x => x !== n);
+  PF.tiers[PF.addTier].push(n);
+  document.getElementById('pf-preview').innerHTML = pfPreviewHTML();
+}
+function pfRemove(t, n) { PF.tiers[t] = PF.tiers[t].filter(x => x !== n); document.getElementById('pf-preview').innerHTML = pfPreviewHTML(); }
+function pfSave() {
+  let link = (document.getElementById('pf-link').value || '').trim();
+  if (link && !/^https?:\/\//i.test(link)) link = 'https://' + link;
+  const firstLine = String(PF.text || '').split('\n').map(x => x.trim()).find(x => x && x.length < 70 && !Object.values(TIER_HEAD).some(re => { re.lastIndex = 0; return re.test(x); }) && !findNotesIn(x).length);
+  const name = (document.getElementById('pf-name').value || '').trim() || (link ? (refFromInput(link) || {}).title : '') || (firstLine || '').replace(/\s+для\s+(жінок|чоловіків|жінок і чоловіків)$/i, '').replace(/\s+for\s+(women|men|women and men)$/i, '') || 'Perfume';
+  if (!perfNotes(PF.tiers).length) { toast('No notes yet — paste the pyramid'); return; }
+  if (PF.target === 'new' || String(PF.target).startsWith('edit:')) {
+    const notes = tierNotes(PF.tiers);
+    let vis;
+    if (PF.target === 'new') { vis = { id: uid(), name, link, notes, updatedAt: Date.now() }; state.visions = [vis, ...(state.visions || [])]; }
+    else { vis = state.visions.find(v => v.id === PF.target.slice(5)); Object.assign(vis, { name, link, notes, updatedAt: Date.now() }); }
+    save(); closeSheet(); renderVision(); openVisionDetail(vis.id);
+    toast(PF.target === 'new' ? `${name} added` : 'Saved');
+    return;
+  }
+  const p = { id: uid(), name, link, top: PF.tiers.top, heart: PF.tiers.heart, base: PF.tiers.base, other: PF.tiers.other, addedAt: Date.now() };
+  const take = PF.take;
+  if (PF.target === 'editor') {
+    VIS_EDIT.perfumes.push(p);
+    if (take) visAddNotes(perfNotes(p));
+    closeSheet();
+    perfEditorRefresh();
+  } else {
+    const vis = state.visions.find(v => v.id === PF.target); if (!vis) return;
+    vis.perfumes = [...(vis.perfumes || []), p];
+    if (take) mergeNotesInto(vis, perfNotes(p));
+    save(); closeSheet(); closeSheet(); openVisionDetail(vis.id);
+  }
+  toast(`${name} added`);
+}
+const TIER_PYR = { top: 'Top', heart: 'Heart', base: 'Base', other: '' };
+function mergeNotesInto(vis, list) {
+  vis.notes = vis.notes || [];
+  for (const { n, t } of list) {
+    if (vis.notes.some(x => noteKey(x.name) === noteKey(n))) continue;
+    vis.notes.push({ name: n, pyramid: TIER_PYR[t] });
+  }
+}
+function takePerfumeNotes(visId, pid) {
+  const vis = state.visions.find(v => v.id === visId); if (!vis) return;
+  const p = (vis.perfumes || []).find(x => x.id === pid); if (!p) return;
+  const before = (vis.notes || []).length;
+  mergeNotesInto(vis, perfNotes(p));
+  save(); closeSheet(); openVisionDetail(visId);
+  const added = vis.notes.length - before;
+  toast(added ? `${added} notes added to the vision` : 'All these notes are already in the vision');
+}
+function removePerfume(visId, pid) {
+  const vis = state.visions.find(v => v.id === visId); if (!vis) return;
+  vis.perfumes = (vis.perfumes || []).filter(x => x.id !== pid);
+  save(); closeSheet(); openVisionDetail(visId);
+}
+// editor side
+function visAddNotes(list) {
+  for (const { n, t } of list) {
+    visionPickerState.selected[n] = true;
+    if (TIER_PYR[t]) visionPickerState.pyramid[n] = TIER_PYR[t];
+  }
+  refreshVisChips();
+  document.querySelectorAll('#vis-note-grid .note-icon-card').forEach(b => b.classList.toggle('selected', !!visionPickerState.selected[b.dataset.note]));
+}
+function refreshVisChips() {
+  const selectedNames = Object.keys(visionPickerState.selected);
+  const chipsEl = document.getElementById('vis-selected-chips');
+  if (chipsEl) chipsEl.innerHTML = selectedNames.length === 0
+    ? `<span style="font-size:12px;color:var(--text3)">Pick notes below…</span>`
+    : selectedNames.map(n => `
+        <span style="display:inline-flex;align-items:center;gap:4px;padding:3px 8px 3px 10px;border-radius:20px;font-size:12px;background:var(--text);color:#fff;font-weight:500">
+          ${esc(n)}
+          <button onclick="visToggleNote('${esc(n)}')" style="background:none;border:none;color:#fff;opacity:0.7;cursor:pointer;font-size:14px;padding:0;line-height:1">×</button>
+        </span>`).join('');
+  const cnt = document.getElementById('vis-sel-count'); if (cnt) cnt.textContent = `(${selectedNames.length})`;
+}
+function perfEditorHTML() { return `<div class="insp" id="perf-box">${perfEditorInner()}</div>`; }
+function perfEditorInner() {
+  return `
+    <div class="insp-label">Perfumes you love <span>pyramids from Fragrantica</span></div>
+    ${VIS_EDIT.perfumes.map(p => `
+      <div class="insp-ref"><span>${esc(p.name)}<small>${perfNotes(p).length} notes</small></span><b onclick="VIS_EDIT.perfumes=VIS_EDIT.perfumes.filter(x=>x.id!=='${p.id}');perfEditorRefresh()">×</b></div>`).join('')}
+    <button class="btn btn-ghost btn-sm" style="align-self:flex-start" onclick="openPerfumeSheet('editor')">+ Perfume</button>`;
+}
+function perfEditorRefresh() { const b = document.getElementById('perf-box'); if (b) b.innerHTML = perfEditorInner(); }
+// detail side
+function perfumesViewHTML(vis) {
+  const list = vis.perfumes || [];
+  return `
+    <div class="detail-block">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div class="detail-label">Perfumes you love${list.length ? ` · ${list.length}` : ''}</div>
+        <button class="acc-link-add" style="padding:3px 10px" onclick="openPerfumeSheet('${vis.id}')">+ Perfume</button>
+      </div>
+      ${list.map(p => {
+        const all = perfNotes(p), have = all.filter(x => noteInCollection(x.n)).length;
+        const inVis = new Set((vis.notes || []).map(x => noteKey(x.name)));
+        const missingFromVis = all.filter(x => !inVis.has(noteKey(x.n))).length;
+        return `
+        <div class="pf-card">
+          <div class="pf-head">
+            ${p.link ? `<a href="${esc(p.link)}" target="_blank" rel="noopener" class="pf-name">${esc(p.name)} ↗</a>` : `<span class="pf-name">${esc(p.name)}</span>`}
+            <span class="pf-have">${have}/${all.length} covered</span>
+          </div>
+          ${TIERS.filter(([t]) => (p[t] || []).length).map(([t, label]) => `
+            <div class="pf-tier"><div class="pf-tier-label">${label}</div>
+              <div class="acc-links-row" style="margin-top:0">${p[t].map(n => pfChip(n, t, false)).join('')}</div></div>`).join('')}
+          <div style="display:flex;gap:8px;margin-top:8px">
+            ${missingFromVis ? `<button class="btn btn-ghost btn-sm" onclick="takePerfumeNotes('${vis.id}','${p.id}')">Add ${missingFromVis} notes to the vision</button>` : `<span style="font-size:12px;color:var(--text3);align-self:center">All notes are in the vision</span>`}
+            <button class="btn btn-ghost btn-sm" style="margin-left:auto" onclick="removePerfume('${vis.id}','${p.id}')">Remove</button>
+          </div>
+        </div>`;
+      }).join('') || `<div style="font-size:12px;color:var(--text3);margin-top:6px">Add perfumes you love — paste their pyramid from Fragrantica.</div>`}
+    </div>`;
+}
+
+
+// ══════════════════════════════════════════════════════
+// VISION = perfumes you love (pyramids pasted from Fragrantica) + the note base
+// ══════════════════════════════════════════════════════
+const PYR_TIER = { Top: 'top', Heart: 'heart', Base: 'base' };
+function visTiers(vis) {
+  const t = { top: [], heart: [], base: [], other: [] };
+  (vis.notes || []).forEach(n => t[PYR_TIER[n.pyramid] || 'other'].push(n.name));
+  return t;
+}
+function tierNotes(tiers) { return ['top', 'heart', 'base', 'other'].flatMap(t => tiers[t].map(n => ({ name: n, pyramid: TIER_PYR[t] }))); }
+// old visions could hold nested perfumes — each becomes its own item
+function migrateVisions() {
+  let changed = false;
+  const out = [];
+  for (const v of state.visions || []) {
+    const ps = v.perfumes || [];
+    if (ps.length) {
+      changed = true;
+      const copy = { ...v }; delete copy.perfumes; out.push(copy);
+      ps.forEach(p => out.push({ id: uid(), name: p.name, link: p.link || '', notes: tierNotes({ top: p.top || [], heart: p.heart || [], base: p.base || [], other: p.other || [] }), updatedAt: p.addedAt || Date.now() }));
+    } else out.push(v);
+  }
+  if (changed) { state.visions = out; save(); }
+}
+function visChip(n) {
+  const art = noteArt(n), have = noteInCollection(n);
+  return `<span class="vc-chip${have ? ' have' : ''}">${art.svg}<span>${esc(n)}</span></span>`;
+}
+function openNoteBase() {
+  visionPickerState = { cat: visionPickerState.cat || Object.keys(FRAG_NOTES)[0], search: '', selected: {}, pyramid: {}, browse: true };
+  showSheet('visionEdit', 'Notes', `
+    <div class="vis-sticky" id="vis-sticky">
+      <div class="search-wrap" style="margin-bottom:8px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input class="search-input" placeholder="Search ${ALL_NOTES_FLAT.length} notes…" autocomplete="off" autocorrect="off" spellcheck="false" oninput="visSearch(this.value)" />
+      </div>
+      <div class="vis-img-bar">
+        <button class="vis-img-toggle" id="vis-img-toggle" onclick="visToggleImgMode()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.8"/><path d="M21 16l-5-5-9 8"/></svg>
+          <span id="vis-img-toggle-label">Pictures</span>
+        </button>
+        <button class="vis-img-toggle" onclick="openPackSheet()">Pack${PACK.count ? ` · ${PACK.count}` : ''}</button>
+        <button class="vis-img-toggle" id="vis-hidden-btn" onclick="openHiddenSheet()" style="${hiddenCount() ? '' : 'display:none'}">Deleted · ${hiddenCount()}</button>
+        <span class="vis-img-hint" id="vis-img-hint">Tap a note for info</span>
+      </div>
+      <input type="file" accept="image/*" id="vis-img-input" style="display:none" onchange="visImgPicked(this)" />
+      <div class="note-cat-tabs" id="vis-cat-tabs" style="margin-bottom:0;padding-bottom:10px">
+        ${Object.keys(FRAG_NOTES).map(cat => `<button class="note-cat-tab${visionPickerState.cat===cat?' active':''}" data-cat="${esc(cat)}" onclick="visSetCat('${esc(cat)}')">${esc(catName(cat))}</button>`).join('')}
+      </div>
+    </div>
+    <div style="padding:10px 16px 24px">
+      <div class="note-grid" id="vis-note-grid">${renderNoteGrid()}</div>
+    </div>`, { full: true });
+}
+
 // ── INIT ──
 load();
+migrateVisions();
 render();
 packLoad();
 setupOffline();
