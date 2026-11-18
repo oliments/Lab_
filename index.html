@@ -1468,6 +1468,7 @@ function renderFormulas(kind) {
 
 function formulaCard(f, kind) {
   kind = kind || 'formulas';
+  IFRA_OFF = kind === 'accords';
   const v = f.versions[f.activeVersion || 0];
   useStrength(v);
   const total = v.ingredients.reduce((s, i) => s + ingEffectivePct(i), 0);
@@ -1605,7 +1606,11 @@ function ingFinalPct(ing, S) { return ingPurePct(ing) * (S == null ? IFRA_S : S)
 const WARN_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`;
 
 // Returns 'ok' | 'warn' (approaching) | 'over'
+// accords are building blocks, never worn on their own → no IFRA checks while showing an accord
+// (an accord used inside a formula is still checked there, at the formula's strength)
+let IFRA_OFF = false;
 function ifraStatus(ing, totalPct, S) {
+  if (IFRA_OFF) return 'ok';
   if (ing.accId) {
     const st = expandIngs([ing]).map(x => ifraStatus(x, totalPct, S));
     return st.includes('over') ? 'over' : st.includes('warn') ? 'warn' : 'ok';
@@ -1619,6 +1624,7 @@ function ifraStatus(ing, totalPct, S) {
 }
 
 function ifraWarningHTML(ing) {
+  if (IFRA_OFF) return '';
   const at = ` at ${strengthLabel(IFRA_S)}`;
   if (ing.accId) {
     const bad = expandIngs([ing]).filter(x => ifraStatus(x, 100) !== 'ok');
@@ -1658,6 +1664,7 @@ function openFormulaBuilder(fid, kind, presetNote) {
 }
 
 function renderBuilder() {
+  IFRA_OFF = BK === 'accords';
   const v = BS.versions[BS.activeVersion];
   useStrength(v);
   const total = v.ingredients.reduce((s, i) => s + (+i.pct || 0), 0);
@@ -1703,10 +1710,10 @@ function renderBuilder() {
               oninput="BS.versions[BS.activeVersion].ethanolMl=this.value;refreshEthanolInfo()" />
           </div>
         </div>
-        <div>
+        ${BK === 'accords' ? '' : `<div>
           <div style="font-size:11px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--text2);margin-bottom:6px">IFRA checked at</div>
           <div style="display:flex;gap:6px;flex-wrap:wrap" id="b-strength">${strengthChipsHTML(v)}</div>
-        </div>
+        </div>`}
         <div id="b-ethanol-info" style="font-size:12px;color:var(--text2);line-height:1.5">
           ${ethanolMl > 0
             ? `Total: <strong>${finalMl.toFixed(2)} g</strong> · Concentrate: <strong>${concPct}%</strong>`
@@ -1903,6 +1910,7 @@ function bSetDilution(idx, pct) {
 }
 
 function refreshIngWarning(idx) {
+  IFRA_OFF = BK === 'accords';
   const v = BS.versions[BS.activeVersion];
   useStrength(v);
   const ing = v.ingredients[idx];
@@ -2077,6 +2085,7 @@ function saveFormula() {
 // ── FORMULA DETAIL ──
 function openFormulaDetail(id, kind) {
   DK = kind || (state.page === 'accords' ? 'accords' : 'formulas');
+  IFRA_OFF = DK === 'accords';
   const f = state[DK].find(x => x.id === id);
   if (!f) return;
   const v = f.versions[f.activeVersion || 0];
@@ -2468,7 +2477,7 @@ function computeAnalytics(v) {
 
   // ── IFRA risks ──
   const S = useStrength(v);
-  const ifraRisks = actualContent(v).map(r => {
+  const ifraRisks = IFRA_OFF ? [] : actualContent(v).map(r => {
     const mol = r.mol;
     if (!(+mol?.ifra > 0)) return null;
     const ing = { name: r.name };
@@ -2574,10 +2583,10 @@ function analyticsHTML(v) {
 
         ${analyticsExtraHTML(v, an)}
 
-        <div class="an-section" style="margin-bottom:0">
+        ${IFRA_OFF ? '' : `<div class="an-section" style="margin-bottom:0">
           <div class="an-label">IFRA at ${strengthLabel(IFRA_S)}</div>
           ${ifraHTML}
-        </div>
+        </div>`}
 
       </div>
     </div>
@@ -2730,7 +2739,7 @@ function analyticsExtraHTML(v, an) {
             </div>
             <div class="ev-left">${s.left >= 10 ? s.left.toFixed(0) : s.left.toFixed(1)}%</div>
           </div>`).join('')}
-        <div class="an-note">Right column: how much of the scent is still there. Shares estimate what you smell: how much there is, how strong each material is and how long it lasts. ${ev.guessed ? `For ${ev.guessed} of ${ev.total} molecules odor life or strength is a typical value or a guess — set your own (“Odor life”, “Odor strength”) in the molecule for a truer picture.` : ''}</div>
+
       </div>`);
   }
   // actual content
@@ -2739,10 +2748,10 @@ function analyticsExtraHTML(v, an) {
     out.push(`
       <div class="an-section">
         <div class="an-label">Actual molecule content</div>
-        <div class="ac-head"><span>Molecule</span><span>in concentrate</span><span>in perfume ${strengthLabel(IFRA_S)}</span></div>
-        ${ac.map(r => { const lim = +r.mol?.ifra; const fin = r.pure * IFRA_S / 100; const st = lim > 0 ? (fin > lim ? 'over' : fin > lim * .85 ? 'warn' : 'ok') : '';
-          return `<div class="ac-row"><span>${st ? `<i class="ifra-dot ${st}"></i>` : ''}${esc(r.name)}</span><span>${fmtPct(r.pure)}%</span><span>${fmtPct(fin)}%${lim > 0 ? `<small> / ${lim}%</small>` : ''}</span></div>`; }).join('')}
-        <div class="an-note">After dilutions and accords. The dot shows IFRA status where a limit is set.</div>
+        <div class="ac-head"><span>Molecule</span><span>in concentrate</span>${IFRA_OFF ? '<span></span>' : `<span>in perfume ${strengthLabel(IFRA_S)}</span>`}</div>
+        ${ac.map(r => { const lim = +r.mol?.ifra; const fin = r.pure * IFRA_S / 100; const st = lim > 0 && !IFRA_OFF ? (fin > lim ? 'over' : fin > lim * .85 ? 'warn' : 'ok') : '';
+          return `<div class="ac-row"><span>${st ? `<i class="ifra-dot ${st}"></i>` : ''}${esc(r.name)}</span><span>${fmtPct(r.pure)}%</span><span>${IFRA_OFF ? '' : fmtPct(fin) + '%'}${lim > 0 && !IFRA_OFF ? `<small> / ${lim}%</small>` : ''}</span></div>`; }).join('')}
+
       </div>`);
   }
   // cost
@@ -2759,16 +2768,17 @@ function analyticsExtraHTML(v, an) {
           <div><b>₴${bottle(30).toFixed(0)} / ₴${bottle(50).toFixed(0)}</b><span>30 / 50 ml at ${S.toFixed(0)}%</span></div>
         </div>
         ${c.top.slice(0, 5).map(([n, val]) => `<div class="ac-row"><span>${esc(n)}</span><span>${(val / c.perG * 100).toFixed(0)}% of cost</span><span>₴${val.toFixed(2)}/g</span></div>`).join('')}
-        <div class="an-note">Concentrate only — ethanol and bottle not included. ${c.noPrice.length ? `No price for: ${c.noPrice.map(esc).join(', ')}.` : ''}</div>
+        ${c.noPrice.length ? `<div class="an-note">No price: ${c.noPrice.map(esc).join(', ')}</div>` : ''}
       </div>`);
   } else if (c.noPrice.length) {
-    out.push(`<div class="an-section"><div class="an-label">Cost</div><div class="an-note" style="margin-top:0">Add prices (₴/g) to your molecules to see what this costs.</div></div>`);
+    out.push(`<div class="an-section"><div class="an-label">Cost</div><div class="an-note" style="margin-top:0">No prices yet</div></div>`);
   }
   return out.join('');
 }
 
 // ── version comparison ──
 function openCompareVersions(id, kind, a, b) {
+  IFRA_OFF = kind === 'accords';
   const f = (state[kind] || []).find(x => x.id === id);
   if (!f || f.versions.length < 2) return;
   if (a == null) { b = f.activeVersion || 0; a = b > 0 ? b - 1 : 1; }
@@ -2794,7 +2804,7 @@ function openCompareVersions(id, kind, a, b) {
         <span></span><b>${esc(VA.name)}</b><b>${esc(VB.name)}</b>
         <span>Top / Heart / Base</span><span>${pyr(anA)}</span><span>${pyr(anB)}</span>
         <span>Cost per g</span><span>${cA ? '₴' + cA.toFixed(2) : '—'}</span><span>${cB ? '₴' + cB.toFixed(2) : '—'}</span>
-        <span>IFRA over</span><span>${ifraN(VA, SA)} at ${SA.toFixed(0)}%</span><span>${ifraN(VB, SB)} at ${SB.toFixed(0)}%</span>
+        ${IFRA_OFF ? '' : `<span>IFRA over</span><span>${ifraN(VA, SA)} at ${SA.toFixed(0)}%</span><span>${ifraN(VB, SB)} at ${SB.toFixed(0)}%</span>`}
         <span>Ingredients</span><span>${VA.ingredients.length}</span><span>${VB.ingredients.length}</span>
       </div>
     </div>
